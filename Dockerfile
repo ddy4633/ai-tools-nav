@@ -2,28 +2,22 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 复制 package.json 和 package-lock.json
+# 安装依赖
 COPY package*.json ./
-
-# 安装所有依赖
 RUN npm ci
 
 # 复制源代码
 COPY . .
 
-# 确保启动脚本可执行
-RUN chmod +x start.sh
-
-# 构建应用
+# 构建
 RUN npm run build
 
 # 暴露端口
 EXPOSE 3000
 
-# 设置环境变量
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# 使用启动脚本
-CMD ["./start.sh"]
+# 使用完整路径启动
+CMD ["node", ".next/standalone/openclaw_code/ai-tools-nav/server.js"]
