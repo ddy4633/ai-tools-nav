@@ -1,0 +1,46 @@
+{
+  "project": {
+    "name": "ai-tools-nav",
+    "description": "AI工具导航站 - 发现最好用的AI工具"
+  },
+  "service": {
+    "name": "ai-tools-nav-web",
+    "type": "application",
+    "build": {
+      "type": "nixpacks",
+      "buildCommand": "npm install && npm run build"
+    },
+    "deploy": {
+      "startCommand": "npm start",
+      "port": 3000,
+      "healthCheck": {
+        "path": "/api/health",
+        "interval": 30
+      }
+    },
+    "source": {
+      "type": "git",
+      "repository": "https://github.com/ddy4633/ai-tools-nav",
+      "branch": "main",
+      "autoDeploy": true
+    },
+    "env": [
+      {
+        "key": "NEXT_PUBLIC_SUPABASE_URL",
+        "value": "https://crmkyaoczrvnjsizlaas.supabase.co"
+      },
+      {
+        "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNybWt5YW9jenJ2bmpzaXpsYWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNzQxNDksImV4cCI6MjA4Njc1MDE0OX0.q_qxaozd4Ct_B2yyrZXbVJSCon57kO8HCdWr_7xtG9M"
+      },
+      {
+        "key": "SUPABASE_SERVICE_ROLE_KEY",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNybWt5YW9jenJ2bmpzaXpsYWFzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTE3NDE0OSwiZXhwIjoyMDg2NzUwMTQ5fQ.mHcUfPwebMa6QLYeErwey-dDhTvWjR3MUtmKIIarX2M"
+      },
+      {
+        "key": "NODE_ENV",
+        "value": "production"
+      }
+    ]
+  }
+}
