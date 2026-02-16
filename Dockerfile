@@ -22,5 +22,8 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# 使用 standalone 模式启动（根据实际路径）
-CMD ["node", ".next/standalone/openclaw_code/ai-tools-nav/server.js"]
+# 创建启动脚本
+RUN echo '#!/bin/sh\nif [ -f ".next/standalone/server.js" ]; then\n  node .next/standalone/server.js\nelif [ -f ".next/standalone/openclaw_code/ai-tools-nav/server.js" ]; then\n  node .next/standalone/openclaw_code/ai-tools-nav/server.js\nelse\n  echo "Error: server.js not found"\n  find .next/standalone -name "server.js" -type f\n  exit 1\nfi' > /app/start.sh && chmod +x /app/start.sh
+
+# 启动应用
+CMD ["/app/start.sh"]
