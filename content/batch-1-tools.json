@@ -1,0 +1,234 @@
+[
+  {
+    "id": "chatgpt",
+    "name": "ChatGPT",
+    "category": "AI聊天",
+    "categorySlug": "chatbot",
+    "pricingType": "freemium",
+    "website": "https://chat.openai.com",
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
+    "rating": 4.7,
+    "difficulty": 1,
+    "oneLiner": "处理长文档时，它的理解能力让我惊讶",
+    "reason": "无论是写代码、改文案还是分析数据，它的综合能力依然是最强的。GPT-4o 的速度和准确性都很出色。",
+    "fullReview": "我从 2022 年底开始用 ChatGPT，几乎每天都在用。最惊喜的是它在处理长文档时的表现——把一篇 5000 字的文章丢给它，它能准确提取关键点，甚至发现我自己都没注意到的逻辑漏洞。\n\n写代码方面，它不只是简单的代码补全，而是能理解整个项目的上下文。有一次我让它帮我重构一个 200 行的函数，它不仅给出了优化后的代码，还解释了为什么要这样改，以及潜在的性能提升。\n\n当然它也有缺点。有时候会产生「幻觉」， confidently 地胡说八道。还有就是免费版的限制越来越严格，重度用户基本都要上 Plus。",
+    "pros": [
+      "综合能力最强，几乎什么任务都能胜任",
+      "GPT-4o 速度快，接近实时响应",
+      "支持文件上传、图片分析、网页浏览",
+      "插件生态丰富，可扩展性强"
+    ],
+    "cons": [
+      "偶尔会产生幻觉，需要事实核查",
+      "免费版限制较多，重度使用需付费",
+      "对中文诗歌、成语理解不如 Claude 细腻"
+    ],
+    "suitableFor": [
+      "需要全能型 AI 助手的用户",
+      "程序员、写作者、分析师",
+      "每天使用 AI 超过 2 小时的深度用户"
+    ],
+    "notSuitableFor": [
+      "只需要简单问答的轻度用户",
+      "对数据隐私极度敏感的用户"
+    ],
+    "pricing": {
+      "free": "GPT-3.5，有使用次数限制，高峰期可能排队",
+      "paid": "$20/月，无限 GPT-4o 使用，优先访问新功能",
+      "recommendation": "如果你每天用 AI 超过 1 小时，Plus 绝对值得"
+    },
+    "alternatives": [
+      { "name": "Claude", "pros": "长文本处理更强，更诚实", "cons": "没有实时联网" },
+      { "name": "Gemini", "pros": "免费版更慷慨，Google 生态整合", "cons": "中文支持不如 ChatGPT" }
+    ],
+    "testedAt": "2026-02-17",
+    "version": "GPT-4o"
+  },
+  {
+    "id": "claude",
+    "name": "Claude",
+    "category": "AI聊天",
+    "categorySlug": "chatbot",
+    "pricingType": "freemium",
+    "website": "https://claude.ai",
+    "icon": "https://claude.ai/favicon.ico",
+    "rating": 4.8,
+    "difficulty": 1,
+    "oneLiner": "回答更深思熟虑，适合深度工作",
+    "reason": "Claude 的回复总是更有条理、更有深度。它不会急于给答案，而是会一步步推理，这种「思考感」很珍贵。",
+    "fullReview": "如果说 ChatGPT 像一个反应很快的实习生，Claude 就像一个经验丰富、说话慢但每句都在点上的资深顾问。\n\n我最爱用 Claude 的场景是：复杂决策分析。比如我要比较两个技术方案，Claude 不会立刻给结论，而是会先列出评估维度、分析每个方案的优劣、指出潜在风险，最后才给出建议。这种思维方式对我帮助很大。\n\n它的写作能力也很强，特别是中文。同样的主题，Claude 写出来的文章往往更有文采，成语用得恰到好处，不会让人觉得是机器写的。\n\n200K 的上下文窗口是另一个杀手锏。我可以把整本书的 PDF 丢给它，让它总结、提取观点、甚至对比不同章节的内容。这种能力在研究工作中非常有用。\n\n缺点是它没有实时联网功能，信息可能不是最新的。而且免费版的使用限制比较严格，经常聊一会儿就提示「用量已达上限」。",
+    "pros": [
+      "回答更有深度和条理，逻辑清晰",
+      "中文写作能力突出，更有文采",
+      "200K 上下文窗口，可处理整本书",
+      "更诚实，不确定时会承认而不是瞎编"
+    ],
+    "cons": [
+      "没有实时联网，知识截止训练时间",
+      "免费版限制严格，经常中断",
+      "响应速度比 GPT-4o 慢一些",
+      "没有插件生态"
+    ],
+    "suitableFor": [
+      "需要深度分析和决策支持的用户",
+      "研究人员、学生、写作者",
+      "长文档处理和总结需求"
+    ],
+    "notSuitableFor": [
+      "需要实时信息的场景",
+      "追求极致响应速度的用户"
+    ],
+    "pricing": {
+      "free": "有限次数使用，200K 上下文",
+      "paid": "$20/月，优先访问，更高使用限额",
+      "recommendation": "写作者和研究人员强烈建议订阅"
+    },
+    "alternatives": [
+      { "name": "ChatGPT", "pros": "实时联网，插件丰富", "cons": "中文写作不如 Claude 细腻" },
+      { "name": "Perplexity", "pros": "实时联网搜索", "cons": "深度分析能力不如 Claude" }
+    ],
+    "testedAt": "2026-02-17",
+    "version": "Claude 3.5 Sonnet"
+  },
+  {
+    "id": "cursor",
+    "name": "Cursor",
+    "category": "AI编程",
+    "categorySlug": "code",
+    "pricingType": "freemium",
+    "website": "https://cursor.sh",
+    "icon": "https://cursor.sh/favicon.ico",
+    "rating": 4.9,
+    "difficulty": 2,
+    "oneLiner": "写代码就像和结对程序员对话",
+    "reason": "Cursor 把 AI 真正融入了开发工作流，不只是代码补全，而是能理解整个代码库，帮你重构、debug、写测试。",
+    "fullReview": "作为一个用了 10 年 VS Code 的开发者，转到 Cursor 我只花了 10 分钟。它的界面和 VS Code 几乎一样，所有插件都能用，但内嵌的 AI 能力让我效率提升了至少 30%。\n\n最震撼的功能是「代码库理解」。你可以问它：「这个函数在哪里被调用了？」、「这个 bug 可能是什么原因？」，它能在整个项目范围内搜索、分析，给出精准答案。这种体验是 GitHub Copilot 给不了的。\n\n另一个杀手功能是 Cmd+K（快速编辑）。选中一段代码，按 Cmd+K，描述你想怎么改，它就会生成 diff，你可以一键应用或拒绝。这比手动改快多了，特别是对于重复性的重构任务。\n\nTab 补全也比 Copilot 更智能。它不只是基于当前文件，而是会考虑整个项目的上下文。比如我在写一个 API 调用，它会自动提示项目中已有的相关函数。\n\n免费版已经很够用，每天 2000 次补全，对于个人开发者完全够用。Pro 版主要是更多 GPT-4 调用次数和优先支持。",
+    "pros": [
+      "深度理解整个代码库，不只是当前文件",
+      "Cmd+K 快速编辑，重构效率极高",
+      "内置聊天可直接询问代码问题",
+      "兼容 VS Code 所有插件和配置",
+      "免费版对个人开发者已足够"
+    ],
+    "cons": [
+      "偶尔会有延迟，特别是复杂查询",
+      "大型代码库（10万行+）索引需要时间",
+      "AI 建议偶尔会有错误，需要人工检查"
+    ],
+    "suitableFor": [
+      "每天写代码 4 小时以上的开发者",
+      "需要频繁重构的项目",
+      "大型代码库的维护者"
+    ],
+    "notSuitableFor": [
+      "偶尔写几行代码的轻度用户",
+      "对 AI 代码建议不信任的开发者"
+    ],
+    "pricing": {
+      "free": "每月 2000 次补全，200 次 GPT-4 调用",
+      "paid": "$20/月，无限补全，500 次 GPT-4 调用",
+      "recommendation": "免费版先用，不够了再升级"
+    },
+    "alternatives": [
+      { "name": "GitHub Copilot", "pros": "更早成熟，IDE 支持更广", "cons": "不理解代码库整体，只是基于当前文件" },
+      { "name": "Codeium", "pros": "完全免费", "cons": "功能不如 Cursor 丰富" }
+    ],
+    "testedAt": "2026-02-17",
+    "version": "Cursor 0.45"
+  },
+  {
+    "id": "midjourney",
+    "name": "Midjourney",
+    "category": "AI图像",
+    "categorySlug": "image",
+    "pricingType": "paid",
+    "website": "https://midjourney.com",
+    "icon": "https://www.midjourney.com/favicon.ico",
+    "rating": 4.8,
+    "difficulty": 3,
+    "oneLiner": "AI 艺术的黄金标准，出图质量无人能敌",
+    "reason": "Midjourney 的美学质量依然是行业标杆。同样的 prompt，在 Midjourney 和其他工具出来的效果，差距是肉眼可见的。",
+    "fullReview": "我用过 DALL-E、Stable Diffusion、Leonardo，但 Midjourney 依然是那个「不可替代」的工具。它的出图有一种独特的「质感」——光影、构图、细节都恰到好处，不像其他工具那样「AI 感」很重。\n\nv6 版本的理解能力更强了。以前需要写很长的 prompt 来描述光影和构图，现在简单的一句话就能出很好的图。比如「a cyberpunk samurai standing in the rain, neon lights reflecting on wet pavement」，出来的效果已经很有电影感。\n\n缺点是它通过 Discord 操作，体验不算最好。特别是批量操作和管理历史图片，都比较麻烦。价格也不便宜，基础版 $10/月只能生成约 200 张图。\n\n但它依然是专业设计师和艺术家的首选。如果你是做视觉创意、游戏美术、概念设计，Midjourney 几乎是必选项。",
+    "pros": [
+      "出图质量业界最高，艺术感强",
+      "v6 版本理解 prompt 更准确",
+      "美学风格独特，AI 感最低",
+      "社区活跃，有很多优秀案例参考"
+    ],
+    "cons": [
+      "只能通过 Discord 使用，体验一般",
+      "价格较贵，基础版限制较多",
+      "对亚洲人脸生成有时不太稳定",
+      "无法精准控制细节（需要反复抽卡）"
+    ],
+    "suitableFor": [
+      "专业设计师、插画师",
+      "游戏美术、概念设计师",
+      "需要高质量视觉内容的创意工作者"
+    ],
+    "notSuitableFor": [
+      "预算有限的用户",
+      "需要精准控制每一个细节的用户",
+      "只用 AI 生成简单图标/配图的用户"
+    ],
+    "pricing": {
+      "free": "无免费版",
+      "paid": "$10/月起，约 200 张图；$30/月无限快速出图",
+      "recommendation": "$30/月对专业用户性价比最高"
+    },
+    "alternatives": [
+      { "name": "DALL-E 3", "pros": "prompt 理解精准，可通过 ChatGPT 使用", "cons": "艺术感不如 Midjourney" },
+      { "name": "Stable Diffusion", "pros": "开源免费，可本地部署，控制精准", "cons": "学习成本高，需要好显卡" }
+    ],
+    "testedAt": "2026-02-17",
+    "version": "Midjourney v6"
+  },
+  {
+    "id": "notion",
+    "name": "Notion",
+    "category": "效率工具",
+    "categorySlug": "productivity",
+    "pricingType": "freemium",
+    "website": "https://notion.so",
+    "icon": "https://www.notion.so/images/favicon.ico",
+    "rating": 4.6,
+    "difficulty": 3,
+    "oneLiner": "用了三年，它成了我的第二大脑",
+    "reason": "Notion 不只是笔记工具，它是数据库、项目管理、Wiki、知识库的集合体。真正实现了「All-in-one」。",
+    "fullReview": "三年前我同时用 Evernote、Todoist、Google Docs 和 Trello。现在我只用 Notion。\n\n最核心的价值是「结构化知识」。传统的笔记工具是文件夹+文档，Notion 是数据库+视图。你可以把笔记、任务、项目都存成数据库，然后用不同的视图（表格、看板、日历、画廊）来查看。这种灵活性是传统工具给不了的。\n\nAI 功能的加入让它更强大了。写文档时按空格，AI 可以帮你续写、翻译、总结。数据库里的内容也可以批量处理，比如「帮我把这 20 条笔记提取关键词」。\n\n协作功能也很好用。团队 Wiki、项目文档、会议记录都可以在一个地方管理。权限控制也很细，可以给不同的人不同的访问级别。\n\n学习曲线是主要门槛。刚上手时会觉得「太复杂了」，不知道怎么组织。建议先找个模板开始，慢慢调整成适合自己的结构。我用了三个月才真正建立起自己的工作流。",
+    "pros": [
+      "All-in-one，替代多个工具",
+      "数据库功能强大，视图灵活",
+      "模板丰富，快速上手",
+      "协作功能完善",
+      "跨平台同步稳定"
+    ],
+    "cons": [
+      "学习曲线较陡，需要时间适应",
+      "离线功能不够完善",
+      "大型数据库加载会变慢",
+      "移动端体验不如桌面端"
+    ],
+    "suitableFor": [
+      "知识工作者、学生、研究员",
+      "需要管理复杂项目的团队",
+      "想建立个人知识库的人"
+    ],
+    "notSuitableFor": [
+      "只想简单记笔记的用户",
+      "对离线使用有强需求的用户",
+      "不想花时间学习工具的用户"
+    ],
+    "pricing": {
+      "free": "个人版完全免费，无存储限制",
+      "paid": "$10/月，无限 AI 使用，更多协作功能",
+      "recommendation": "个人用户免费版足够，团队版值得付费"
+    },
+    "alternatives": [
+      { "name": "Obsidian", "pros": "本地存储，隐私更好，插件丰富", "cons": "没有原生数据库功能" },
+      { "name": "Roam Research", "pros": "双向链接，适合网状思维", "cons": "价格高，学习曲线更陡" }
+    ],
+    "testedAt": "2026-02-17",
+    "version": "Notion 3.0"
+  }
+]
