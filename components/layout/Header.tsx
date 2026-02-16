@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
-import { Search, Menu } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -27,11 +32,65 @@ export default function Header() {
               <Search className="w-4 h-4" />
               <span>搜索</span>
             </Link>
-            <button className="md:hidden">
-              <Menu className="w-6 h-6 text-gray-600" />
+            <button 
+              className="md:hidden p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6 text-gray-600" />
+              ) : (
+                <Menu className="w-6 h-6 text-gray-600" />
+              )}
             </button>
           </div>
         </div>
+        
+        {/* 移动端菜单 */}
+        {mobileMenuOpen && (
+          <nav className="md:hidden py-4 border-t">
+            <ul className="space-y-4">
+              <li>
+                <Link 
+                  href="/tools" 
+                  className="block text-gray-600 hover:text-gray-900 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  全部工具
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/categories" 
+                  className="block text-gray-600 hover:text-gray-900 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  分类
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/blog" 
+                  className="block text-gray-600 hover:text-gray-900 py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  博客
+                </Link>
+              </li>
+              <li className="pt-2 border-t">
+                <Link 
+                  href="/tools"
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Search className="w-4 h-4" />
+                  <span>搜索工具</span>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        )}
       </div>
     </header>
   );

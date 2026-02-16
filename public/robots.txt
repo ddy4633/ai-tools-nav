@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aitoolsnav-web.dokploy.vibecodinghub.org/sitemap.xml

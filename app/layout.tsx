@@ -1,10 +1,18 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aitools-nav.com';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#6366f1',
+};
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'AI工具导航',
     description: '发现最好用的AI工具',
-    url: 'https://aitools-nav.com',
+    url: siteUrl,
     siteName: 'AI工具导航',
     locale: 'zh_CN',
     type: 'website',
@@ -27,7 +35,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: 'https://aitools-nav.com',
+    canonical: siteUrl,
   },
 };
 
@@ -36,8 +44,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'AI工具导航',
+    url: siteUrl,
+    description: '发现最好用的AI工具',
+  };
+
   return (
     <html lang="zh-CN">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={inter.className}>
         <div className="min-h-screen flex flex-col">
           <Header />
