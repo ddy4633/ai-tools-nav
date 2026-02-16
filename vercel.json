@@ -1,0 +1,14 @@
+{
+  "name": "ai-tools-nav",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://crmkyaoczrvnjsizlaas.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNybWt5YW9jenJ2bmpzaXpsYWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNzQxNDksImV4cCI6MjA4Njc1MDE0OX0.q_qxaozd4Ct_B2yyrZXbVJSCon57kO8HCdWr_7xtG9M"
+  }
+}
