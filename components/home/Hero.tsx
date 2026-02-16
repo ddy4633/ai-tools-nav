@@ -13,46 +13,55 @@ export default function Hero() {
     }
   };
 
+  const quickTags = ['ChatGPT', 'Claude', 'Midjourney', 'Notion'];
+
   return (
-    <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 text-white py-20 md:py-32">
-      <div className="container mx-auto px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          发现最好用的 AI 工具
-        </h1>
-        <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl mx-auto">
-          1000+ AI 工具，涵盖写作、图像、代码、音频等领域
-          <br />
-          帮你提升 10 倍效率
-        </p>
-        
-        <form onSubmit={handleSearch} className="max-w-2xl mx-auto relative">
-          <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
-            <input
-              type="text"
-              placeholder="搜索 AI 工具..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 px-6 py-4 text-gray-800 outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 font-medium transition-colors"
-            >
-              <Search className="w-5 h-5" />
-            </button>
+    <section className="py-20 md:py-28 bg-bg-primary">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="max-w-2xl">
+          {/* 标题 - 手写风格 */}
+          <h1 className="text-4xl md:text-5xl font-medium text-text-primary mb-6 leading-tight">
+            「好工具，<br />
+            值得被看见」
+          </h1>
+          
+          {/* 副标题 - 更人味 */}
+          <p className="text-lg text-text-secondary mb-8 leading-relaxed">
+            这里收集了我们真正用过、觉得好用的工具。<br className="hidden md:block" />
+            没有广告，只有真诚的推荐。
+          </p>
+          
+          {/* 搜索框 - 简化 */}
+          <form onSubmit={handleSearch} className="relative max-w-lg">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="搜索工具..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-5 py-3.5 pr-24 bg-white border border-border-medium rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-accent-warm text-white text-sm rounded-md hover:bg-accent-warm-hover transition-colors"
+              >
+                搜索
+              </button>
+            </div>
+          </form>
+          
+          {/* 快捷标签 */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            {quickTags.map((tag) => (
+              <a
+                key={tag}
+                href={`/tools?search=${encodeURIComponent(tag)}`}
+                className="px-3 py-1 text-sm text-text-secondary bg-border-light rounded-full hover:bg-border-medium hover:text-text-primary transition-colors"
+              >
+                {tag}
+              </a>
+            ))}
           </div>
-        </form>
-        
-        <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
-          {['ChatGPT', 'Midjourney', 'Claude', 'Notion AI'].map((tag) => (
-            <a
-              key={tag}
-              href={`/tools?search=${tag}`}
-              className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full transition-colors"
-            >
-              {tag}
-            </a>
-          ))}
         </div>
       </div>
     </section>

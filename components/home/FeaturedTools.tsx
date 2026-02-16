@@ -1,32 +1,36 @@
 'use client';
 
-import { Star, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 interface Tool {
   id: string;
   name: string;
   description: string;
-  logo_url: string;
+  reason?: string;  // 推荐理由
   category: string;
-  rating: number;
-  is_free: boolean;
-  pricing_type: string;
+  pricing_type: 'free' | 'paid' | 'freemium';
+  icon?: string;
 }
 
 interface FeaturedToolsProps {
   tools: Tool[];
 }
 
+const pricingLabels = {
+  free: { text: '免费', className: 'bg-accent-cool/10 text-accent-cool' },
+  paid: { text: '付费', className: 'bg-accent-warm/10 text-accent-warm' },
+  freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
+};
+
 export default function FeaturedTools({ tools }: FeaturedToolsProps) {
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-bg-secondary">
+      <div className="max-w-6xl mx-auto px-6">
         <div className="flex justify-between items-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900">热门 AI 工具</h2>
+          <h2 className="text-2xl font-medium text-text-primary">热门工具</h2>
           <Link
             href="/tools"
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium transition-colors"
           >
             查看全部 →
           </Link>
@@ -43,38 +47,47 @@ export default function FeaturedTools({ tools }: FeaturedToolsProps) {
 }
 
 function ToolCard({ tool }: { tool: Tool }) {
+  const pricing = pricingLabels[tool.pricing_type] || pricingLabels.freemium;
+  
   return (
-    <Link href={`/tools/${tool.id}`}>
-      <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100">
-        <div className="flex items-start justify-between mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-            {tool.name[0]}
-          </div>
-          <div className="flex items-center gap-1 text-amber-500">
-            <Star className="w-4 h-4 fill-current" />
-            <span className="text-sm font-medium">{tool.rating || '4.5'}</span>
-          </div>
+    <Link 
+      href={`/tools/${tool.id}`}
+      className="group block bg-white rounded-xl border border-border-light p-5 hover:shadow-hover hover:border-border-medium transition-all duration-300"
+    >
+      {/* 头部：图标 + 名称 */}
+      <div className="flex items-start gap-4 mb-4">
+        <div className="w-12 h-12 rounded-lg bg-bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
+          {tool.icon ? (
+            <img src={tool.icon} alt="" className="w-8 h-8 object-contain" />
+          ) : (
+            <span className="text-xl text-accent-warm font-medium">
+              {tool.name[0]}
+            </span>
+          )}
         </div>
-        
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{tool.name}</h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {tool.description}
-        </p>
-        
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-            {tool.category}
-          </span>
-          <span
-            className={`text-xs px-2 py-1 rounded ${
-              tool.is_free || tool.pricing_type === 'free'
-                ? 'bg-green-100 text-green-700'
-                : 'bg-amber-100 text-amber-700'
-            }`}
-          >
-            {tool.is_free || tool.pricing_type === 'free' ? '免费' : '付费'}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors">
+            {tool.name}
+          </h3>
+          <span className={`inline-block mt-1 px-2 py-0.5 text-xs rounded ${pricing.className}`}>
+            {pricing.text}
           </span>
         </div>
+      </div>
+      
+      {/* 推荐理由 */}
+      <p className="text-text-secondary text-sm leading-relaxed mb-4">
+        {tool.reason || tool.description}
+      </p>
+      
+      {/* 底部分类 */}
+      <div className="flex items-center justify-between pt-4 border-t border-bg-primary">
+        <span className="text-xs text-text-muted">
+          {tool.category}
+        </span>
+        <span className="text-xs text-accent-warm opacity-0 group-hover:opacity-100 transition-opacity">
+          查看详情 →
+        </span>
       </div>
     </Link>
   );

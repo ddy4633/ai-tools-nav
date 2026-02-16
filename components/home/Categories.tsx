@@ -1,86 +1,60 @@
 'use client';
 
 import Link from 'next/link';
-import { 
-  PenTool, 
-  Image, 
-  Code, 
-  Music, 
-  Video, 
-  Bot,
-  BarChart,
-  Globe,
-  type LucideIcon 
-} from 'lucide-react';
 
 interface Category {
   id: string;
   name: string;
   slug: string;
-  description: string;
-  icon: string;
-  tool_count: number;
+  count: number;
+  popularity: number;  // 0-100
 }
 
 interface CategoriesProps {
-  categories: Category[];
+  categories?: Category[];
 }
 
-const iconMap: Record<string, LucideIcon> = {
-  'writing': PenTool,
-  'image': Image,
-  'code': Code,
-  'audio': Music,
-  'video': Video,
-  'chatbot': Bot,
-  'productivity': BarChart,
-  'marketing': Globe,
-};
+const defaultCategories: Category[] = [
+  { id: '1', name: 'AI写作', slug: 'writing', count: 120, popularity: 95 },
+  { id: '2', name: 'AI图像', slug: 'image', count: 85, popularity: 90 },
+  { id: '3', name: 'AI编程', slug: 'code', count: 64, popularity: 85 },
+  { id: '4', name: 'AI聊天', slug: 'chatbot', count: 56, popularity: 88 },
+  { id: '5', name: 'AI音频', slug: 'audio', count: 42, popularity: 70 },
+  { id: '6', name: 'AI视频', slug: 'video', count: 38, popularity: 75 },
+  { id: '7', name: '设计助手', slug: 'design', count: 35, popularity: 65 },
+  { id: '8', name: '效率工具', slug: 'productivity', count: 48, popularity: 80 },
+  { id: '9', name: '知识管理', slug: 'knowledge', count: 28, popularity: 60 },
+  { id: '10', name: '数据分析', slug: 'data', count: 32, popularity: 55 },
+];
 
-export default function Categories({ categories }: CategoriesProps) {
-  // 如果没有数据，使用默认分类
-  const displayCategories = categories.length > 0 
-    ? categories 
-    : [
-        { id: '1', name: 'AI写作', slug: 'writing', description: '智能写作助手', icon: 'writing', tool_count: 120 },
-        { id: '2', name: 'AI图像', slug: 'image', description: '图像生成与编辑', icon: 'image', tool_count: 85 },
-        { id: '3', name: 'AI编程', slug: 'code', description: '代码助手与开发工具', icon: 'code', tool_count: 64 },
-        { id: '4', name: 'AI音频', slug: 'audio', description: '语音合成与音乐创作', icon: 'audio', tool_count: 42 },
-        { id: '5', name: 'AI视频', slug: 'video', description: '视频生成与剪辑', icon: 'video', tool_count: 38 },
-        { id: '6', name: 'AI聊天', slug: 'chatbot', description: '智能对话机器人', icon: 'chatbot', tool_count: 56 },
-      ];
+export default function Categories({ categories = [] }: CategoriesProps) {
+  const displayCategories = categories.length > 0 ? categories : defaultCategories;
+  
+  // 根据 popularity 计算字号
+  const getFontSize = (popularity: number) => {
+    if (popularity >= 90) return 'text-lg';
+    if (popularity >= 70) return 'text-base';
+    return 'text-sm';
+  };
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
+    <section className="py-16 bg-bg-primary">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-2xl font-medium text-text-primary mb-8">
           按分类浏览
         </h2>
-        <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-          探索 20+ 个 AI 工具分类，找到适合你需求的工具
-        </p>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {displayCategories.map((category) => {
-            const IconComponent = iconMap[category.icon] || Bot;
-            return (
-              <Link
-                key={category.id}
-                href={`/categories/${category.slug}`}
-                className="group bg-white rounded-xl p-6 text-center border border-gray-100 hover:border-blue-300 hover:shadow-md transition-all"
-              >
-                <div className="w-14 h-14 mx-auto mb-4 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors"
-                >
-                  <IconComponent className="w-7 h-7 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-1">{category.name}</h3>
-                <p className="text-sm text-gray-500 mb-2">{category.description}</p>
-                <span className="text-xs text-gray-400">
-                  {category.tool_count} 个工具
-                </span>
-              </Link>
-            );
-          })}
+        <div className="flex flex-wrap gap-3">
+          {displayCategories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/categories/${cat.slug}`}
+              className={`px-4 py-2 bg-white border border-border-light rounded-lg text-text-secondary hover:text-accent-warm hover:border-accent-warm hover:shadow-soft transition-all ${getFontSize(cat.popularity)}`}
+            >
+              {cat.name}
+              <span className="ml-2 text-xs text-text-muted">({cat.count})</span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

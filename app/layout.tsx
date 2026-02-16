@@ -1,32 +1,29 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aitools-nav.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai.poph163.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#6366f1',
+  themeColor: '#F5F1EB',
 };
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI工具导航 - 发现最好用的AI工具',
-    template: '%s | AI工具导航',
+    default: '好工具 - 发现真正好用的工具',
+    template: '%s | 好工具',
   },
-  description: '发现1000+最好用的AI工具，涵盖AI写作、图像生成、代码助手等领域。帮你提升10倍效率！',
-  keywords: ['AI工具', '人工智能', 'AI导航', 'AI写作', 'AI图像', 'ChatGPT', 'Claude'],
-  authors: [{ name: 'AI工具导航' }],
+  description: '这里收集了我们真正用过、觉得好用的工具。没有广告，只有真诚的推荐。',
+  keywords: ['AI工具', '效率工具', '工具推荐', '软件推荐', '好工具'],
+  authors: [{ name: '好工具' }],
   openGraph: {
-    title: 'AI工具导航',
-    description: '发现最好用的AI工具',
+    title: '好工具',
+    description: '发现真正好用的工具',
     url: siteUrl,
-    siteName: 'AI工具导航',
+    siteName: '好工具',
     locale: 'zh_CN',
     type: 'website',
   },
@@ -47,9 +44,9 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'AI工具导航',
+    name: '好工具',
     url: siteUrl,
-    description: '发现最好用的AI工具',
+    description: '发现真正好用的工具',
   };
 
   return (
@@ -60,7 +57,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={inter.className}>
+      <body className="bg-bg-primary text-text-primary">
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">{children}</main>

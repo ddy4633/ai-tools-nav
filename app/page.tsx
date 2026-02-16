@@ -1,4 +1,5 @@
 import Hero from '@/components/home/Hero';
+import EditorPicks from '@/components/home/EditorPicks';
 import FeaturedTools from '@/components/home/FeaturedTools';
 import Categories from '@/components/home/Categories';
 import { getFeaturedTools, getCategories } from '@/lib/supabase';
@@ -14,6 +15,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
+      <EditorPicks />
       <FeaturedTools tools={tools} />
       <Categories categories={categories} />
     </>
