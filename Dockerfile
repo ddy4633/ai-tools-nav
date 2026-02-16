@@ -1,23 +1,10 @@
-FROM node:20-alpine
+FROM nginx:alpine
 
-WORKDIR /app
-
-# 安装依赖
-COPY package*.json ./
-RUN npm install
-
-# 复制源代码
-COPY . .
-
-# 构建
-RUN npm run build
+# 复制静态文件到 nginx 目录
+COPY dist /usr/share/nginx/html
 
 # 暴露端口
-EXPOSE 3000
+EXPOSE 80
 
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
-
-# 使用 Next.js 标准启动方式
-CMD ["npm", "start"]
+# 启动 nginx
+CMD ["nginx", "-g", "daemon off;"]
