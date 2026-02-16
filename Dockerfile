@@ -19,5 +19,5 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# 使用完整路径启动
-CMD ["node", ".next/standalone/openclaw_code/ai-tools-nav/server.js"]
+# Docker 内构建路径不同，使用正确路径
+CMD ["node", ".next/standalone/server.js"]
