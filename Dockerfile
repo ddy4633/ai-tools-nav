@@ -5,8 +5,8 @@ WORKDIR /app
 # 复制 package.json 和 package-lock.json
 COPY package*.json ./
 
-# 安装依赖
-RUN npm ci --only=production
+# 安装所有依赖
+RUN npm ci
 
 # 复制源代码
 COPY . .
@@ -17,5 +17,10 @@ RUN npm run build
 # 暴露端口
 EXPOSE 3000
 
-# 启动应用
-CMD ["npm", "start"]
+# 设置环境变量
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+# 使用 standalone 模式启动（根据实际路径）
+CMD ["node", ".next/standalone/openclaw_code/ai-tools-nav/server.js"]
