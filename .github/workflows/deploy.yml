@@ -1,0 +1,33 @@
+name: Deploy to Dokploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      
+      - name: Trigger Dokploy Webhook
+        run: |
+          curl -X POST "https://dokploy.vibecodinghub.org/api/deploy/PmPT8Mh9WV7czKQ-R8TA2" \
+            -H "Content-Type: application/json" \
+            -w "\nHTTP Status: %{http_code}\n"
