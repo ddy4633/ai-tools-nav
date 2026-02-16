@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "./start.sh",
     "lint": "next lint",
     "db:types": "supabase gen types typescript --project-id $PROJECT_ID --schema public > types/supabase.ts"
   },
