@@ -4,7 +4,7 @@ WORKDIR /app
 
 # 安装依赖
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # 复制源代码
 COPY . .
