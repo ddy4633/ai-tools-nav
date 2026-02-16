@@ -7,11 +7,10 @@
     "name": "ai-tools-nav-web",
     "type": "application",
     "build": {
-      "type": "nixpacks",
-      "buildCommand": "npm install && npm run build"
+      "type": "docker",
+      "dockerfile": "Dockerfile"
     },
     "deploy": {
-      "startCommand": "npm start",
       "port": 3000,
       "healthCheck": {
         "path": "/api/health",
