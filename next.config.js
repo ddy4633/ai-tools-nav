@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  // 使用标准输出而非 standalone
+  distDir: '.next',
   images: {
     unoptimized: true,
   },
