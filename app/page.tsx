@@ -1,13 +1,14 @@
 import Hero from '@/components/home/Hero';
-import EditorPicks from '@/components/home/EditorPicks';
+import TrendingTools from '@/components/home/TrendingTools';
 import FeaturedTools from '@/components/home/FeaturedTools';
 import Categories from '@/components/home/Categories';
-import { getFeaturedTools, getCategories } from '@/lib/supabase';
+import { getTrendingTools, getFeaturedTools, getCategories } from '@/lib/supabase';
 
 export const revalidate = 3600; // 每小时重新验证
 
 export default async function Home() {
-  const [tools, categories] = await Promise.all([
+  const [trending, tools, categories] = await Promise.all([
+    getTrendingTools(10),  // 获取热度最高的10个
     getFeaturedTools(8),
     getCategories(),
   ]);
@@ -15,7 +16,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <EditorPicks />
+      <TrendingTools tools={trending} />
       <FeaturedTools tools={tools} />
       <Categories categories={categories} />
     </>
