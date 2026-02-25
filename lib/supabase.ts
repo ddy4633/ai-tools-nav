@@ -68,6 +68,47 @@ export async function getCategories() {
   return data;
 }
 
+// 获取所有工具
+export async function getAllTools() {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return getMockTools();
+  }
+  
+  const { data, error } = await supabase
+    .from('tools')
+    .select('*')
+    .order('name', { ascending: true });
+  
+  if (error || !data || data.length === 0) {
+    return getMockTools();
+  }
+  
+  return data;
+}
+
+// 根据 ID 获取工具
+export async function getToolById(id: string) {
+  const supabase = getSupabase();
+  if (!supabase) {
+    const mockTools = getMockTools();
+    return mockTools.find(t => t.id === id) || null;
+  }
+  
+  const { data, error } = await supabase
+    .from('tools')
+    .select('*')
+    .eq('id', id)
+    .single();
+  
+  if (error || !data) {
+    const mockTools = getMockTools();
+    return mockTools.find(t => t.id === id) || null;
+  }
+  
+  return data;
+}
+
 // 模拟热度工具数据
 function getMockTrendingTools() {
   return [
