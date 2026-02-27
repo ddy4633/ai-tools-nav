@@ -202,14 +202,14 @@ function getMockTrendingTools() {
 
 function getMockTools() {
   return [
-    { id: '1', name: 'ChatGPT', description: 'OpenAI 开发的大型语言模型，支持对话、写作、编程等多种任务', category: 'AI聊天', pricing_type: 'freemium' as const },
-    { id: '2', name: 'Midjourney', description: '强大的 AI 图像生成工具，可创建高质量艺术作品', category: 'AI图像', pricing_type: 'paid' as const },
-    { id: '3', name: 'Claude', description: 'Anthropic 开发的 AI 助手，擅长长文本分析和推理', category: 'AI聊天', pricing_type: 'freemium' as const },
-    { id: '4', name: 'Notion AI', description: 'Notion 内置的 AI 写作助手，支持笔记、文档生成', category: 'AI写作', pricing_type: 'paid' as const },
-    { id: '5', name: 'GitHub Copilot', description: 'GitHub 和 OpenAI 合作的 AI 编程助手', category: 'AI编程', pricing_type: 'paid' as const },
-    { id: '6', name: 'Jasper', description: '企业级 AI 写作工具，专注于营销文案创作', category: 'AI写作', pricing_type: 'paid' as const },
-    { id: '7', name: 'Runway', description: 'AI 视频编辑和生成工具，支持多种创意效果', category: 'AI视频', pricing_type: 'freemium' as const },
-    { id: '8', name: 'Suno', description: 'AI 音乐生成工具，可根据文字描述创作歌曲', category: 'AI音频', pricing_type: 'freemium' as const },
+    { id: '1', name: 'ChatGPT', description: 'OpenAI 开发的大型语言模型，支持对话、写作、编程等多种任务', category: 'AI聊天', pricing_type: 'freemium' as const, average_rating: 4.5, rating_count: 128, website: 'https://chat.openai.com', repo_url: null },
+    { id: '2', name: 'Midjourney', description: '强大的 AI 图像生成工具，可创建高质量艺术作品', category: 'AI图像', pricing_type: 'paid' as const, average_rating: 4.8, rating_count: 256, website: 'https://www.midjourney.com', repo_url: null },
+    { id: '3', name: 'Claude', description: 'Anthropic 开发的 AI 助手，擅长长文本分析和推理', category: 'AI聊天', pricing_type: 'freemium' as const, average_rating: 4.7, rating_count: 89, website: 'https://claude.ai', repo_url: null },
+    { id: '4', name: 'Notion AI', description: 'Notion 内置的 AI 写作助手，支持笔记、文档生成', category: 'AI写作', pricing_type: 'paid' as const, average_rating: 4.2, rating_count: 67, website: 'https://www.notion.so/product/ai', repo_url: null },
+    { id: '5', name: 'GitHub Copilot', description: 'GitHub 和 OpenAI 合作的 AI 编程助手', category: 'AI编程', pricing_type: 'paid' as const, average_rating: 4.6, rating_count: 312, website: 'https://github.com/features/copilot', repo_url: 'https://github.com/github/copilot' },
+    { id: '6', name: 'Jasper', description: '企业级 AI 写作工具，专注于营销文案创作', category: 'AI写作', pricing_type: 'paid' as const, average_rating: 4.3, rating_count: 45, website: 'https://www.jasper.ai', repo_url: null },
+    { id: '7', name: 'Runway', description: 'AI 视频编辑和生成工具，支持多种创意效果', category: 'AI视频', pricing_type: 'freemium' as const, average_rating: 4.4, rating_count: 78, website: 'https://runwayml.com', repo_url: null },
+    { id: '8', name: 'Suno', description: 'AI 音乐生成工具，可根据文字描述创作歌曲', category: 'AI音频', pricing_type: 'freemium' as const, average_rating: 4.5, rating_count: 92, website: 'https://suno.com', repo_url: null },
   ];
 }
 

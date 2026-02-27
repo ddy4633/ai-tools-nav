@@ -274,7 +274,71 @@
 
 ---
 
-## 九、构建验证
+## 八、Git 提交记录
+
+### 最新提交
+- **Commit**: `b9a565c`
+- **Message**: `feat: 全面优化SEO、样式和内容 - 添加20个工具评测`
+- **分支**: `main`
+- **时间**: 2026-02-27
+- **变更文件**: 16 files, +1574 lines
+- **GitHub**: https://github.com/ddy4633/ai-tools-nav/commit/b9a565c
+
+### 关键修复
+- **next.config.js**: 添加 `output: 'standalone'` 配置，修复 Dokploy Docker 构建失败问题
+- **构建验证**: ✅ 本地 `npm run build` 成功，standalone 目录生成正常
+
+---
+
+## 九、Dokploy 部署指南
+
+### 部署配置
+1. **构建命令**: `npm run build`
+2. **启动命令**: `npm start`
+3. **端口**: `3000`
+4. **健康检查**: `http://localhost:3000/api/health`
+
+### Dokploy 构建问题解决
+**问题**: `npm run build` 在 Docker 中退出代码 1  
+**原因**: `next.config.js` 缺少 `output: 'standalone'` 配置  
+**修复**: 在 `next.config.js` 中添加 `output: 'standalone'`
+
+```javascript
+const nextConfig = {
+  output: 'standalone',  // 必需！用于 Docker 部署
+  distDir: '.next',
+  images: {
+    unoptimized: true,
+  },
+};
+```
+
+### Dockerfile 说明
+```dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+# standalone 模式会自动生成 .next/standalone 目录
+EXPOSE 3000
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+CMD ["npm", "start"]
+```
+
+### 环境变量
+| 变量 | 说明 | 必需 |
+|------|------|------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase 项目 URL | 是 |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase 匿名密钥 | 是 |
+| `NODE_ENV` | 环境模式 (production) | 自动 |
+
+---
+
+## 十、构建验证
 
 **构建状态**: ✅ 成功  
 **构建时间**: 2026-02-27  
