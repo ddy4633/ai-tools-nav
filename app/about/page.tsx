@@ -1,3 +1,11 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '关于我们 - 好工具',
+  description: '了解好工具团队的使命和原则。我们致力于发现和推荐真正好用的 AI 工具，帮助用户提升工作效率。',
+  keywords: ['关于我们', '好工具', 'AI工具推荐', '团队介绍'],
+};
+
 export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">

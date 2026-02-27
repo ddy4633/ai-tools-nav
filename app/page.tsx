@@ -2,6 +2,7 @@ import Hero from '@/components/home/Hero';
 import TrendingTools from '@/components/home/TrendingTools';
 import FeaturedTools from '@/components/home/FeaturedTools';
 import Categories from '@/components/home/Categories';
+import NewsletterSection from '@/components/home/NewsletterSection';
 import { getTrendingTools, getFeaturedTools, getCategories } from '@/lib/supabase';
 
 export const revalidate = 3600; // 每小时重新验证
@@ -19,6 +20,7 @@ export default async function Home() {
       <TrendingTools tools={trending} />
       <FeaturedTools tools={tools} />
       <Categories categories={categories} />
+      <NewsletterSection />
     </>
   );
 }
