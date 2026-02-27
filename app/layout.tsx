@@ -93,6 +93,13 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
+        {/* Google Search Console Verification */}
+        <meta name="google-site-verification" content="your-google-verification-code" />
+        {/* Baidu Search Verification */}
+        <meta name="baidu-site-verification" content="your-baidu-verification-code" />
+        {/* Bing Webmaster Tools */}
+        <meta name="msvalidate.01" content="your-bing-verification-code" />
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
