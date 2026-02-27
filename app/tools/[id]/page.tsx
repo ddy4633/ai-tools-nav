@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { getToolById, getAllTools } from '@/lib/supabase';
+import { RatingDisplay } from '@/components/ui/star-rating';
+import { RatingForm } from '@/components/rating-form';
 
 interface ToolPageProps {
   params: Promise<{ id: string }>;
@@ -73,13 +75,21 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <div className="flex items-start justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
-              <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
-                {pricing.text}
-              </span>
+              <div className="flex items-center gap-3 mb-3">
+                <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
+                  {pricing.text}
+                </span>
+                <span className="text-sm text-text-muted bg-bg-secondary px-3 py-1 rounded-lg">
+                  {tool.category}
+                </span>
+              </div>
+              {/* 评分显示 */}
+              <RatingDisplay 
+                averageRating={tool.average_rating || 0} 
+                ratingCount={tool.rating_count || 0}
+                size="md"
+              />
             </div>
-            <span className="text-sm text-text-muted bg-bg-secondary px-3 py-1 rounded-lg">
-              {tool.category}
-            </span>
           </div>
           
           <p className="text-text-secondary text-lg mb-8 leading-relaxed">
@@ -116,6 +126,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
               查看其他工具
             </Link>
           </div>
+        </div>
+        
+        {/* 评分区域 */}
+        <div className="mt-8 bg-white rounded-2xl p-8 shadow-soft">
+          <h2 className="text-2xl font-bold text-text-primary mb-6">用户评价</h2>
+          <RatingForm toolId={tool.id} />
         </div>
         
         {/* 提示 */}
