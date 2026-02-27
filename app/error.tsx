@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
 export default function Error({
   error,
@@ -10,30 +11,57 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    // 可以在这里发送错误到日志服务
+    console.error('Application error:', error);
   }, [error]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4">
-      <div className="text-center max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900">出错了</h2>
-        <p className="text-gray-600 mb-6">
-          抱歉，页面加载时出现了问题。请稍后重试。
+    <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center px-6">
+      <div className="text-center max-w-lg">
+        <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+          <AlertTriangle className="w-10 h-10 text-red-500" />
+        </div>
+        
+        <h1 className="text-3xl font-bold text-text-primary mb-4">
+          出错了
+        </h1>
+        
+        <p className="text-text-secondary mb-2">
+          抱歉，页面加载时出现了问题
         </p>
-        <div className="flex gap-4 justify-center"
-        >
+        
+        <p className="text-sm text-text-muted mb-8">
+          错误代码: {error.digest || 'UNKNOWN_ERROR'}
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={reset}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover transition-colors"
           >
+            <RefreshCw className="w-4 h-4" />
             重试
           </button>
+          
           <a
             href="/"
-            className="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-accent-warm hover:text-accent-warm transition-colors"
           >
+            <Home className="w-4 h-4" />
             返回首页
           </a>
+        </div>
+        
+        <div className="mt-12 p-4 bg-bg-secondary rounded-xl">
+          <p className="text-sm text-text-muted">
+            如果问题持续存在，请{' '}
+            <a
+              href="mailto:hello@ai.poph163.com"
+              className="text-accent-warm hover:text-accent-warm-hover"
+            >
+              联系我们
+            </a>
+          </p>
         </div>
       </div>
     </div>
