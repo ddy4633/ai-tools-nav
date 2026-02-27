@@ -1,16 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import Link from 'next/link';
-import { Filter, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { EnhancedSearch } from '@/components/enhanced-search';
+import { ToolCardSkeletonGrid } from '@/components/ui/Skeleton';
 
 interface Tool {
   id: string;
   name: string;
   description: string;
+  reason?: string;
   category: string;
   pricing_type: 'free' | 'paid' | 'freemium';
+  icon?: string;
 }
 
 interface Category {
@@ -135,12 +138,10 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
         )}
       </div>
 
-      {/* 工具列表 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} />
-        ))}
-      </div>
+      {/* 工具列表 - 使用 Suspense 和骨架屏 */}
+      <Suspense fallback={<ToolCardSkeletonGrid count={9} />}>
+        <ToolsGrid tools={filteredTools} />
+      </Suspense>
 
       {filteredTools.length === 0 && (
         <div className="text-center py-16 bg-white rounded-xl shadow-soft">
@@ -163,6 +164,17 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
   );
 }
 
+// 工具网格组件
+function ToolsGrid({ tools }: { tools: Tool[] }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {tools.map((tool) => (
+        <ToolCard key={tool.id} tool={tool} />
+      ))}
+    </div>
+  );
+}
+
 function ToolCard({ tool }: { tool: Tool }) {
   const pricing = pricingLabels[tool.pricing_type];
 
@@ -171,24 +183,43 @@ function ToolCard({ tool }: { tool: Tool }) {
       href={`/tools/${tool.id}`}
       className="group block bg-white rounded-xl p-6 shadow-soft hover:shadow-hover border border-transparent hover:border-accent-warm/20 transition-all"
     >
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors">
-          {tool.name}
-        </h3>
-        <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${pricing.className}`}>
-          {pricing.text}
-        </span>
+      <div className="flex items-start gap-4 mb-4">
+        {/* 工具图标 */}
+        <div className="w-12 h-12 rounded-lg bg-bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
+          {tool.icon ? (
+            <img src={tool.icon} alt="" className="w-8 h-8 object-contain" loading="lazy" />
+          ) : (
+            <span className="text-xl text-accent-warm font-medium">
+              {tool.name[0]}
+            </span>
+          )}
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between mb-1">
+            <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors truncate">
+              {tool.name}
+            </h3>
+          </div>
+          <span className={`inline-block px-2 py-0.5 text-xs rounded ${pricing.className}`}>
+            {pricing.text}
+          </span>
+        </div>
       </div>
 
+      {/* 推荐理由或描述 */}
       <p className="text-text-secondary text-sm mb-4 line-clamp-2">
-        {tool.description}
+        {tool.reason || tool.description}
       </p>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-3 border-t border-bg-primary">
         <span className="text-xs text-text-muted bg-bg-secondary px-2 py-1 rounded">
           {tool.category}
         </span>
-        <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-accent-warm group-hover:translate-x-1 transition-all" />
+        <span className="flex items-center gap-1 text-xs text-accent-warm opacity-0 group-hover:opacity-100 transition-opacity">
+          查看详情
+          <ArrowRight className="w-3 h-3" />
+        </span>
       </div>
     </Link>
   );
