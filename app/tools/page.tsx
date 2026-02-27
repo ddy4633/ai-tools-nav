@@ -3,8 +3,14 @@ import { getAllTools, getCategories } from '@/lib/supabase';
 import ToolsClient from './ToolsClient';
 
 export const metadata: Metadata = {
-  title: '全部 AI 工具 - 好工具',
-  description: '发现 100+ 最好用的 AI 工具，包括 AI 写作、图像生成、代码助手、聊天机器人等。',
+  title: '全部 AI 工具 - 发现最好用的 AI 工具导航',
+  description: '浏览 1000+ 最好用的 AI 工具，支持 AI 写作、图像生成、代码助手、聊天机器人等分类筛选和搜索。基于真实用户评价和热度排行。',
+  keywords: ['AI工具', 'AI工具导航', '人工智能工具', 'AI写作', 'AI图像', 'AI编程', 'AI聊天'],
+  openGraph: {
+    title: '全部 AI 工具 - 好工具',
+    description: '浏览 1000+ 最好用的 AI 工具，支持分类筛选和搜索',
+    type: 'website',
+  },
 };
 
 export const revalidate = 3600;

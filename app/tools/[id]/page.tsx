@@ -24,12 +24,19 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   if (!tool) {
     return {
       title: '工具未找到 - 好工具',
+      description: '抱歉，您查找的工具不存在或已被移除。',
     };
   }
   
   return {
-    title: `${tool.name} - 好工具`,
-    description: tool.description,
+    title: `${tool.name} - ${tool.category}AI工具`,
+    description: `${tool.description}。了解更多关于${tool.name}的功能、定价和用户评价。`,
+    keywords: [tool.name, tool.category, 'AI工具', '人工智能', '工具评测'],
+    openGraph: {
+      title: `${tool.name} - ${tool.category}`,
+      description: tool.description,
+      type: 'article',
+    },
   };
 }
 
@@ -80,9 +87,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </p>
           
           {/* 操作按钮 */}
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             <a
-              href="#"
+              href={tool.website || '#'}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover transition-colors"
@@ -90,6 +97,17 @@ export default async function ToolPage({ params }: ToolPageProps) {
               访问官网
               <ExternalLink className="w-4 h-4" />
             </a>
+            
+            {tool.repo_url && (
+              <a
+                href={tool.repo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-accent-warm hover:text-accent-warm transition-colors"
+              >
+                查看源码
+              </a>
+            )}
             
             <Link
               href="/tools"

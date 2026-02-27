@@ -145,9 +145,20 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
       </div>
 
       {filteredTools.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-text-muted text-lg mb-2">没有找到匹配的工具</p>
-          <p className="text-text-muted text-sm">试试其他关键词或筛选条件</p>
+        <div className="text-center py-16 bg-white rounded-xl shadow-soft">
+          <div className="text-6xl mb-4">🔍</div>
+          <p className="text-text-primary text-lg mb-2">没有找到匹配的工具</p>
+          <p className="text-text-muted text-sm mb-6">试试其他关键词，或清除筛选条件</p>
+          <button
+            onClick={() => {
+              setSearch('');
+              setSelectedCategory('all');
+              setSelectedPricing('all');
+            }}
+            className="px-6 py-2 bg-accent-warm text-white rounded-lg hover:bg-accent-warm-hover transition-colors"
+          >
+            清除所有筛选
+          </button>
         </div>
       )}
     </>
