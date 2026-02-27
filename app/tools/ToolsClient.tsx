@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Filter, ArrowRight } from 'lucide-react';
+import { Filter, ArrowRight } from 'lucide-react';
+import { EnhancedSearch } from '@/components/enhanced-search';
 
 interface Tool {
   id: string;
@@ -55,15 +56,12 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
     <>
       {/* 搜索和筛选 */}
       <div className="bg-white rounded-xl p-6 shadow-soft mb-8">
-        {/* 搜索框 */}
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="搜索工具名称或描述..."
-            className="w-full pl-12 pr-4 py-3 bg-bg-secondary border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm transition-colors"
+        {/* 增强搜索框 */}
+        <div className="mb-6">
+          <EnhancedSearch
+            tools={tools}
+            onSearch={setSearch}
+            currentQuery={search}
           />
         </div>
 
