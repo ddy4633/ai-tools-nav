@@ -1,31 +1,44 @@
 import type { Metadata, Viewport } from 'next';
+import { JetBrains_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai.poph163.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#F5F1EB',
+  themeColor: '#0a0a0f',
 };
 
 export const metadata: Metadata = {
   title: {
-    default: '好工具 - 发现最好用的 AI 工具导航',
-    template: '%s | 好工具',
+    default: '_TOOLS // Next-Gen AI Tools Directory',
+    template: '%s | _TOOLS',
   },
-  description: '发现 1000+ 最好用的 AI 工具，包括 AI 写作、图像生成、代码助手、聊天机器人等。基于真实用户评价和热度排行，帮你快速找到适合的 AI 工具。',
-  keywords: ['AI工具', 'AI导航', '人工智能工具', '效率工具', '工具推荐', '软件推荐', '好工具', 'AI评测'],
-  authors: [{ name: '好工具', url: 'https://ai.poph163.com' }],
-  creator: '好工具团队',
-  publisher: '好工具',
+  description: 'Curated collection of the best AI and developer tools. Discover next-generation utilities for coding, design, and productivity.',
+  keywords: ['AI tools', 'developer tools', 'productivity', 'code utilities', 'tech stack'],
+  authors: [{ name: '_TOOLS', url: 'https://ai.poph163.com' }],
+  creator: '_TOOLS',
+  publisher: '_TOOLS',
   openGraph: {
-    title: '好工具 - 发现最好用的 AI 工具导航',
-    description: '1000+ AI 工具收录，基于热度排行和用户评价，帮你快速找到适合的 AI 工具',
+    title: '_TOOLS // Next-Gen AI Tools Directory',
+    description: 'Curated collection of the best AI and developer tools',
     url: siteUrl,
-    siteName: '好工具',
+    siteName: '_TOOLS',
     locale: 'zh_CN',
     type: 'website',
     images: [
@@ -33,14 +46,14 @@ export const metadata: Metadata = {
         url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: '好工具 - AI 工具导航',
+        alt: '_TOOLS - AI Tools Directory',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '好工具 - 发现最好用的 AI 工具导航',
-    description: '1000+ AI 工具收录，基于热度排行和用户评价',
+    title: '_TOOLS // Next-Gen AI Tools Directory',
+    description: 'Curated collection of the best AI and developer tools',
     images: [`${siteUrl}/og-image.png`],
   },
   robots: {
@@ -72,20 +85,20 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: '好工具',
+    name: '_TOOLS',
     url: siteUrl,
-    description: '发现真正好用的工具',
+    description: 'Next-Gen AI Tools Directory',
   };
 
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-bg-primary text-text-primary">
+      <body className="bg-bg-primary text-text-primary font-sans antialiased">
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">{children}</main>

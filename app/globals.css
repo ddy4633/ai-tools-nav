@@ -1,31 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  /* 背景色 */
-  --bg-primary: #F5F1EB;
-  --bg-secondary: #FAF8F5;
-  --bg-card: #FFFFFF;
+  /* 主背景色 - 深邃宇宙 */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a2e;
+  --bg-hover: #252542;
+  --bg-code: #0d1117;
   
   /* 文字色 */
-  --text-primary: #2C2420;
-  --text-secondary: #6B5E55;
-  --text-muted: #9B8B7B;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+  --text-muted: #6b6b80;
+  --text-accent: #00f5d4;
   
-  /* 强调色 */
-  --accent-warm: #D4825A;
-  --accent-warm-hover: #B86D45;
-  --accent-cool: #4A5D4E;
-  --accent-cool-hover: #3D4D40;
+  /* 霓虹强调色 */
+  --accent-cyan: #00f5d4;
+  --accent-pink: #ff006e;
+  --accent-purple: #8338ec;
+  --accent-yellow: #ffbe0b;
   
   /* 边框 */
-  --border-light: #E8E2D9;
-  --border-medium: #D4CFC4;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(0, 245, 212, 0.3);
+  --border-card: rgba(255, 255, 255, 0.08);
 }
 
 body {
   color: var(--text-primary);
   background-color: var(--bg-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* 字体优化 */
@@ -35,7 +39,7 @@ html {
 
 /* 选择文本颜色 */
 ::selection {
-  background-color: rgba(212, 130, 90, 0.2);
+  background-color: rgba(0, 245, 212, 0.3);
   color: var(--text-primary);
 }
 
@@ -51,4 +55,65 @@ html {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 霓虹脉冲动画 */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(0, 245, 212, 0.5);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* 渐变文字 */
+.text-gradient-cyber {
+  background: linear-gradient(135deg, #00f5d4 0%, #8338ec 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 网格背景 */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(0, 245, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 212, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* 发光效果 */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(131, 56, 236, 0.3);
+}
+
+.glow-pink {
+  box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
+}
+
+/* 玻璃态效果 */
+.glass {
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

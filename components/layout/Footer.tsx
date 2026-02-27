@@ -1,45 +1,79 @@
+'use client';
+
 import Link from 'next/link';
-import { NewsletterForm } from '@/components/newsletter-form';
+import { Terminal, Github, Twitter, Mail } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Footer() {
-  return (
-    <footer className="bg-text-primary text-text-muted py-12">
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Newsletter Section */}
-        <div className="mb-10 pb-10 border-b border-text-secondary/20">
-          <div className="max-w-md mx-auto text-center">
-            <h3 className="text-lg font-medium text-bg-primary mb-2">订阅 AI 工具周报</h3>
-            <p className="text-sm mb-4">每周精选最新 AI 工具和行业动态</p>
-            <NewsletterForm variant="minimal" />
-          </div>
-        </div>
+  const currentYear = new Date().getFullYear();
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          {/* 左侧 */}
-          <div>
-            <h3 className="text-lg font-medium text-bg-primary mb-2">好工具</h3>
-            <p className="text-sm">收集真正好用的工具，真诚推荐。</p>
+  const links = [
+    { name: 'TOOLS', href: '/tools' },
+    { name: 'CATEGORIES', href: '/categories' },
+    { name: 'ABOUT', href: '/about' },
+    { name: 'SUBMIT', href: '/submit' },
+  ];
+
+  const socials = [
+    { name: 'GITHUB', href: 'https://github.com', icon: Github },
+    { name: 'TWITTER', href: 'https://twitter.com', icon: Twitter },
+    { name: 'EMAIL', href: 'mailto:hello@poph163.com', icon: Mail },
+  ];
+
+  return (
+    <footer className="bg-bg-secondary border-t border-border-subtle py-12">
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+        >
+          {/* 左侧 Logo */}
+          <div className="flex items-center gap-2">
+            <Terminal className="w-5 h-5 text-accent-cyan" />
+            <span className="text-xl font-mono font-bold text-text-primary">
+              <span className="text-accent-cyan">&gt;</span>_TOOLS
+            </span>
           </div>
           
-          {/* 右侧链接 */}
-          <div className="flex items-center gap-6 text-sm">
-            <Link href="/about" className="hover:text-bg-primary transition-colors">
-              关于我们
-            </Link>
-            <Link href="/submit" className="hover:text-bg-primary transition-colors">
-              提交工具
-            </Link>
-            <a 
-              href="mailto:hello@poph163.com" 
-              className="hover:text-bg-primary transition-colors"
-            >
-              联系我们
-            </a>
+          {/* 中间导航 */}
+          <nav className="flex flex-wrap items-center gap-6">
+            {links.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-sm font-mono text-text-secondary hover:text-accent-cyan transition-colors"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
+          
+          {/* 右侧社交链接 */}
+          <div className="flex items-center gap-4">
+            {socials.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-text-secondary hover:text-accent-cyan transition-colors"
+                aria-label={social.name}
+              >
+                <social.icon className="w-5 h-5" />
+              </a>
+            ))}
           </div>
-        </div>
+        </motion.div>
         
-        <div className="mt-8 pt-8 border-t border-text-secondary/20 text-xs text-center">
-          <p>© 2025 好工具. 用心推荐每一款工具。</p>
+        {/* 底部版权 */}
+        <div className="mt-10 pt-8 border-t border-border-subtle">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs font-mono text-text-muted"
+          >
+            <p>© {currentYear} _TOOLS. All systems operational.</p>
+            <p><span className="text-accent-cyan">&lt;</span> Crafted for developers <span className="text-accent-cyan">/&gt;</span></p>
+          </div>
         </div>
       </div>
     </footer>

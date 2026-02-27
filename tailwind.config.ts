@@ -8,38 +8,59 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // 背景色
+        // 背景色 - Cyberpunk深色主题
         bg: {
-          primary: '#F5F1EB',
-          secondary: '#FAF8F5',
-          card: '#FFFFFF',
+          primary: '#0a0a0f',
+          secondary: '#12121a',
+          card: '#1a1a2e',
+          hover: '#252542',
+          code: '#0d1117',
         },
         // 文字色
         text: {
-          primary: '#2C2420',
-          secondary: '#6B5E55',
-          muted: '#9B8B7B',
+          primary: '#ffffff',
+          secondary: '#a0a0b0',
+          muted: '#6b6b80',
+          accent: '#00f5d4',
         },
-        // 强调色
+        // 霓虹强调色
         accent: {
-          warm: '#D4825A',
-          'warm-hover': '#B86D45',
-          cool: '#4A5D4E',
-          'cool-hover': '#3D4D40',
+          cyan: '#00f5d4',
+          pink: '#ff006e',
+          purple: '#8338ec',
+          yellow: '#ffbe0b',
         },
         // 边框
         border: {
-          light: '#E8E2D9',
-          medium: '#D4CFC4',
+          subtle: 'rgba(255, 255, 255, 0.1)',
+          glow: 'rgba(0, 245, 212, 0.3)',
+          card: 'rgba(255, 255, 255, 0.08)',
         },
       },
       fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans SC', 'sans-serif'],
-        serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
+        sans: ['var(--font-sans)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['var(--font-mono)', 'JetBrains Mono', 'SF Mono', 'Fira Code', 'monospace'],
       },
       boxShadow: {
-        'soft': '0 2px 8px rgba(44, 36, 32, 0.06)',
-        'hover': '0 4px 16px rgba(44, 36, 32, 0.1)',
+        'glow-cyan': '0 0 20px rgba(0, 245, 212, 0.3)',
+        'glow-purple': '0 0 20px rgba(131, 56, 236, 0.3)',
+        'glow-pink': '0 0 20px rgba(255, 0, 110, 0.3)',
+        'card': '0 4px 24px rgba(0, 0, 0, 0.4)',
+      },
+      animation: {
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+      keyframes: {
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 245, 212, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(0, 245, 212, 0.5)' },
+        },
+      },
+      backgroundImage: {
+        'gradient-cyber': 'linear-gradient(135deg, #00f5d4 0%, #8338ec 100%)',
+        'gradient-heat': 'linear-gradient(135deg, #ff006e 0%, #ffbe0b 100%)',
+        'gradient-dark': 'linear-gradient(180deg, #0a0a0f 0%, #12121a 100%)',
       },
     },
   },
