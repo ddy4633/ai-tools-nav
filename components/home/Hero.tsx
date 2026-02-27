@@ -16,13 +16,13 @@ export default function Hero() {
   const quickTags = ['ChatGPT', 'Claude', 'Midjourney', 'Notion'];
 
   return (
-    <section className="py-20 md:py-28 bg-bg-primary">
+    <section className="py-24 md:py-32 bg-bg-primary">
       <div className="max-w-6xl mx-auto px-6">
         <div className="max-w-2xl">
-          {/* 标题 - 手写风格 */}
-          <h1 className="text-4xl md:text-5xl font-medium text-text-primary mb-6 leading-tight">
-            「好工具，<br />
-            值得被看见」
+          {/* 标题 - 更现代的设计 */}
+          <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-6 leading-tight">
+            发现真正好用的
+            <span className="text-accent-warm">AI工具</span>
           </h1>
           
           {/* 副标题 - 更人味 */}
@@ -31,19 +31,19 @@ export default function Hero() {
             没有广告，只有真诚的推荐。
           </p>
           
-          {/* 搜索框 - 简化 */}
+          {/* 搜索框 - 优化设计 */}
           <form onSubmit={handleSearch} className="relative max-w-lg">
             <div className="relative">
               <input
                 type="text"
-                placeholder="搜索工具..."
+                placeholder="搜索 AI 工具..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-5 py-3.5 pr-24 bg-white border border-border-medium rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all"
+                className="w-full px-5 py-4 pr-28 bg-white border-2 border-border-light rounded-2xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm focus:ring-4 focus:ring-accent-warm/10 transition-all shadow-sm"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-accent-warm text-white text-sm rounded-md hover:bg-accent-warm-hover transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover active:scale-95 transition-all shadow-md hover:shadow-lg"
               >
                 搜索
               </button>
@@ -52,11 +52,12 @@ export default function Hero() {
           
           {/* 快捷标签 */}
           <div className="mt-6 flex flex-wrap gap-2">
+            <span className="text-sm text-text-muted">热门搜索:</span>
             {quickTags.map((tag) => (
               <a
                 key={tag}
                 href={`/tools?search=${encodeURIComponent(tag)}`}
-                className="px-3 py-1 text-sm text-text-secondary bg-border-light rounded-full hover:bg-border-medium hover:text-text-primary transition-colors"
+                className="px-3 py-1 text-sm text-text-secondary bg-bg-secondary border border-border-light rounded-full hover:bg-accent-warm hover:text-white hover:border-accent-warm transition-all"
               >
                 {tag}
               </a>
