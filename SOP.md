@@ -1,133 +1,67 @@
-# AI Tools Nav - 系统化完善 SOP
+# 开发标准操作流程 (SOP)
 
-## 项目信息
-- **仓库**: https://github.com/ddy4633/ai-tools-nav
-- **域名**: https://ai.poph163.com/
-- **目标**: 构建完善的 AI 工具导航与评测平台
+## 文件修改后必做检查清单
 
-## 多模型协作迭代流程
+### 1. 类型检查
+- [ ] 运行 `npm run type-check` 或检查 IDE 类型错误
+- [ ] 修复所有 TypeScript 错误
 
-### Phase 1: 架构分析与规划 (30分钟)
-1. **当前状态审计**
-   - 代码结构审查
-   - 功能完整性检查
-   - 性能瓶颈识别
-   - SEO 健康度检测
+### 2. 本地构建验证
+- [ ] 运行 `npm run build`
+- [ ] 确保构建成功，无错误
+- [ ] 检查 .next/standalone 目录是否生成（如使用 Docker 部署）
 
-2. **多模型并行分析**
-   - MiniMax: 技术架构深度分析
-   - GLM-5.0: 内容策略与用户体验
-   - Kimi-2.5: 代码质量与安全审计
+### 3. 代码检查
+- [ ] 检查是否有未使用的导入
+- [ ] 检查是否有 console.log 需要移除
+- [ ] 检查文件权限是否正确
 
-3. **整合输出**
-   - 合并多模型建议
-   - 优先级排序
-   - 迭代计划制定
+### 4. Git 提交
+- [ ] `git status` 查看变更
+- [ ] `git add .` 或选择性添加
+- [ ] `git commit -m "type: 描述"`（遵循 Conventional Commits）
+- [ ] `git push` 推送到远程
 
-### Phase 2: 核心功能完善 (30分钟)
-1. **前端优化**
-   - 组件完善
-   - 响应式设计
-   - 性能优化
-   - 无障碍支持
+### 5. 部署验证
+- [ ] 检查 Dokploy/Vercel 构建状态
+- [ ] 验证线上功能正常
 
-2. **后端增强**
-   - API 完善
-   - 数据库优化
-   - 缓存策略
-   - 错误处理
+## 提交信息规范
 
-3. **内容系统**
-   - SEO 优化
-   - 元数据完善
-   - 结构化数据
-   - 社交分享
+### 格式
+```
+<type>(<scope>): <subject>
 
-### Phase 3: 测试与验证 (15分钟)
-1. **功能测试**
-2. **性能测试**
-3. **兼容性测试**
-4. **SEO 验证
+<body>
 
-### Phase 4: 文档与交付 (15分钟)
-1. **更新文档**
-2. **Git 提交**
-3. **CHANGELOG 更新**
-4. **发布说明**
-
-## 迭代 Checklist
-
-### 技术栈检查
-- [ ] Next.js 15 配置优化
-- [ ] TypeScript 严格模式
-- [ ] Tailwind CSS 4.x 适配
-- [ ] Supabase 集成完善
-- [ ] 构建配置优化
-
-### 核心功能
-- [ ] 首页热度展示
-- [ ] 工具列表搜索筛选
-- [ ] 工具详情页面
-- [ ] 分类浏览
-- [ ] 评分系统
-- [ ] Newsletter 订阅
-
-### SEO & 性能
-- [ ] Meta 标签完善
-- [ ] Sitemap.xml
-- [ ] Robots.txt
-- [ ] 结构化数据
-- [ ] 图片优化
-- [ ] 懒加载
-
-### 用户体验
-- [ ] 加载状态
-- [ ] 错误页面
-- [ ] 空状态提示
-- [ ] 响应式设计
-- [ ] 动画效果
-
-## 执行命令
-
-```bash
-# 1. 进入项目
-cd ~/.openclaw/workspace/ai-tools-nav-new
-
-# 2. 安装依赖
-npm install
-
-# 3. 开发模式启动
-npm run dev
-
-# 4. 构建测试
-npm run build
-
-# 5. 提交更改
-git add -A
-git commit -m "iteration: 描述"
-git push origin main
+<footer>
 ```
 
-## 质量标准
+### Type 类型
+- feat: 新功能
+- fix: 修复
+- docs: 文档
+- style: 格式（不影响代码运行）
+- refactor: 重构
+- test: 测试
+- chore: 构建/工具
 
-### 代码质量
-- TypeScript 无错误
-- ESLint 通过
-- 组件可复用
-- 注释清晰
+### 示例
+```
+feat(seo): 添加面包屑导航组件
 
-### 性能标准
-- Lighthouse 评分 > 90
-- FCP < 1.5s
-- LCP < 2.5s
-- CLS < 0.1
+- 实现 Breadcrumb 组件
+- 添加 JSON-LD 结构化数据
+- 应用到工具详情页
+```
 
-### SEO 标准
-- 所有页面有唯一标题
-- 所有页面有描述
-- 图片有 alt 文本
-- 链接可爬取
+## 常见问题速查
 
----
-**创建时间**: 2026-02-27
-**迭代次数**: 第1轮系统化完善
+### Q: Docker 构建失败
+A: 检查 next.config.js 是否有 `output: 'standalone'`
+
+### Q: 类型检查失败
+A: 修复所有红色下划线错误后再提交
+
+### Q: 合并冲突
+A: 先 `git pull`，解决冲突后再 `git push`
