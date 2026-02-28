@@ -27,3 +27,10 @@ Thumbs.db
 
 # TypeScript
 *.tsbuildinfo
+
+# Scanning & temporary files
+*_SCAN_REPORT.md
+scan_*.sh
+quick_scan.sh
+deep_scan.sh
+final_scan.sh
