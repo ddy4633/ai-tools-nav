@@ -11,8 +11,8 @@ import type { Metadata } from 'next';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: '_TOOLS // Next-Gen AI Tools Directory',
-  description: 'Curated collection of the best AI and developer tools. Discover next-generation utilities for coding, design, and productivity.',
+  title: 'AI工具导航 - 发现1000+最好用的AI工具 | 国内免费AI工具推荐',
+  description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
   keywords: ['AI tools', 'developer tools', 'productivity', 'code utilities', 'tech stack'],
   alternates: {
     canonical: 'https://ai.poph163.com',

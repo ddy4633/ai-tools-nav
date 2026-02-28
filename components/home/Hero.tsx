@@ -74,15 +74,13 @@ export default function Hero() {
           {/* 科技感标题 */}
           <motion.h1 
             variants={itemVariants}
-            className="text-5xl md:text-7xl font-mono font-bold mb-6"
+            className="text-4xl md:text-6xl font-mono font-bold mb-6"
           >
-            <span className="text-text-primary">DISCOVER</span>
-            <br />
+            <span className="text-text-primary">发现</span>
             <span className="text-gradient-cyber">
-              NEXT_GEN
+              最好用
             </span>
-            <br />
-            <span className="text-text-primary">TOOLS</span>
+            <span className="text-text-primary">的AI工具</span>
           </motion.h1>
           
           {/* 副标题 - 终端风格 */}
