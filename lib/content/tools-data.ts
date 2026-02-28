@@ -6,21 +6,21 @@ export const editors: Editor[] = [
   {
     id: 'editor1',
     name: '小明',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=xiaoming',
+    avatar: 'https://ui-avatars.com/api/?name=小明&background=f59e0b&color=fff&size=128',
     bio: 'AI工具重度使用者，每天测试3-5个新工具',
     role: 'editor'
   },
   {
-    id: 'editor2', 
+    id: 'editor2',
     name: '阿强',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=qiang',
+    avatar: 'https://ui-avatars.com/api/?name=阿强&background=ea580c&color=fff&size=128',
     bio: '前产品经理，专注效率工具和工作流优化',
     role: 'editor'
   },
   {
     id: 'editor3',
     name: 'Lisa',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lisa',
+    avatar: 'https://ui-avatars.com/api/?name=Lisa&background=8b5cf6&color=fff&size=128',
     bio: '设计师出身，对AI图像和视频工具有独到见解',
     role: 'editor'
   }
