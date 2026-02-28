@@ -1,27 +1,40 @@
+import dynamic from 'next/dynamic';
 import Hero from '@/components/home/Hero';
-import TrendingTools from '@/components/home/TrendingTools';
-import FeaturedTools from '@/components/home/FeaturedTools';
-import EditorPicks from '@/components/home/EditorPicks';
-import Categories from '@/components/home/Categories';
-import NewsletterSection from '@/components/home/NewsletterSection';
 import { getTrendingTools, getFeaturedTools, getCategories } from '@/lib/supabase';
 import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data';
 import type { Metadata } from 'next';
+
+// Dynamic imports for below-the-fold components to reduce initial bundle size
+const TrendingTools = dynamic(() => import('@/components/home/TrendingTools'), {
+  loading: () => <div className="py-20 bg-bg-secondary" />,
+});
+const FeaturedTools = dynamic(() => import('@/components/home/FeaturedTools'), {
+  loading: () => <div className="py-20 bg-bg-secondary" />,
+});
+const EditorPicks = dynamic(() => import('@/components/home/EditorPicks'), {
+  loading: () => <div className="py-20 bg-bg-primary" />,
+});
+const Categories = dynamic(() => import('@/components/home/Categories'), {
+  loading: () => <div className="py-20 bg-bg-secondary" />,
+});
+const NewsletterSection = dynamic(() => import('@/components/home/NewsletterSection'), {
+  loading: () => <div className="py-16 bg-bg-primary" />,
+});
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'AI工具导航 - 发现1000+最好用的AI工具 | 国内免费AI工具推荐',
   description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
-  keywords: ['AI tools', 'developer tools', 'productivity', 'code utilities', 'tech stack'],
+  keywords: ['AI工具', 'AI工具导航', 'AI写作', 'AI绘画', 'AI编程', 'ChatGPT', 'DeepSeek', 'Midjourney', '免费AI工具', '国内AI工具'],
   alternates: {
     canonical: 'https://ai.poph163.com',
   },
   openGraph: {
-    title: '_TOOLS // Next-Gen AI Tools Directory',
-    description: 'Curated collection of the best AI and developer tools',
+    title: 'AI工具导航 - 发现1000+最好用的AI工具',
+    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
     url: 'https://ai.poph163.com',
-    siteName: '_TOOLS',
+    siteName: 'AI工具导航',
     locale: 'zh_CN',
     type: 'website',
   },

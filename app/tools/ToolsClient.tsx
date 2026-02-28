@@ -187,7 +187,14 @@ function ToolCard({ tool }: { tool: Tool }) {
         {/* 工具图标 */}
         <div className="w-12 h-12 rounded-lg bg-bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
           {tool.icon ? (
-            <img src={tool.icon} alt="" className="w-8 h-8 object-contain" loading="lazy" />
+            <img 
+              src={tool.icon} 
+              alt="" 
+              className="w-8 h-8 object-contain" 
+              loading="lazy" 
+              width={32} 
+              height={32}
+            />
           ) : (
             <span className="text-xl text-accent-warm font-medium">
               {tool.name[0]}

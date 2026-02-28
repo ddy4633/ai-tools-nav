@@ -19,11 +19,16 @@
   --accent-pink: #ff006e;
   --accent-purple: #8338ec;
   --accent-yellow: #ffbe0b;
+  --accent-warm: #ff6b35;
+  --accent-cool: #00d4aa;
+  --accent-warm-hover: #ff8555;
   
   /* 边框 */
   --border-subtle: rgba(255, 255, 255, 0.1);
   --border-glow: rgba(0, 245, 212, 0.3);
   --border-card: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.15);
 }
 
 body {
@@ -105,6 +110,15 @@ html {
   background: rgba(10, 10, 15, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+/* 柔和阴影 */
+.shadow-soft {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.shadow-hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* 减少动画偏好 */

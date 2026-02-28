@@ -89,6 +89,8 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                           src={pick.tool.icon} 
                           alt="" 
                           className="w-8 h-8 object-contain"
+                          width={32}
+                          height={32}
                           loading="lazy"
                         />
                       ) : (
@@ -133,6 +135,8 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                       src={pick.editor.avatar} 
                       alt={pick.editor.name}
                       className="w-8 h-8 rounded-full flex-shrink-0 border border-border-subtle"
+                      width={32}
+                      height={32}
                       loading="lazy"
                     />
                     <div className="flex-1 min-w-0">

@@ -1,70 +1,119 @@
 import { MetadataRoute } from 'next';
 import { getAllTools, getCategories } from '@/lib/supabase';
+import { toolsData, categoriesData } from '@/lib/content/tools-data';
+
+export const revalidate = 86400; // 24 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://ai.poph163.com';
-  
-  // 获取所有工具和分类
-  const [tools, categories] = await Promise.all([
-    getAllTools(),
-    getCategories(),
-  ]);
-  
-  // 基础页面
-  const staticPages = [
+
+  let tools: { id: string; updated_at?: string }[] = [];
+  let categories: { slug: string; updated_at?: string }[] = [];
+
+  // Try to fetch from Supabase, fallback to local data
+  try {
+    const [toolsResult, categoriesResult] = await Promise.all([
+      getAllTools(),
+      getCategories(),
+    ]);
+    tools = toolsResult || [];
+    categories = categoriesResult || [];
+  } catch (error) {
+    console.error('Failed to fetch data for sitemap, using fallback data:', error);
+    // Use local fallback data
+    tools = toolsData.map(t => ({ id: t.id, updated_at: t.updatedAt }));
+    categories = categoriesData.map(c => ({ slug: c.slug }));
+  }
+
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 1,
     },
     {
       url: `${baseUrl}/tools`,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/categories`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: `${baseUrl}/submit`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/trending`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
   ];
-  
-  // 工具详情页面
-  const toolPages = tools.map((tool) => ({
+
+  // Tool detail pages
+  const toolPages: MetadataRoute.Sitemap = tools.map((tool) => ({
     url: `${baseUrl}/tools/${tool.id}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
+    lastModified: tool.updated_at ? new Date(tool.updated_at) : new Date(),
+    changeFrequency: 'weekly',
     priority: 0.7,
   }));
-  
-  // 分类页面
-  const categoryPages = categories.map((category) => ({
+
+  // Category pages
+  const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${baseUrl}/categories/${category.slug}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
+    changeFrequency: 'weekly',
     priority: 0.6,
   }));
-  
-  return [...staticPages, ...toolPages, ...categoryPages];
+
+  // Blog article pages
+  const blogPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/blog/deepseek-guide`,
+      lastModified: new Date('2024-02-28'),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/blog/ai-art-generators`,
+      lastModified: new Date('2024-03-01'),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/blog/ai-writing-tools-free`,
+      lastModified: new Date('2024-03-05'),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/blog/chatgpt-china-alternatives`,
+      lastModified: new Date('2024-03-08'),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+  ];
+
+  return [...staticPages, ...toolPages, ...categoryPages, ...blogPages];
 }

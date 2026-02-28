@@ -106,7 +106,14 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: any }) {
             <div className="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all"
             >
               {tool.icon ? (
-                <img src={tool.icon} alt="" className="w-8 h-8 object-contain" />
+                <img 
+                  src={tool.icon} 
+                  alt="" 
+                  className="w-8 h-8 object-contain" 
+                  width={32} 
+                  height={32}
+                  loading="lazy"
+                />
               ) : (
                 <span className="text-xl font-mono text-accent-cyan">{tool.name[0]}</span>
               )}

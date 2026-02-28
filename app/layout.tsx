@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     template: '%s | AI工具导航',
   },
   description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
-  keywords: ['AI tools', 'developer tools', 'productivity', 'code utilities', 'tech stack'],
-  authors: [{ name: '_TOOLS', url: 'https://ai.poph163.com' }],
-  creator: '_TOOLS',
-  publisher: '_TOOLS',
+  keywords: ['AI工具', 'AI工具导航', 'AI写作', 'AI绘画', 'AI编程', 'ChatGPT', 'DeepSeek', 'Midjourney', '免费AI工具', '国内AI工具'],
+  authors: [{ name: 'AI工具导航', url: 'https://ai.poph163.com' }],
+  creator: 'AI工具导航',
+  publisher: 'AI工具导航',
   openGraph: {
-    title: '_TOOLS // Next-Gen AI Tools Directory',
-    description: 'Curated collection of the best AI and developer tools',
+    title: 'AI工具导航 - 发现1000+最好用的AI工具 | 国内免费AI工具推荐',
+    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
     url: siteUrl,
-    siteName: '_TOOLS',
+    siteName: 'AI工具导航',
     locale: 'zh_CN',
     type: 'website',
     images: [
@@ -46,14 +46,14 @@ export const metadata: Metadata = {
         url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: '_TOOLS - AI Tools Directory',
+        alt: 'AI工具导航 - 发现最好用的AI工具',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: '_TOOLS // Next-Gen AI Tools Directory',
-    description: 'Curated collection of the best AI and developer tools',
+    title: 'AI工具导航 - 发现1000+最好用的AI工具',
+    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
     images: [`${siteUrl}/og-image.png`],
   },
   robots: {
@@ -85,14 +85,26 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: '_TOOLS',
+    name: 'AI工具导航',
     url: siteUrl,
-    description: 'Next-Gen AI Tools Directory',
+    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}/tools?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
   };
 
   return (
     <html lang="zh-CN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
+        {/* Resource Hints - DNS Prefetch and Preconnect */}
+        <link rel="dns-prefetch" href="https://crmkyaoczrvnjsizlaas.supabase.co" />
+        <link rel="preconnect" href="https://crmkyaoczrvnjsizlaas.supabase.co" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="your-google-verification-code" />
         {/* Baidu Search Verification */}

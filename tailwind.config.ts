@@ -23,18 +23,28 @@ module.exports = {
           muted: '#6b6b80',
           accent: '#00f5d4',
         },
+        // 表面色 - 用于卡片背景
+        surface: {
+          base: '#12121a',
+          card: '#1a1a2e',
+        },
         // 霓虹强调色
         accent: {
           cyan: '#00f5d4',
           pink: '#ff006e',
           purple: '#8338ec',
           yellow: '#ffbe0b',
+          warm: '#ff6b35',
+          cool: '#00d4aa',
+          'warm-hover': '#ff8555',
         },
         // 边框
         border: {
           subtle: 'rgba(255, 255, 255, 0.1)',
           glow: 'rgba(0, 245, 212, 0.3)',
           card: 'rgba(255, 255, 255, 0.08)',
+          light: 'rgba(255, 255, 255, 0.1)',
+          medium: 'rgba(255, 255, 255, 0.15)',
         },
       },
       fontFamily: {
