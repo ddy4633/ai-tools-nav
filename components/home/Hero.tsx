@@ -14,7 +14,7 @@ export default function Hero() {
     }
   };
 
-  const quickTags = ['ChatGPT', 'Claude', 'Midjourney', 'Cursor'];
+  const quickTags = ['ChatGPT', 'Claude', 'Midjourney', 'DeepSeek', 'Cursor'];
 
   const containerVariants = {
     hidden: { opacity: 0 },

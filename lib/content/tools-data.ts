@@ -120,6 +120,29 @@ export const toolsData: Tool[] = [
     isEditorsPick: true,
     isFeatured: true
   },
+  {
+    id: 'deepseek',
+    name: 'DeepSeek',
+    slug: 'deepseek',
+    description: '国产AI大模型，推理能力强，性价比极高',
+    reason: '国产AI黑马，数学代码推理顶尖，而且完全免费',
+    fullReview: 'DeepSeek（深度求索）是2024年最引人注目的国产AI大模型。DeepSeek-R1在数学、代码、逻辑推理等任务上表现优异，甚至在某些基准测试上超越了GPT-4。更令人惊讶的是，它的训练成本仅为600万美元，API价格低至GPT-4的1/10。对个人用户完全免费，国内可直接访问，中文表达自然流畅。',
+    category: 'AI聊天',
+    categorySlug: 'chatbot',
+    pricingType: 'free',
+    priceRange: '个人用户完全免费',
+    website: 'https://chat.deepseek.com',
+    features: ['深度推理', '代码生成', '数学计算', '中文优化', '联网搜索'],
+    pros: ['完全免费', '推理能力强', '中文优化好', '国内访问快', 'API价格极低'],
+    cons: ['创意写作稍逊', '多模态功能有限', '生态待完善'],
+    alternatives: ['ChatGPT', 'Claude'],
+    editorRating: 4.7,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: true,
+    isFeatured: true
+  },
 
   // ===== AI写作 (2个) =====
   {
@@ -410,6 +433,13 @@ export const toolsData: Tool[] = [
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [
+  {
+    id: 'pick-deepseek',
+    tool: toolsData.find(t => t.id === 'deepseek')!,
+    editor: editors[1],
+    comment: '国产AI黑马，推理能力让我惊讶。完全免费+国内直达，这是我今年最推荐的AI工具。',
+    pickedAt: '2026-02-28'
+  },
   {
     id: 'pick1',
     tool: toolsData.find(t => t.id === 'claude')!,

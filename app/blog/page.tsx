@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { Calendar, Clock, ArrowRight, Tag, BookOpen, TrendingUp, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'AI 工具博客 - 最新资讯与使用技巧',
@@ -18,6 +19,17 @@ const blogPosts = [
     readTime: '8 分钟',
     tags: ['AI工具', '效率', '推荐'],
     featured: true,
+  },
+  {
+    id: 'deepseek-guide',
+    title: 'DeepSeek使用教程 - 国产AI大模型DeepSeek怎么用',
+    excerpt: 'DeepSeek使用教程详解：DeepSeek是什么？如何注册使用DeepSeek？DeepSeek vs ChatGPT对比分析，DeepSeek优缺点及使用技巧。',
+    category: '使用教程',
+    date: '2024-02-28',
+    readTime: '15 分钟',
+    tags: ['DeepSeek', '国产AI', 'AI大模型'],
+    featured: false,
+    slug: 'deepseek-guide',
   },
   {
     id: 2,
@@ -166,43 +178,76 @@ export default function BlogPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {regularPosts.map((post) => (
-                <article
-                  key={post.id}
-                  className="group bg-surface-card rounded-xl overflow-hidden border border-border-light hover:border-accent-warm/30 transition-all hover:shadow-md"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="px-2 py-1 bg-surface-base text-text-secondary rounded-md text-xs font-medium">
-                        {post.category}
-                      </span>
-                      <span className="text-text-muted text-xs">
-                        {post.date}
-                      </span>
-                    </div>
-                    <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-accent-warm transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-text-secondary text-sm mb-4 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-1">
-                        {post.tags.slice(0, 2).map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-xs text-text-muted"
-                          >
-                            #{tag}
+                post.slug ? (
+                  <Link href={`/blog/${post.slug}`} key={post.id}>
+                    <article className="group bg-surface-card rounded-xl overflow-hidden border border-border-light hover:border-accent-warm/30 transition-all hover:shadow-md h-full">
+                      <div className="p-6">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="px-2 py-1 bg-surface-base text-text-secondary rounded-md text-xs font-medium">
+                            {post.category}
                           </span>
-                        ))}
+                          <span className="text-text-muted text-xs">
+                            {post.date}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-accent-warm transition-colors line-clamp-2">
+                          {post.title}
+                        </h3>
+                        <p className="text-text-secondary text-sm mb-4 line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-1">
+                            {post.tags.slice(0, 2).map((tag) => (
+                              <span key={tag} className="text-xs text-text-muted">
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                          <span className="flex items-center gap-1 text-text-muted text-xs">
+                            <Clock className="w-3 h-3" />
+                            {post.readTime}
+                          </span>
+                        </div>
                       </div>
-                      <span className="flex items-center gap-1 text-text-muted text-xs">
-                        <Clock className="w-3 h-3" />
-                        {post.readTime}
-                      </span>
+                    </article>
+                  </Link>
+                ) : (
+                  <article
+                    key={post.id}
+                    className="group bg-surface-card rounded-xl overflow-hidden border border-border-light hover:border-accent-warm/30 transition-all hover:shadow-md"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="px-2 py-1 bg-surface-base text-text-secondary rounded-md text-xs font-medium">
+                          {post.category}
+                        </span>
+                        <span className="text-text-muted text-xs">
+                          {post.date}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-accent-warm transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-text-secondary text-sm mb-4 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-1">
+                          {post.tags.slice(0, 2).map((tag) => (
+                            <span key={tag} className="text-xs text-text-muted">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                        <span className="flex items-center gap-1 text-text-muted text-xs">
+                          <Clock className="w-3 h-3" />
+                          {post.readTime}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </article>
+                  </article>
+                )
               ))}
             </div>
 
