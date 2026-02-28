@@ -4,6 +4,8 @@ import { getTrendingTools, getFeaturedTools, getCategories } from '@/lib/supabas
 import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data';
 import type { Metadata } from 'next';
 
+import { Tool, Category } from '@/types/tool';
+
 // Dynamic imports for below-the-fold components to reduce initial bundle size
 const TrendingTools = dynamic(() => import('@/components/home/TrendingTools'), {
   loading: () => <div className="py-20 bg-bg-secondary" />,
@@ -41,9 +43,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let trending: any[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let tools: any[] = [];
-  let categories: any[] = [];
+  let categories: Category[] = [];
 
   try {
     const [trendingResult, toolsResult, categoriesResult] = await Promise.all([
@@ -55,7 +59,7 @@ export default async function Home() {
     tools = toolsResult || [];
     categories = categoriesResult || [];
   } catch (error) {
-    console.error('Failed to fetch data:', error);
+    // 静默处理错误，使用备用数据
   }
 
   // 使用本地数据作为备用

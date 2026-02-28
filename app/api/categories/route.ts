@@ -20,7 +20,6 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('API /categories error:', error);
     return NextResponse.json({
       success: false,
       error: '获取分类列表失败',

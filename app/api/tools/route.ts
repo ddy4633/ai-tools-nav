@@ -37,7 +37,6 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error('API /tools error:', error);
     return NextResponse.json({
       success: false,
       error: '获取工具列表失败',

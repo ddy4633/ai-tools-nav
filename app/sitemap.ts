@@ -19,8 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     tools = toolsResult || [];
     categories = categoriesResult || [];
   } catch (error) {
-    console.error('Failed to fetch data for sitemap, using fallback data:', error);
-    // Use local fallback data
+    // 使用本地备用数据
     tools = toolsData.map(t => ({ id: t.id, updated_at: t.updatedAt }));
     categories = categoriesData.map(c => ({ slug: c.slug }));
   }

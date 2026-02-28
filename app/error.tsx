@@ -12,7 +12,6 @@ export default function Error({
 }) {
   useEffect(() => {
     // 可以在这里发送错误到日志服务
-    console.error('Application error:', error);
   }, [error]);
 
   return (
