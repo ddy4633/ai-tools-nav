@@ -228,13 +228,11 @@ export async function submitRating(toolId: string, rating: number): Promise<{ su
   
   if (!supabase) {
     // 模拟提交成功
-    console.log(`模拟提交评分: toolId=${toolId}, rating=${rating}`);
     return { success: true };
   }
   
   try {
     // 简化处理，避免类型问题
-    console.log(`提交评分: toolId=${toolId}, rating=${rating}`);
     return { success: true };
   } catch (error) {
     console.error('提交评分失败:', error);
