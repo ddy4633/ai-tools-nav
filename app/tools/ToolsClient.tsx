@@ -28,8 +28,8 @@ interface ToolsClientProps {
 }
 
 const pricingLabels = {
-  free: { text: '免费', className: 'bg-accent-cool/10 text-accent-cool' },
-  paid: { text: '付费', className: 'bg-accent-warm/10 text-accent-warm' },
+  free: { text: '免费', className: 'bg-accent-cyan/10 text-accent-cyan' },
+  paid: { text: '付费', className: 'bg-accent-pink/10 text-accent-pink' },
   freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
 };
 
@@ -58,7 +58,7 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
   return (
     <>
       {/* 搜索和筛选 */}
-      <div className="bg-white rounded-xl p-6 shadow-soft mb-8">
+      <div className="bg-bg-card rounded-xl p-6 shadow-card border border-border-card mb-8">
         {/* 增强搜索框 */}
         <div className="mb-6">
           <EnhancedSearch
@@ -76,8 +76,8 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
               onClick={() => setSelectedCategory('all')}
               className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                 selectedCategory === 'all'
-                  ? 'bg-accent-warm text-white'
-                  : 'bg-bg-secondary text-text-secondary hover:bg-border-light'
+                  ? 'bg-gradient-to-r from-accent-cyan to-accent-purple text-white'
+                  : 'bg-bg-secondary text-text-secondary hover:bg-border-subtle'
               }`}
             >
               全部
@@ -88,8 +88,8 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
                 onClick={() => setSelectedCategory(cat.name)}
                 className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                   selectedCategory === cat.name
-                    ? 'bg-accent-warm text-white'
-                    : 'bg-bg-secondary text-text-secondary hover:bg-border-light'
+                    ? 'bg-gradient-to-r from-accent-cyan to-accent-purple text-white'
+                    : 'bg-bg-secondary text-text-secondary hover:bg-border-subtle'
                 }`}
               >
                 {cat.name}
@@ -108,8 +108,8 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
                 onClick={() => setSelectedPricing(type)}
                 className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                   selectedPricing === type
-                    ? 'bg-accent-warm text-white'
-                    : 'bg-bg-secondary text-text-secondary hover:bg-border-light'
+                    ? 'bg-gradient-to-r from-accent-cyan to-accent-purple text-white'
+                    : 'bg-bg-secondary text-text-secondary hover:bg-border-subtle'
                 }`}
               >
                 {type === 'all' ? '全部' : pricingLabels[type].text}
@@ -131,7 +131,7 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
               setSelectedCategory('all');
               setSelectedPricing('all');
             }}
-            className="text-sm text-accent-warm hover:text-accent-warm-hover"
+            className="text-sm text-accent-cyan hover:opacity-80"
           >
             清除筛选
           </button>
@@ -144,7 +144,7 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
       </Suspense>
 
       {filteredTools.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-xl shadow-soft">
+        <div className="text-center py-16 bg-bg-card rounded-xl shadow-card border border-border-card">
           <div className="text-6xl mb-4">🔍</div>
           <p className="text-text-primary text-lg mb-2">没有找到匹配的工具</p>
           <p className="text-text-muted text-sm mb-6">试试其他关键词，或清除筛选条件</p>
@@ -154,7 +154,7 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
               setSelectedCategory('all');
               setSelectedPricing('all');
             }}
-            className="px-6 py-2 bg-accent-warm text-white rounded-lg hover:bg-accent-warm-hover transition-colors"
+            className="px-6 py-2 bg-gradient-to-r from-accent-cyan to-accent-purple text-white rounded-lg hover:opacity-90 transition-opacity"
           >
             清除所有筛选
           </button>
@@ -181,7 +181,7 @@ function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
       href={`/tools/${tool.id}`}
-      className="group block bg-white rounded-xl p-6 shadow-soft hover:shadow-hover border border-transparent hover:border-accent-warm/20 transition-all"
+      className="group block bg-bg-card rounded-xl p-6 shadow-card hover:shadow-hover border border-border-card hover:border-accent-cyan/30 transition-all"
     >
       <div className="flex items-start gap-4 mb-4">
         {/* 工具图标 */}
@@ -189,14 +189,14 @@ function ToolCard({ tool }: { tool: Tool }) {
           {tool.icon ? (
             <img 
               src={tool.icon} 
-              alt="" 
+              alt={`${tool.name} logo`}
               className="w-8 h-8 object-contain" 
               loading="lazy" 
               width={32} 
               height={32}
             />
           ) : (
-            <span className="text-xl text-accent-warm font-medium">
+            <span className="text-xl text-accent-cyan font-medium">
               {tool.name[0]}
             </span>
           )}
@@ -204,7 +204,7 @@ function ToolCard({ tool }: { tool: Tool }) {
         
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between mb-1">
-            <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors truncate">
+            <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-cyan transition-colors truncate">
               {tool.name}
             </h3>
           </div>
@@ -220,10 +220,10 @@ function ToolCard({ tool }: { tool: Tool }) {
       </p>
 
       <div className="flex items-center justify-between pt-3 border-t border-bg-primary">
-        <span className="text-xs text-text-muted bg-bg-secondary px-2 py-1 rounded">
+        <span className="text-xs text-text-muted bg-bg-secondary px-2 py-1 rounded border border-border-subtle">
           {tool.category}
         </span>
-        <span className="flex items-center gap-1 text-xs text-accent-warm opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="flex items-center gap-1 text-xs text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity">
           查看详情
           <ArrowRight className="w-3 h-3" />
         </span>

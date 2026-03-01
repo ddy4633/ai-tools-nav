@@ -51,8 +51,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
   }
   
   const pricingLabels = {
-    free: { text: '免费', className: 'bg-accent-cool/10 text-accent-cool' },
-    paid: { text: '付费', className: 'bg-accent-warm/10 text-accent-warm' },
+    free: { text: '免费', className: 'bg-accent-cyan/10 text-accent-cyan' },
+    paid: { text: '付费', className: 'bg-accent-pink/10 text-accent-pink' },
     freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
   };
   
@@ -64,14 +64,14 @@ export default async function ToolPage({ params }: ToolPageProps) {
         {/* 返回链接 */}
         <Link
           href="/tools"
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-accent-warm transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-text-secondary hover:text-accent-cyan transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           返回工具列表
         </Link>
         
         {/* 工具信息卡片 */}
-        <div className="bg-white rounded-2xl p-8 shadow-soft">
+        <div className="bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
           <div className="flex items-start justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
@@ -79,7 +79,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
                   {pricing.text}
                 </span>
-                <span className="text-sm text-text-muted bg-bg-secondary px-3 py-1 rounded-lg">
+                <span className="text-sm text-text-secondary bg-bg-secondary px-3 py-1 rounded-lg border border-border-subtle">
                   {tool.category}
                 </span>
               </div>
@@ -102,7 +102,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
               href={tool.website || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-purple text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
             >
               访问官网
               <ExternalLink className="w-4 h-4" />
@@ -113,7 +113,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 href={tool.repo_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-accent-warm hover:text-accent-warm transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border-subtle text-text-secondary font-medium rounded-xl hover:border-accent-cyan hover:text-accent-cyan transition-colors"
               >
                 查看源码
               </a>
@@ -121,7 +121,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
             
             <Link
               href="/tools"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-accent-warm hover:text-accent-warm transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-border-subtle text-text-secondary font-medium rounded-xl hover:border-accent-cyan hover:text-accent-cyan transition-colors"
             >
               查看其他工具
             </Link>
@@ -129,13 +129,13 @@ export default async function ToolPage({ params }: ToolPageProps) {
         </div>
         
         {/* 评分区域 */}
-        <div className="mt-8 bg-white rounded-2xl p-8 shadow-soft">
+        <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
           <h2 className="text-2xl font-bold text-text-primary mb-6">用户评价</h2>
           <RatingForm toolId={tool.id} />
         </div>
         
         {/* 提示 */}
-        <div className="mt-8 p-4 bg-accent-warm/5 border border-accent-warm/20 rounded-xl">
+        <div className="mt-8 p-4 bg-accent-cyan/5 border border-accent-cyan/20 rounded-xl">
           <p className="text-sm text-text-secondary">
             💡 提示：点击"访问官网"按钮可以跳转到工具的官方网站进行试用。
           </p>

@@ -17,8 +17,8 @@ export default function Error({
   return (
     <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center px-6">
       <div className="text-center max-w-lg">
-        <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-          <AlertTriangle className="w-10 h-10 text-red-500" />
+        <div className="w-20 h-20 bg-accent-pink/10 border border-accent-pink/30 rounded-full flex items-center justify-center mx-auto mb-6">
+          <AlertTriangle className="w-10 h-10 text-accent-pink" />
         </div>
         
         <h1 className="text-3xl font-bold text-text-primary mb-4">
@@ -36,7 +36,7 @@ export default function Error({
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={reset}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-purple text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
           >
             <RefreshCw className="w-4 h-4" />
             重试
@@ -44,7 +44,7 @@ export default function Error({
           
           <a
             href="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-accent-warm hover:text-accent-warm transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border-subtle text-text-secondary font-medium rounded-xl hover:border-accent-cyan hover:text-accent-cyan transition-colors"
           >
             <Home className="w-4 h-4" />
             返回首页
@@ -56,7 +56,7 @@ export default function Error({
             如果问题持续存在，请{' '}
             <a
               href="mailto:hello@ai.poph163.com"
-              className="text-accent-warm hover:text-accent-warm-hover"
+              className="text-accent-cyan hover:opacity-80"
             >
               联系我们
             </a>
