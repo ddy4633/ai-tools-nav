@@ -131,3 +131,13 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* 骨架屏 Shimmer 动画 */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

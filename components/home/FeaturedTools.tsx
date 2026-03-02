@@ -1,24 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Star, ArrowRight } from 'lucide-react';
-
-interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  reason?: string;
-  category: string;
-  pricing_type: 'free' | 'paid' | 'freemium';
-  icon?: string;
-}
+import type { Tool } from '@/types/tool';
 
 interface FeaturedToolsProps {
   tools: Tool[];
 }
 
-const pricingLabels = {
+const pricingLabels: Record<string, { text: string; className: string }> = {
   free: { text: 'FREE', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
   paid: { text: 'PAID', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
   freemium: { text: 'FREEMIUM', className: 'bg-accent-purple/10 text-accent-purple border-accent-purple/30' },
@@ -86,8 +77,9 @@ export default function FeaturedTools({ tools }: FeaturedToolsProps) {
   );
 }
 
-function ToolCard({ tool, variants }: { tool: Tool; variants: any }) {
-  const pricing = pricingLabels[tool.pricing_type] || pricingLabels.freemium;
+function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
+  const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
+  const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
   
   return (
     <motion.div variants={variants}>

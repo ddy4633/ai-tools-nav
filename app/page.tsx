@@ -4,23 +4,30 @@ import { getTrendingTools, getFeaturedTools, getCategories } from '@/lib/supabas
 import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data';
 import type { Metadata } from 'next';
 
-import { Tool, Category } from '@/types/tool';
+import { Tool, Category, TrendingTool } from '@/types/tool';
+import { 
+  FeaturedToolsSkeleton, 
+  TrendingToolsSkeleton,
+  CategoriesSkeleton,
+  EditorPicksSkeleton,
+  NewsletterSkeleton
+} from '@/components/ui/Skeleton';
 
-// Dynamic imports for below-the-fold components to reduce initial bundle size
+// Dynamic imports for below-the-fold components with proper skeletons
 const TrendingTools = dynamic(() => import('@/components/home/TrendingTools'), {
-  loading: () => <div className="py-20 bg-bg-secondary" />,
+  loading: () => <TrendingToolsSkeleton />,
 });
 const FeaturedTools = dynamic(() => import('@/components/home/FeaturedTools'), {
-  loading: () => <div className="py-20 bg-bg-secondary" />,
+  loading: () => <FeaturedToolsSkeleton />,
 });
 const EditorPicks = dynamic(() => import('@/components/home/EditorPicks'), {
-  loading: () => <div className="py-20 bg-bg-primary" />,
+  loading: () => <EditorPicksSkeleton />,
 });
 const Categories = dynamic(() => import('@/components/home/Categories'), {
-  loading: () => <div className="py-20 bg-bg-secondary" />,
+  loading: () => <CategoriesSkeleton />,
 });
 const NewsletterSection = dynamic(() => import('@/components/home/NewsletterSection'), {
-  loading: () => <div className="py-16 bg-bg-primary" />,
+  loading: () => <NewsletterSkeleton />,
 });
 
 export const revalidate = 3600;
@@ -43,10 +50,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let trending: any[] = [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let tools: any[] = [];
+  let trending: TrendingTool[] = [];
+  let tools: Tool[] = [];
   let categories: Category[] = [];
 
   try {
@@ -55,10 +60,10 @@ export default async function Home() {
       getFeaturedTools(8),
       getCategories(),
     ]);
-    trending = trendingResult || [];
-    tools = toolsResult || [];
-    categories = categoriesResult || [];
-  } catch (error) {
+    trending = (trendingResult || []) as TrendingTool[];
+    tools = (toolsResult || []) as Tool[];
+    categories = (categoriesResult || []) as Category[];
+  } catch {
     // 静默处理错误，使用备用数据
   }
 

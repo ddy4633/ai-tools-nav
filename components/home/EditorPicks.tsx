@@ -9,7 +9,7 @@ interface EditorPicksProps {
   picks: EditorPick[];
 }
 
-const pricingLabels = {
+const pricingLabels: Record<string, { text: string; className: string }> = {
   free: { text: 'FREE', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
   paid: { text: 'PAID', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
   freemium: { text: 'FREEMIUM', className: 'bg-accent-purple/10 text-accent-purple border-accent-purple/30' },
@@ -101,9 +101,17 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                       <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors">
                         {pick.tool.name}
                       </h3>
-                      <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded border ${pricingLabels[pick.tool.pricingType].className}`}>
-                        {pricingLabels[pick.tool.pricingType].text}
-                      </span>
+                      {
+                        (() => {
+                          const pricingType = pick.tool.pricingType || pick.tool.pricing_type || 'freemium';
+                          const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
+                          return (
+                            <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded border ${pricing.className}`}>
+                              {pricing.text}
+                            </span>
+                          );
+                        })()
+                      }
                     </div>
                   </div>
                   

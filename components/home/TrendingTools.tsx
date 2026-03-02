@@ -1,41 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Flame, ArrowRight, Github } from 'lucide-react';
-
-interface SocialMetrics {
-  github: {
-    stars: number;
-    stars_per_day: number;
-    forks: number;
-  };
-  twitter?: {
-    likes: number;
-    retweets: number;
-  };
-  hackernews?: {
-    votes: number;
-    comments: number;
-  };
-}
-
-interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  website: string;
-  repo_url: string;
-  hype_score: number;
-  viral_coefficient: number;
-  tier: string;
-  metrics: SocialMetrics;
-  install_methods: string[];
-  one_liner: string;
-}
+import type { TrendingTool } from '@/types/tool';
 
 interface TrendingToolsProps {
-  tools: Tool[];
+  tools: TrendingTool[];
 }
 
 const tierConfig: Record<string, { text: string; className: string }> = {
@@ -113,7 +84,7 @@ export default function TrendingTools({ tools }: TrendingToolsProps) {
   );
 }
 
-function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants: any }) {
+function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; variants: Variants }) {
   const tier = tierConfig[tool.tier] || tierConfig['💡 WATCH'];
   
   return (
@@ -166,9 +137,9 @@ function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants
             
             {/* 社交指标 */}
             <div className="flex flex-wrap items-center gap-4 text-sm font-mono mb-4">
-              {tool.metrics.github && (
+              {tool.metrics?.github && (
                 <a
-                  href={tool.repo_url}
+                  href={tool.repo_url || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1 text-text-secondary hover:text-accent-cyan transition-colors duration-300"
@@ -179,7 +150,7 @@ function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants
                 </a>
               )}
               
-              {tool.metrics.hackernews && tool.metrics.hackernews.votes > 0 && (
+              {tool.metrics?.hackernews && tool.metrics.hackernews.votes > 0 && (
                 <span className="flex items-center gap-1 text-text-secondary"
                 >
                   <span className="text-accent-orange">▲</span>
