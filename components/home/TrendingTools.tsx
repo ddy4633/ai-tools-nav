@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Flame, ArrowRight, Github, Star } from 'lucide-react';
+import { Flame, ArrowRight, Github } from 'lucide-react';
 
 interface SocialMetrics {
   github: {
@@ -121,12 +121,13 @@ function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants
       variants={variants}
       className="group relative"
     >
-      <div className="absolute -inset-px bg-gradient-to-r from-accent-pink/10 via-transparent to-accent-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-pink/20 via-accent-purple/20 to-accent-cyan/20 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-xl blur-sm group-hover:blur-md" />
+      <div className="absolute -inset-px bg-gradient-to-r from-accent-pink/10 via-transparent to-accent-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
       
-      <div className="relative bg-bg-card border border-border-card rounded-xl p-5 hover:border-accent-pink/30 transition-colors">
+      <div className="relative bg-bg-card border border-border-card rounded-xl p-5 group-hover:border-accent-pink/40 transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(255,0,110,0.1)]">
         <div className="flex items-start gap-4">
           {/* 排名 */}
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center font-mono font-bold text-accent-cyan">
+          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center font-mono font-bold text-accent-cyan group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all duration-300">
             {rank.toString().padStart(2, '0')}
           </div>
           
@@ -135,22 +136,26 @@ function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors">
+                  <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-pink transition-colors duration-300"
+                  >
                     {tool.name}
                   </h3>
-                  <span className={`px-2 py-0.5 text-xs font-mono rounded border ${tier.className}`}>
+                  <span className={`px-2 py-0.5 text-xs font-mono rounded border transition-all duration-300 group-hover:shadow-[0_0_10px_rgba(255,0,110,0.2)] ${tier.className}`}
+                  >
                     {tier.text}
                   </span>
                 </div>
                 
-                <p className="text-sm text-text-secondary font-mono leading-relaxed">
+                <p className="text-sm text-text-secondary font-mono leading-relaxed group-hover:text-text-primary transition-colors duration-300"
+                >
                   {tool.one_liner || tool.description}
                 </p>
               </div>
               
               {/* 热度分 */}
               <div className="text-right flex-shrink-0">
-                <div className="text-2xl font-mono font-bold text-accent-pink">
+                <div className="text-2xl font-mono font-bold text-accent-pink group-hover:scale-110 transition-transform duration-300"
+                >
                   {tool.hype_score.toFixed(0)}
                 </div>
                 <div className="text-xs font-mono text-text-muted">
@@ -166,7 +171,7 @@ function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants
                   href={tool.repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-text-secondary hover:text-accent-cyan transition-colors"
+                  className="flex items-center gap-1 text-text-secondary hover:text-accent-cyan transition-colors duration-300"
                 >
                   <Github className="w-4 h-4" />
                   <span>{formatNumber(tool.metrics.github.stars)}</span>
@@ -183,7 +188,7 @@ function ToolCard({ tool, rank, variants }: { tool: Tool; rank: number; variants
               )}
               
               {tool.viral_coefficient > 1.5 && (
-                <span className="text-accent-yellow font-mono"
+                <span className="text-accent-yellow font-mono group-hover:text-accent-pink transition-colors duration-300"
                 >
                   VIRAL: {tool.viral_coefficient.toFixed(1)}x
                 </span>

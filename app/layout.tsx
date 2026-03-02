@@ -3,6 +3,7 @@ import { JetBrains_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import PageTransition from '@/components/transitions/PageTransition';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -120,7 +121,9 @@ export default function RootLayout({
       <body className="bg-bg-primary text-text-primary font-sans antialiased">
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className="flex-1">{children}</main>
+          <PageTransition>
+            <main className="flex-1">{children}</main>
+          </PageTransition>
           <Footer />
         </div>
       </body>
