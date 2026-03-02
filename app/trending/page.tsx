@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { getTrendingTools } from '@/lib/supabase';
 import Link from 'next/link';
 import { ArrowRight, Home, TrendingUp, Star, GitFork } from 'lucide-react';
+import type { TrendingTool } from '@/types/tool';
 
 export const metadata: Metadata = {
   title: '热门 AI工具排行 - 最受欢迎的人工智能工具 | AI工具导航',
@@ -63,7 +64,7 @@ export default async function TrendingPage() {
         {/* 工具排行列表 */}
         {tools.length > 0 ? (
           <div className="space-y-4">
-            {tools.map((tool: any, index: number) => {
+            {tools.map((tool: TrendingTool, index: number) => {
               const tier = tierLabels[tool.tier] || tierLabels['⭐ STABLE'];
               const hasMetrics = tool.metrics?.github?.stars > 0;
               

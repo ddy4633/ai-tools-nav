@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { getAllTools } from '@/lib/supabase';
 import Link from 'next/link';
 import { ArrowRight, Home } from 'lucide-react';
+import type { Tool } from '@/types/tool';
 
 export const metadata: Metadata = {
   title: '生产力 AI工具 - 最好的生产力人工智能工具 | AI工具导航',
@@ -19,7 +20,7 @@ const pricingLabels = {
 
 export default async function ProductivityCategoryPage() {
   const allTools = await getAllTools();
-  const tools = allTools.filter((tool: any) => 
+  const tools = allTools.filter((tool: Tool) => 
     tool.category?.includes('生产力') || 
     tool.category?.includes('效率') ||
     tool.category?.toLowerCase().includes('productivity') ||
@@ -71,7 +72,7 @@ export default async function ProductivityCategoryPage() {
         {/* 工具列表 */}
         {tools.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tools.map((tool: any) => {
+            {tools.map((tool: Tool) => {
               const pricing = pricingLabels[tool.pricing_type as keyof typeof pricingLabels] || pricingLabels.freemium;
               return (
                 <Link
