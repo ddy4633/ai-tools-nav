@@ -9,7 +9,10 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type'); // 'all' | 'trending' | 'featured'
-    const limit = parseInt(searchParams.get('limit') || '100', 10);
+    const rawLimit = searchParams.get('limit');
+    let limit = Number(rawLimit ?? 100);
+    if (!Number.isFinite(limit)) limit = 100;
+    limit = Math.min(Math.max(Math.floor(limit), 1), 200);
 
     let tools;
 

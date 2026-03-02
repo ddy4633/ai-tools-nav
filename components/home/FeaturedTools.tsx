@@ -101,7 +101,7 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
               {tool.icon ? (
                 <img 
                   src={tool.icon} 
-                  alt="" 
+                  alt={`${tool.name} logo`} 
                   className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110" 
                   width={32} 
                   height={32}

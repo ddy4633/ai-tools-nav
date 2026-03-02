@@ -20,7 +20,7 @@ export async function getTrendingTools(limit = 10) {
   }
   
   const { data, error } = await supabase
-    .from('tools')
+    .from('tools_view')
     .select('*')
     .order('hype_score', { ascending: false })
     .limit(limit);
@@ -39,7 +39,7 @@ export async function getFeaturedTools(limit = 8) {
   }
   
   const { data, error } = await supabase
-    .from('tools')
+    .from('tools_view')
     .select('*')
     .eq('is_featured', true)
     .limit(limit);
@@ -58,7 +58,7 @@ export async function getCategories() {
   }
   
   const { data, error } = await supabase
-    .from('categories')
+    .from('categories_view')
     .select('*');
   
   if (error || !data) {
@@ -76,7 +76,7 @@ export async function getAllTools() {
   }
   
   const { data, error } = await supabase
-    .from('tools')
+    .from('tools_view')
     .select('*')
     .order('name', { ascending: true });
   
@@ -96,7 +96,7 @@ export async function getToolById(id: string) {
   }
   
   const { data, error } = await supabase
-    .from('tools')
+    .from('tools_view')
     .select('*')
     .eq('id', id)
     .single();
@@ -401,19 +401,43 @@ function getMockCategories() {
 }
 
 // 提交评分
-export async function submitRating(toolId: string, rating: number): Promise<{ success: boolean }> {
-  const supabase = getSupabase();
-  
-  if (!supabase) {
-    // 模拟提交成功
-    return { success: true };
+export async function submitRating(
+  toolId: string,
+  rating: number
+): Promise<{ success: boolean; message?: string }> {
+  if (typeof window === 'undefined') {
+    return { success: false, message: '仅支持在浏览器中评分' };
   }
-  
+
+  if (!toolId) {
+    return { success: false, message: '缺少工具标识' };
+  }
+
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    return { success: false, message: '评分需为 1-5 的整数' };
+  }
+
   try {
-    // 简化处理，避免类型问题
+    const storageKey = 'toolRatings';
+    let data: Record<string, { rating: number; updatedAt: string }> = {};
+    const raw = window.localStorage.getItem(storageKey);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          data = parsed as Record<string, { rating: number; updatedAt: string }>;
+        }
+      } catch {
+        data = {};
+      }
+    }
+
+    data[toolId] = { rating, updatedAt: new Date().toISOString() };
+    window.localStorage.setItem(storageKey, JSON.stringify(data));
+
     return { success: true };
   } catch (error) {
     console.error('提交评分失败:', error);
-    return { success: false };
+    return { success: false, message: '本地保存失败' };
   }
 }

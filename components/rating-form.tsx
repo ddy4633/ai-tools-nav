@@ -25,10 +25,10 @@ export function RatingForm({ toolId }: RatingFormProps) {
     try {
       const result = await submitRating(toolId, rating);
       if (result.success) {
-        setMessage('✅ 评分提交成功！感谢您的评价。');
+        setMessage('✅ 评分已保存到本地（静态版本）。');
         setRating(0);
       } else {
-        setMessage('❌ 提交失败，请稍后重试。');
+        setMessage(`❌ ${result.message || '提交失败，请稍后重试。'}`);
       }
     } catch (error) {
       setMessage('❌ 网络错误，请检查网络连接。');

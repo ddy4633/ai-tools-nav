@@ -356,7 +356,7 @@ export default function ChatGPTAlternativesPage() {
           <section className="text-center">
             <h3 className="text-xl font-bold text-text-primary mb-4">探索更多AI工具</h3>
             <p className="text-text-secondary mb-6">
-              访问我们的<a href="/tools" className="text-accent-warm hover:underline">AI工具库</a>，发现1000+优质AI工具
+              访问我们的<a href="/tools" className="text-accent-warm hover:underline">AI工具库</a>，发现更多优质AI工具
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

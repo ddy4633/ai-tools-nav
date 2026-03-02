@@ -9,6 +9,7 @@ export interface Tool {
   fullReview?: string;
   category: string;
   categorySlug?: string;
+  category_slug?: string;
   pricing_type?: 'free' | 'paid' | 'freemium';
   pricingType?: 'free' | 'paid' | 'freemium';
   priceRange?: string;
@@ -50,22 +51,6 @@ export interface TrendingTool extends Tool {
     };
   };
   install_methods: string[];
-}
-
-export interface Editor {
-  id: string;
-  name: string;
-  avatar: string;
-  bio: string;
-  role: 'editor' | 'admin';
-}
-
-export interface EditorPick {
-  id: string;
-  tool: Tool;
-  editor: Editor;
-  comment: string;
-  pickedAt: string;
 }
 
 export interface Editor {

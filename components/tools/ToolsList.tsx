@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, Filter, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 
 interface Tool {
   id: string;
@@ -34,7 +34,7 @@ const pricingLabels = {
   },
 };
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -42,7 +42,7 @@ const containerVariants = {
   }
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
     opacity: 1, 
@@ -162,7 +162,7 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
 
 interface ToolCardProps {
   tool: Tool;
-  variants: any;
+  variants: Variants;
 }
 
 function ToolCard({ tool, variants }: ToolCardProps) {
@@ -184,7 +184,7 @@ function ToolCard({ tool, variants }: ToolCardProps) {
               {tool.icon ? (
                 <img 
                   src={tool.icon} 
-                  alt="" 
+                  alt={`${tool.name} logo`} 
                   className="w-8 h-8 object-contain" 
                   loading="lazy"
                   width={32}

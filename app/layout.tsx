@@ -27,17 +27,17 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI工具导航 - 发现1000+最好用的AI工具 | 国内免费AI工具推荐',
+    default: 'AI工具导航 - 精选好用AI工具 | 国内AI工具推荐',
     template: '%s | AI工具导航',
   },
-  description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
+  description: '精选国内外好用的AI工具，涵盖AI写作、AI绘画、AI编程、AI视频等领域，助您提升工作效率。',
   keywords: ['AI工具', 'AI工具导航', 'AI写作', 'AI绘画', 'AI编程', 'ChatGPT', 'DeepSeek', 'Midjourney', '免费AI工具', '国内AI工具'],
   authors: [{ name: 'AI工具导航', url: 'https://ai.poph163.com' }],
   creator: 'AI工具导航',
   publisher: 'AI工具导航',
   openGraph: {
-    title: 'AI工具导航 - 发现1000+最好用的AI工具 | 国内免费AI工具推荐',
-    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
+    title: 'AI工具导航 - 精选好用AI工具 | 国内AI工具推荐',
+    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
     url: siteUrl,
     siteName: 'AI工具导航',
     locale: 'zh_CN',
@@ -53,8 +53,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI工具导航 - 发现1000+最好用的AI工具',
-    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
+    title: 'AI工具导航 - 精选好用AI工具',
+    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
     images: [`${siteUrl}/og-image.png`],
   },
   robots: {
@@ -88,7 +88,7 @@ export default function RootLayout({
     '@type': 'WebSite',
     name: 'AI工具导航',
     url: siteUrl,
-    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
+    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
     potentialAction: {
       '@type': 'SearchAction',
       target: `${siteUrl}/tools?search={search_term_string}`,

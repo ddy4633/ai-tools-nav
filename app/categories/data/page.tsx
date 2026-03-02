@@ -82,7 +82,7 @@ export default async function DataCategoryPage() {
                   <div className="flex items-start gap-4 mb-4">
                     <div className="w-12 h-12 rounded-lg bg-bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
                       {tool.icon ? (
-                        <img src={tool.icon} alt="" className="w-8 h-8 object-contain" loading="lazy" />
+                        <img src={tool.icon} alt={`${tool.name} logo`} className="w-8 h-8 object-contain" loading="lazy" />
                       ) : (
                         <span className="text-xl text-accent-warm font-medium">
                           {tool.name[0]}

@@ -33,15 +33,15 @@ const NewsletterSection = dynamic(() => import('@/components/home/NewsletterSect
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'AI工具导航 - 发现1000+最好用的AI工具 | 国内免费AI工具推荐',
-  description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
+  title: 'AI工具导航 - 精选好用AI工具 | 国内AI工具推荐',
+  description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
   keywords: ['AI工具', 'AI工具导航', 'AI写作', 'AI绘画', 'AI编程', 'ChatGPT', 'DeepSeek', 'Midjourney', '免费AI工具', '国内AI工具'],
   alternates: {
     canonical: 'https://ai.poph163.com',
   },
   openGraph: {
-    title: 'AI工具导航 - 发现1000+最好用的AI工具',
-    description: '发现1000+国内免费最好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
+    title: 'AI工具导航 - 精选好用AI工具',
+    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
     url: 'https://ai.poph163.com',
     siteName: 'AI工具导航',
     locale: 'zh_CN',

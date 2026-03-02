@@ -166,3 +166,124 @@ CREATE POLICY "Allow anonymous read" ON articles
 -- 允许认证用户写入 (后续添加认证后使用)
 -- CREATE POLICY "Allow authenticated insert" ON tools
 --   FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+-- 6. 创建评分表（用户评分记录）
+CREATE TABLE tool_ratings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tool_id UUID REFERENCES tools(id) ON DELETE CASCADE,
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_tool_ratings_tool_id ON tool_ratings(tool_id);
+
+-- 评分聚合：回写 tools.rating / tools.review_count
+CREATE OR REPLACE FUNCTION update_tool_rating()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE tools
+  SET
+    review_count = (SELECT COUNT(*) FROM tool_ratings WHERE tool_id = NEW.tool_id),
+    rating = (SELECT ROUND(AVG(rating)::numeric, 1) FROM tool_ratings WHERE tool_id = NEW.tool_id),
+    updated_at = NOW()
+  WHERE id = NEW.tool_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_tool_rating
+AFTER INSERT ON tool_ratings
+FOR EACH ROW EXECUTE FUNCTION update_tool_rating();
+
+-- 7. 创建工具提交表（待审核）
+CREATE TABLE tool_submissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT,
+  name TEXT NOT NULL,
+  website_url TEXT NOT NULL,
+  description TEXT NOT NULL,
+  category_slug TEXT,
+  tags TEXT[] DEFAULT '{}',
+  reason TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  status TEXT DEFAULT 'pending'
+);
+
+CREATE INDEX idx_tool_submissions_status ON tool_submissions(status);
+CREATE INDEX idx_tool_submissions_created_at ON tool_submissions(created_at DESC);
+
+-- 开启 RLS（写入由服务端 API 使用 Service Role 执行）
+ALTER TABLE tool_ratings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tool_submissions ENABLE ROW LEVEL SECURITY;
+
+-- ===== 前端视图层（DTO）=====
+-- 目的：将数据库规范化结构映射为前端所需的扁平字段，降低应用层映射成本
+
+-- 工具视图：统一字段命名与派生计算
+CREATE OR REPLACE VIEW tools_view AS
+SELECT
+  t.slug AS id,                             -- 前端路由使用 slug 作为 id
+  t.id AS tool_uuid,                        -- 保留原始 UUID
+  t.slug,
+  t.name,
+  t.description,
+  t.full_description,
+  COALESCE(c.name, '未分类') AS category,
+  c.slug AS category_slug,
+  CASE
+    WHEN (COALESCE(t.pricing, '{}'::jsonb)->>'has_free')::boolean IS TRUE
+      AND jsonb_array_length(COALESCE(t.pricing->'plans', '[]'::jsonb)) > 0
+      THEN 'freemium'
+    WHEN (COALESCE(t.pricing, '{}'::jsonb)->>'has_free')::boolean IS TRUE
+      THEN 'free'
+    ELSE 'paid'
+  END AS pricing_type,
+  t.website_url AS website,
+  t.logo_url AS icon,
+  NULL::text AS repo_url,
+  t.meta_description AS reason,
+  t.rating AS average_rating,
+  t.review_count AS rating_count,
+  t.is_featured,
+  t.created_at,
+  t.updated_at,
+  COALESCE(t.meta_description, t.description) AS one_liner,
+  LEAST(
+    100,
+    ROUND(
+      COALESCE(t.rating, 0) * 20
+      + LEAST(20, LN(1 + COALESCE(t.review_count, 0)) * 5)
+      + LEAST(10, LN(1 + COALESCE(t.view_count, 0)) * 3)
+      + LEAST(10, LN(1 + COALESCE(t.click_count, 0)) * 3)
+    )
+  )::int AS hype_score,
+  CASE
+    WHEN COALESCE(t.view_count, 0) > 0 THEN
+      ROUND(1 + LEAST(4, (COALESCE(t.click_count, 0)::numeric / NULLIF(t.view_count, 0)) * 3), 2)
+    ELSE 1
+  END AS viral_coefficient,
+  CASE
+    WHEN COALESCE(t.rating, 0) * 20 >= 90 THEN '🔥 BREAKING'
+    WHEN COALESCE(t.rating, 0) * 20 >= 80 THEN '⚡ TRENDING'
+    WHEN COALESCE(t.rating, 0) * 20 >= 70 THEN '🚀 NEW'
+    ELSE '💡 WATCH'
+  END AS tier,
+  NULL::jsonb AS metrics,
+  ARRAY[]::text[] AS install_methods
+FROM tools t
+LEFT JOIN categories c ON t.category_id = c.id;
+
+-- 分类视图：补齐 count / popularity
+CREATE OR REPLACE VIEW categories_view AS
+SELECT
+  c.id,
+  c.name,
+  c.slug,
+  COALESCE(tc.tool_count, 0) AS count,
+  LEAST(100, ROUND(40 + LN(1 + COALESCE(tc.tool_count, 0)) * 20))::int AS popularity
+FROM categories c
+LEFT JOIN (
+  SELECT category_id, COUNT(*) AS tool_count
+  FROM tools
+  GROUP BY category_id
+) tc ON tc.category_id = c.id;

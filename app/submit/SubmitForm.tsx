@@ -33,6 +33,7 @@ export default function SubmitForm() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState<FormData>({
     name: '',
     website: '',
@@ -90,12 +91,36 @@ export default function SubmitForm() {
     }
 
     setIsSubmitting(true);
-    
-    // 模拟提交延迟
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
+    setSubmitError('');
+
+    try {
+      const storageKey = 'toolSubmissions';
+      const payload = {
+        ...formData,
+        createdAt: new Date().toISOString(),
+      };
+
+      let list: typeof payload[] = [];
+      const raw = window.localStorage.getItem(storageKey);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            list = parsed as typeof payload[];
+          }
+        } catch {
+          list = [];
+        }
+      }
+
+      list.unshift(payload);
+      window.localStorage.setItem(storageKey, JSON.stringify(list));
+      setSubmitted(true);
+    } catch {
+      setSubmitError('本地保存失败，请检查浏览器存储权限');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddTag = () => {
@@ -129,12 +154,12 @@ export default function SubmitForm() {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
             <Check className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-text-primary mb-4">感谢您的推荐！</h1>
+          <h1 className="text-3xl font-bold text-text-primary mb-4">感谢你的推荐！</h1>
           <p className="text-text-secondary text-lg mb-2">
-            我们已收到您对 <strong className="text-accent-warm">{formData.name}</strong> 的推荐
+            已在本地保存对 <strong className="text-accent-warm">{formData.name}</strong> 的推荐
           </p>
           <p className="text-text-muted mb-8">
-            审核通过后，该工具将出现在我们的平台上
+            当前为静态版本，暂不支持在线提交
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
@@ -361,8 +386,12 @@ export default function SubmitForm() {
           )}
         </button>
 
+        {submitError && (
+          <p className="text-sm text-red-600 text-center mt-3">{submitError}</p>
+        )}
+
         <p className="text-xs text-text-muted text-center mt-4">
-          提交即表示您同意我们的审核条款，我们会在 1-3 个工作日内完成审核
+          当前为静态版本，提交内容仅保存在本地浏览器
         </p>
       </form>
     </div>

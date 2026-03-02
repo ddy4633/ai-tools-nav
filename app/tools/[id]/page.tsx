@@ -56,10 +56,35 @@ export default async function ToolPage({ params }: ToolPageProps) {
     freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
   };
   
-  const pricing = pricingLabels[tool.pricing_type];
+  const pricingType = tool.pricing_type || 'freemium';
+  const pricing = pricingLabels[pricingType];
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai.poph163.com';
+  const toolUrl = `${siteUrl}/tools/${tool.id}`;
+
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: tool.name,
+    description: tool.description,
+    applicationCategory: tool.category,
+    operatingSystem: 'Web',
+    url: tool.website || toolUrl,
+  };
+
+  if (tool.average_rating && tool.rating_count) {
+    jsonLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: tool.average_rating,
+      ratingCount: tool.rating_count,
+    };
+  }
   
   return (
     <div className="min-h-screen bg-bg-primary">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* 返回链接 */}
         <Link

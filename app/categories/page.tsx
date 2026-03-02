@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'AI 工具分类 - 按类别浏览',
-  description: '按类别浏览 AI 工具，包括 AI 写作、图像生成、代码助手、聊天机器人等20+分类。',
+  description: '按类别浏览 AI 工具，包括 AI 写作、图像生成、代码助手、聊天机器人等分类。',
   keywords: ['AI工具分类', 'AI写作', 'AI图像', 'AI编程', 'AI聊天', '工具分类'],
 };
 
@@ -20,7 +20,7 @@ export default async function CategoriesPage() {
             AI 工具分类
           </h1>
           <p className="text-text-secondary max-w-2xl mx-auto">
-            按类别浏览 AI 工具，快速找到适合你需求的工具。我们收录了20+个分类，涵盖写作、图像、编程、聊天等各个领域。
+            按类别浏览 AI 工具，快速找到适合你需求的工具。涵盖写作、图像、编程、聊天等领域。
           </p>
         </div>
 

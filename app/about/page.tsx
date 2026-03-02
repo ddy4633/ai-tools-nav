@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: '关于我们 - AI工具导航 | 发现最好用的AI工具',
-  description: '了解AI工具导航团队的使命和愿景。我们致力于发现和推荐真正好用的AI工具，帮助用户提升工作效率。发现1000+国内免费最好用的AI工具。',
+  description: '了解AI工具导航团队的使命和愿景。我们致力于发现和推荐真正好用的AI工具，帮助用户提升工作效率。',
   keywords: ['关于我们', 'AI工具导航', 'AI工具推荐', '团队介绍', 'AI工具平台'],
   alternates: {
     canonical: 'https://ai.poph163.com/about',
@@ -67,10 +67,10 @@ const values = [
 
 // 数据统计
 const stats = [
-  { value: '1000+', label: '收录工具' },
-  { value: '50+', label: '分类目录' },
-  { value: '10万+', label: '月活跃用户' },
-  { value: '98%', label: '用户满意度' },
+  { value: '20+', label: '精选工具' },
+  { value: '10+', label: '分类目录' },
+  { value: '内测中', label: '用户规模' },
+  { value: '持续优化', label: '体验迭代' },
 ];
 
 export default function AboutPage() {

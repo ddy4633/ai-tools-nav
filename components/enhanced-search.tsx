@@ -42,6 +42,11 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // 同步外部查询参数（例如清除筛选）
+  useEffect(() => {
+    setQuery(currentQuery);
+  }, [currentQuery]);
+
   // 加载搜索历史
   useEffect(() => {
     const history = localStorage.getItem('searchHistory');
@@ -155,10 +160,17 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
   // 高亮匹配文本
   const highlightMatch = (text: string, query: string) => {
     if (!query.trim()) return text;
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
     const parts = text.split(regex);
-    return parts.map((part, i) => 
-      regex.test(part) ? <mark key={i} className="bg-accent-warm/20 text-accent-warm font-medium">{part}</mark> : part
+    return parts.map((part, i) =>
+      i % 2 === 1 ? (
+        <mark key={i} className="bg-accent-warm/20 text-accent-warm font-medium">
+          {part}
+        </mark>
+      ) : (
+        part
+      )
     );
   };
 

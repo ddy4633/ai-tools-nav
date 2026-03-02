@@ -87,7 +87,7 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                       {pick.tool.icon ? (
                         <img 
                           src={pick.tool.icon} 
-                          alt="" 
+                          alt={`${pick.tool.name} logo`} 
                           className="w-8 h-8 object-contain"
                           width={32}
                           height={32}

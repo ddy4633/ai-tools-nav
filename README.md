@@ -4,15 +4,15 @@
 
 ## 项目简介
 
-AI Tools Navigator（好工具）是一个专注于发现和评测 AI 工具的中文导航平台。我们收录了 1000+ 优质 AI 工具，涵盖 AI 写作、图像生成、代码助手、对话 AI 等热门领域，帮助用户快速找到适合自己需求的工具。
+AI Tools Navigator（好工具）是一个专注于发现和评测 AI 工具的中文导航平台。当前版本以精选工具为主，涵盖 AI 写作、图像生成、代码助手、对话 AI 等热门领域，帮助用户快速找到适合自己需求的工具。
 
 ## 核心特性
 
-- 🔥 **热度排行** - 基于 GitHub Stars、Hacker News 热度的实时排行
+- 🔥 **热度排行** - 静态示例数据，可扩展接入真实数据源
 - 🏷️ **智能分类** - 20+ 精细分类，快速定位目标工具
 - 🔍 **高级搜索** - 支持关键词、拼音、分类多维搜索
-- ⭐ **用户评分** - 真实用户评价，参考更有价值
-- 📧 **Newsletter** - 每周精选最新 AI 工具和行业动态
+- ⭐ **用户评分** - 静态版本为本地评分（localStorage）
+- 📧 **Newsletter** - 静态版本为本地订阅（localStorage）
 - 📱 **响应式设计** - 完美适配桌面和移动端
 - 🚀 **极速加载** - 静态生成 + CDN 加速
 
@@ -20,7 +20,7 @@ AI Tools Navigator（好工具）是一个专注于发现和评测 AI 工具的�
 
 - **框架**: Next.js 15 + React 19 + TypeScript
 - **样式**: Tailwind CSS 4.x
-- **数据库**: Supabase (PostgreSQL)
+- **数据库**: Supabase (PostgreSQL，可选)
 - **部署**: Dokploy / Vercel
 - **监控**: 内置健康检查 API
 
@@ -66,7 +66,7 @@ npm start
 创建 `.env.local` 文件：
 
 ```env
-# Supabase 配置
+# Supabase 配置（可选，未配置则使用本地数据）
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
@@ -113,7 +113,7 @@ ai-tools-nav/
 - 完整工具信息录入
 - 多维度分类标签
 - 定价模式标识
-- 用户评分和评论
+- 用户评分（静态版本为本地评分）
 
 ### 3. 内容系统
 - 工具评测文章
@@ -125,13 +125,13 @@ ai-tools-nav/
 
 ### 添加新工具
 
-1. 在 Supabase 数据库中添加工具记录
-2. 上传工具图标到存储桶
+1. 在本地数据文件中添加工具记录（`lib/content/tools-data.ts`）
+2. 上传工具图标到 `public/` 或使用外链
 3. 添加工具评测文章（可选）
 
 ### 添加新分类
 
-1. 更新 `lib/supabase.ts` 中的分类列表
+1. 更新 `lib/content/tools-data.ts` 中的分类列表
 2. 添加分类图标
 3. 更新首页分类展示
 
@@ -175,8 +175,8 @@ ai-tools-nav/
 - [x] MVP 版本发布
 - [x] 热度排行榜
 - [x] 搜索和筛选
-- [x] 用户评分系统
-- [x] Newsletter 订阅
+- [x] 用户评分系统（静态版本为本地评分）
+- [x] Newsletter 订阅（静态版本为本地订阅）
 - [ ] 用户系统（登录/收藏）
 - [ ] 工具对比功能
 - [ ] 微信小程序

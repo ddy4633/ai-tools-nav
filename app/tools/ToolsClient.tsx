@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, Suspense } from 'react';
+import { useState, useMemo, Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { EnhancedSearch } from '@/components/enhanced-search';
@@ -12,6 +12,8 @@ interface Tool {
   description: string;
   reason?: string;
   category: string;
+  categorySlug?: string;
+  category_slug?: string;
   pricing_type: 'free' | 'paid' | 'freemium';
   icon?: string;
 }
@@ -25,6 +27,9 @@ interface Category {
 interface ToolsClientProps {
   tools: Tool[];
   categories: Category[];
+  initialSearch?: string;
+  initialCategory?: string;
+  initialPricing?: string;
 }
 
 const pricingLabels = {
@@ -33,10 +38,45 @@ const pricingLabels = {
   freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
 };
 
-export default function ToolsClient({ tools, categories }: ToolsClientProps) {
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedPricing, setSelectedPricing] = useState<'all' | 'free' | 'paid' | 'freemium'>('all');
+function resolveInitialCategory(initialCategory: string | undefined, categories: Category[]) {
+  if (!initialCategory || initialCategory === 'all') return 'all';
+  const bySlug = categories.find((cat) => cat.slug === initialCategory);
+  return bySlug ? bySlug.name : initialCategory;
+}
+
+function resolveInitialPricing(initialPricing: string | undefined) {
+  if (initialPricing === 'free' || initialPricing === 'paid' || initialPricing === 'freemium') {
+    return initialPricing;
+  }
+  return 'all';
+}
+
+export default function ToolsClient({
+  tools,
+  categories,
+  initialSearch = '',
+  initialCategory,
+  initialPricing,
+}: ToolsClientProps) {
+  const [search, setSearch] = useState(initialSearch);
+  const [selectedCategory, setSelectedCategory] = useState<string>(() =>
+    resolveInitialCategory(initialCategory, categories)
+  );
+  const [selectedPricing, setSelectedPricing] = useState<'all' | 'free' | 'paid' | 'freemium'>(() =>
+    resolveInitialPricing(initialPricing)
+  );
+
+  useEffect(() => {
+    setSearch(initialSearch);
+  }, [initialSearch]);
+
+  useEffect(() => {
+    setSelectedCategory(resolveInitialCategory(initialCategory, categories));
+  }, [initialCategory, categories]);
+
+  useEffect(() => {
+    setSelectedPricing(resolveInitialPricing(initialPricing));
+  }, [initialPricing]);
 
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {
@@ -46,7 +86,10 @@ export default function ToolsClient({ tools, categories }: ToolsClientProps) {
         tool.description.toLowerCase().includes(search.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === 'all' || tool.category === selectedCategory;
+        selectedCategory === 'all' ||
+        tool.category === selectedCategory ||
+        tool.categorySlug === selectedCategory ||
+        tool.category_slug === selectedCategory;
 
       const matchesPricing =
         selectedPricing === 'all' || tool.pricing_type === selectedPricing;
