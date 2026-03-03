@@ -53,20 +53,24 @@ export function StarRating({
 
 interface RatingDisplayProps {
   averageRating: number;
-  ratingCount: number;
+  ratingCount?: number;
   size?: 'sm' | 'md' | 'lg';
+  emptyLabel?: string;
 }
 
 export function RatingDisplay({
   averageRating,
-  ratingCount,
+  ratingCount = 0,
   size = 'md',
+  emptyLabel = '编辑评分',
 }: RatingDisplayProps) {
+  const showCount = ratingCount > 0;
+
   return (
     <div className="flex items-center gap-2">
       <StarRating rating={Math.round(averageRating)} size={size} />
       <span className="text-sm text-gray-600">
-        {averageRating.toFixed(1)} ({ratingCount} 评价)
+        {averageRating.toFixed(1)} {showCount ? `(${ratingCount} 评价)` : `(${emptyLabel})`}
       </span>
     </div>
   );

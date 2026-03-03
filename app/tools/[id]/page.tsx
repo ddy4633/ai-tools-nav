@@ -56,8 +56,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
     freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
   };
   
-  const pricingType = tool.pricing_type || 'freemium';
-  const pricing = pricingLabels[pricingType];
+  const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
+  const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
+  const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
+  const ratingCount = tool.rating_count ?? 0;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai.poph163.com';
   const toolUrl = `${siteUrl}/tools/${tool.id}`;
 
@@ -71,11 +73,11 @@ export default async function ToolPage({ params }: ToolPageProps) {
     url: tool.website || toolUrl,
   };
 
-  if (tool.average_rating && tool.rating_count) {
+  if (averageRating && ratingCount) {
     jsonLd.aggregateRating = {
       '@type': 'AggregateRating',
-      ratingValue: tool.average_rating,
-      ratingCount: tool.rating_count,
+      ratingValue: averageRating,
+      ratingCount,
     };
   }
   
@@ -98,28 +100,51 @@ export default async function ToolPage({ params }: ToolPageProps) {
         {/* 工具信息卡片 */}
         <div className="bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
           <div className="flex items-start justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
-              <div className="flex items-center gap-3 mb-3">
-                <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
-                  {pricing.text}
-                </span>
-                <span className="text-sm text-text-secondary bg-bg-secondary px-3 py-1 rounded-lg border border-border-subtle">
-                  {tool.category}
-                </span>
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-xl bg-bg-primary border border-border-subtle flex items-center justify-center overflow-hidden">
+                {tool.icon ? (
+                  <img
+                    src={tool.icon}
+                    alt={`${tool.name} logo`}
+                    className="w-10 h-10 object-contain"
+                    loading="lazy"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <span className="text-2xl font-mono text-accent-cyan">{tool.name[0]}</span>
+                )}
               </div>
-              {/* 评分显示 */}
-              <RatingDisplay 
-                averageRating={tool.average_rating || 0} 
-                ratingCount={tool.rating_count || 0}
-                size="md"
-              />
+              <div>
+                <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
+                    {pricing.text}
+                  </span>
+                  <span className="text-sm text-text-secondary bg-bg-secondary px-3 py-1 rounded-lg border border-border-subtle">
+                    {tool.category}
+                  </span>
+                </div>
+                {/* 评分显示 */}
+                <RatingDisplay 
+                  averageRating={averageRating} 
+                  ratingCount={ratingCount}
+                  size="md"
+                />
+              </div>
             </div>
           </div>
           
           <p className="text-text-secondary text-lg mb-8 leading-relaxed">
             {tool.description}
           </p>
+
+          {tool.priceRange && (
+            <div className="mb-8 text-sm text-text-secondary">
+              <span className="font-medium text-text-primary">价格区间：</span>
+              {tool.priceRange}
+            </div>
+          )}
           
           {/* 操作按钮 */}
           <div className="flex flex-wrap gap-4">
@@ -153,6 +178,82 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         </div>
         
+        {tool.reason && (
+          <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
+            <h2 className="text-2xl font-bold text-text-primary mb-4">推荐理由</h2>
+            <p className="text-text-secondary leading-relaxed">{tool.reason}</p>
+          </div>
+        )}
+
+        {tool.fullReview && (
+          <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
+            <h2 className="text-2xl font-bold text-text-primary mb-4">详细评测</h2>
+            <div className="space-y-4 text-text-secondary leading-relaxed">
+              {tool.fullReview
+                .split(/\n\s*\n/)
+                .map((paragraph, index) => (
+                  <p key={index}>{paragraph.trim()}</p>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {(tool.features?.length || tool.pros?.length || tool.cons?.length) && (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {tool.features?.length ? (
+              <div className="bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
+                <h3 className="text-xl font-bold text-text-primary mb-4">核心功能</h3>
+                <ul className="space-y-2 text-text-secondary">
+                  {tool.features.map((item) => (
+                    <li key={item}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {(tool.pros?.length || tool.cons?.length) && (
+              <div className="bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
+                <h3 className="text-xl font-bold text-text-primary mb-4">优缺点</h3>
+                {tool.pros?.length ? (
+                  <div className="mb-4">
+                    <p className="text-sm font-medium text-text-primary mb-2">优点</p>
+                    <ul className="space-y-1 text-text-secondary">
+                      {tool.pros.map((item) => (
+                        <li key={`pro-${item}`}>+ {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+                {tool.cons?.length ? (
+                  <div>
+                    <p className="text-sm font-medium text-text-primary mb-2">不足</p>
+                    <ul className="space-y-1 text-text-secondary">
+                      {tool.cons.map((item) => (
+                        <li key={`con-${item}`}>- {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tool.alternatives?.length ? (
+          <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
+            <h3 className="text-xl font-bold text-text-primary mb-4">替代工具</h3>
+            <div className="flex flex-wrap gap-2">
+              {tool.alternatives.map((alt) => (
+                <span
+                  key={alt}
+                  className="px-3 py-1 text-sm rounded-full bg-bg-secondary text-text-secondary"
+                >
+                  {alt}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {/* 评分区域 */}
         <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
           <h2 className="text-2xl font-bold text-text-primary mb-6">用户评价</h2>

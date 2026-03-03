@@ -166,7 +166,8 @@ interface ToolCardProps {
 }
 
 function ToolCard({ tool, variants }: ToolCardProps) {
-  const pricing = pricingLabels[tool.pricing_type];
+  const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
+  const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
   
   return (
     <motion.div variants={variants}>

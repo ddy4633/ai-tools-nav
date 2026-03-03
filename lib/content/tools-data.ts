@@ -1,6 +1,7 @@
-// lib/content/tools-data.ts - 首批20个工具详细评测数据
+// lib/content/tools-data.ts - 首批工具详细评测数据
 
 import { Tool, EditorPick, Editor } from '@/types/tool';
+import { toolIcons } from '@/lib/content/tool-icons';
 
 export const editors: Editor[] = [
   {
@@ -26,8 +27,18 @@ export const editors: Editor[] = [
   }
 ];
 
-export const toolsData: Tool[] = [
-  // ===== AI聊天 (4个) =====
+const normalizeTool = (tool: Tool): Tool => ({
+  ...tool,
+  pricing_type: tool.pricing_type ?? tool.pricingType,
+  pricingType: tool.pricingType ?? tool.pricing_type,
+  icon: tool.icon ?? toolIcons[tool.id] ?? `/tool-icons/${tool.id}.svg`,
+  average_rating: tool.average_rating ?? tool.editorRating,
+});
+
+export const toolsData: Tool[] = rawTools.map(normalizeTool);
+
+const rawTools: Tool[] = [
+  // ===== AI聊天 (5个) =====
   {
     id: 'chatgpt',
     name: 'ChatGPT',
@@ -192,7 +203,7 @@ export const toolsData: Tool[] = [
     isFeatured: true
   },
 
-  // ===== AI编程 (3个) =====
+  // ===== AI编程 (5个) =====
   {
     id: 'github-copilot',
     name: 'GitHub Copilot',
@@ -262,8 +273,54 @@ export const toolsData: Tool[] = [
     isEditorsPick: false,
     isFeatured: true
   },
+  {
+    id: 'lovable',
+    name: 'Lovable',
+    slug: 'lovable',
+    description: '用自然语言直接生成可部署的全栈应用',
+    reason: '不是代码辅助，是直接产出产品。从描述到上线，30分钟搞定一个完整应用。',
+    fullReview: '2024年最让我震惊的AI产品。不是帮你写代码，而是直接给你可运行的产品。我试过一个案例：描述一个「带用户登录的 Todo 应用，用 React + Supabase，要有暗黑模式」。几分钟后，它给出了完整的代码库，直接在浏览器里就能运行，一键部署到 Vercel。关键是不只是前端，后端、数据库、认证都帮你搭好了。最适合的场景是 MVP 验证。有个想法，不确定有没有市场？用 Lovable 两小时搭个 demo 出去测试，比写 PRD 快多了。限制也很明显：复杂业务逻辑仍需人工调整，而且生成的代码风格和结构是固定的，不好深度定制。',
+    category: 'AI编程',
+    categorySlug: 'code',
+    pricingType: 'freemium',
+    priceRange: '免费版每月 5 个项目，付费版 $20/月起',
+    website: 'https://lovable.dev',
+    features: ['自然语言生成应用', '一键部署', '全栈代码生成', '多轮迭代修改', '模板与组件库'],
+    pros: ['从描述到可部署应用，全程自动化', '技术栈新且规范', '一键部署', '支持持续迭代', '免费版额度充足'],
+    cons: ['复杂业务逻辑仍需人工调整', '代码风格固定', '不适合已有项目增量开发', '中文描述精度一般'],
+    alternatives: ['v0.dev', 'Replit Agent'],
+    editorRating: 4.6,
+    difficulty: 2,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: true,
+    isFeatured: true
+  },
+  {
+    id: 'tldraw',
+    name: 'tldraw',
+    slug: 'tldraw',
+    description: '画个草图，直接生成可用代码',
+    reason: '2024年最火的「白板编程」工具。画个按钮就能出可用组件。',
+    fullReview: 'tldraw 的核心体验是「用草图表达需求」，然后把草图转成可运行的 UI 代码。你可以画一个登录表单，写上输入框和按钮，它就能生成 React 组件。更适合用于快速沟通和原型验证，而不是替代完整的产品开发。它的价值在于让「想法到原型」变得极快。',
+    category: 'AI编程',
+    categorySlug: 'code',
+    pricingType: 'free',
+    priceRange: '完全免费，开源可自托管',
+    website: 'https://tldraw.com',
+    features: ['白板绘图', '草图转 UI', 'React 组件导出', '实时协作', '开源可自托管'],
+    pros: ['上手快', '原型验证高效', '开源生态好', '协作体验好'],
+    cons: ['复杂交互需手工补充', '生成风格固定', '适合原型而非生产代码'],
+    alternatives: ['v0.dev', 'Figma AI'],
+    editorRating: 4.4,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
 
-  // ===== AI图像 (3个) =====
+  // ===== AI图像 (4个) =====
   {
     id: 'midjourney',
     name: 'Midjourney',
@@ -333,8 +390,31 @@ export const toolsData: Tool[] = [
     isEditorsPick: false,
     isFeatured: true
   },
+  {
+    id: 'felvin',
+    name: 'Felvin',
+    slug: 'felvin',
+    description: '用文字编辑图片，像修图师一样对话',
+    reason: '不需要学 Photoshop，直接用自然语言就能精准改图',
+    fullReview: 'Felvin解决的是「改图」而不是「生图」。我测试过产品图换色、人像微调、背景替换等场景，效果比传统修图 AI 更稳定。它的核心优势是能理解指令背后的意图，比如「让画面更干净」会自动减少杂乱元素，而不是只做简单滤镜。对于电商运营和内容创作者，Felvin能显著降低修图成本。',
+    category: 'AI图像',
+    categorySlug: 'image',
+    pricingType: 'freemium',
+    priceRange: '免费版每月 50 张，付费版 $15/月起',
+    website: 'https://felvin.com',
+    features: ['自然语言修图', '局部编辑', '背景替换', '风格保持', '批量处理'],
+    pros: ['学习成本低', '改图自然', '速度快', 'API 可用'],
+    cons: ['抽象指令效果一般', '免费版有水印', '复杂透视偶尔出错'],
+    alternatives: ['Photoshop Generative Fill', 'Adobe Firefly'],
+    editorRating: 4.5,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
 
-  // ===== AI视频 (2个) =====
+  // ===== AI视频 (3个) =====
   {
     id: 'runway',
     name: 'Runway',
@@ -378,6 +458,29 @@ export const toolsData: Tool[] = [
     difficulty: 1,
     createdAt: '2026-02-27',
     updatedAt: '2026-02-27',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+  {
+    id: 'synclabs',
+    name: 'Sync Labs',
+    slug: 'synclabs',
+    description: '给任意视频换嘴型，让任何人说任何话',
+    reason: '视频翻译的终极形态，口型、表情、语气都能匹配目标语言',
+    fullReview: 'Sync Labs 主打「口型同步」：你给它一个视频和目标语言的音频，它能让人物的嘴型、表情和语气贴合新语言。对于跨境营销、国际化培训内容或多语言内容分发，这是极高效率的解决方案。它的优势是自然度高，观感比字幕翻译更专业；缺点是素材准备成本较高，且对光线和清晰度有要求。',
+    category: 'AI视频',
+    categorySlug: 'video',
+    pricingType: 'paid',
+    priceRange: '按分钟计费，约 $2-5/分钟',
+    website: 'https://synclabs.so',
+    features: ['口型同步', '多语言配音', '表情对齐', '批量处理', 'API 集成'],
+    pros: ['自然度高', '适合多语言内容', '可批量生产', '企业级工作流'],
+    cons: ['成本较高', '对素材质量敏感', '处理时间较长'],
+    alternatives: ['HeyGen', 'Synthesia'],
+    editorRating: 4.4,
+    difficulty: 2,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
     isEditorsPick: false,
     isFeatured: true
   },
@@ -427,6 +530,198 @@ export const toolsData: Tool[] = [
     createdAt: '2026-02-27',
     updatedAt: '2026-02-27',
     isEditorsPick: true,
+    isFeatured: true
+  },
+
+  // ===== AI生产力 (2个) =====
+  {
+    id: 'tome',
+    name: 'Tome',
+    slug: 'tome',
+    description: 'AI演示文稿生成工具，从主题自动生成完整PPT',
+    reason: '几分钟从大纲到成稿，适合快速汇报和路演',
+    fullReview: 'Tome 的核心价值是「快速出稿」。输入主题或几条要点，它会自动生成大纲、排版和配图，省去大量机械性排版工作。适合需要快速交付演示的场景，比如产品汇报、融资路演、团队周报。缺点是深度定制能力有限，复杂排版仍需手动调整。',
+    category: '效率工具',
+    categorySlug: 'productivity',
+    pricingType: 'freemium',
+    priceRange: '免费版可用，付费版解锁品牌与高级导出',
+    website: 'https://tome.app',
+    features: ['一键生成大纲', '自动排版', '素材推荐', '品牌主题', '协作分享'],
+    pros: ['出稿速度快', '模板丰富', '上手门槛低'],
+    cons: ['深度定制有限', '中文模板较少', '复杂图表支持一般'],
+    alternatives: ['Gamma', 'Beautiful.ai'],
+    editorRating: 4.2,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+  {
+    id: 'otter',
+    name: 'Otter.ai',
+    slug: 'otter-ai',
+    description: 'AI会议记录工具，实时转录和自动总结',
+    reason: '会后自动纪要，节省大量整理时间',
+    fullReview: 'Otter 的优势在于实时转录和结构化总结。开会时自动识别说话人，结束后直接生成纪要和待办事项。对于高频会议团队，这是提升效率的「隐形助手」。不足是中文识别表现一般，嘈杂环境会影响准确率。',
+    category: '效率工具',
+    categorySlug: 'productivity',
+    pricingType: 'freemium',
+    priceRange: '免费版可用，团队版按席位计费',
+    website: 'https://otter.ai',
+    features: ['实时转录', '自动摘要', '说话人识别', '会议搜索', '协作分享'],
+    pros: ['节省整理时间', '集成会议工具', '检索方便'],
+    cons: ['中文识别一般', '嘈杂环境影响准确率', '高级功能需付费'],
+    alternatives: ['Fireflies', '通义听悟'],
+    editorRating: 4.3,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+
+  // ===== AI设计 (2个) =====
+  {
+    id: 'canva',
+    name: 'Canva',
+    slug: 'canva',
+    description: '在线设计平台，AI功能丰富，模板海量',
+    reason: '不会设计也能快速产出高质量视觉内容',
+    fullReview: 'Canva 的优势是「模板 + AI」。无论是海报、社媒配图还是简历，基本都能一键生成并快速微调。AI 功能让抠图、排版、文案生成变得更简单。适合运营、市场和内容创作者。',
+    category: '设计助手',
+    categorySlug: 'design',
+    pricingType: 'freemium',
+    priceRange: '免费版可用，Pro 订阅解锁高级素材',
+    website: 'https://www.canva.com',
+    features: ['模板库', '智能排版', '一键抠图', '品牌套件', '团队协作'],
+    pros: ['上手快', '模板丰富', '适配场景多'],
+    cons: ['高度定制有限', '专业设计需求不足', '中文字体选择有限'],
+    alternatives: ['Adobe Express', 'Figma AI'],
+    editorRating: 4.4,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+  {
+    id: 'figma-ai',
+    name: 'Figma AI',
+    slug: 'figma-ai',
+    description: 'Figma 内置 AI 功能，设计到原型一键生成',
+    reason: '设计师最熟悉的工具里，AI 直接融入流程',
+    fullReview: 'Figma AI 的价值是「少点重复劳动」。文本转界面、自动布局、生成占位内容等功能，让设计更专注在核心表达。对于已有 Figma 工作流的团队，AI 带来的收益非常直接。',
+    category: '设计助手',
+    categorySlug: 'design',
+    pricingType: 'freemium',
+    priceRange: '基础免费，团队/企业版付费',
+    website: 'https://www.figma.com/ai',
+    features: ['文本转界面', '自动布局', '生成占位内容', '组件建议', '协作优化'],
+    pros: ['融入现有流程', '协作体验好', '设计效率提升明显'],
+    cons: ['效果依赖提示词', '复杂布局需手动调整', '部分功能需排队'],
+    alternatives: ['Galileo AI', 'Uizard'],
+    editorRating: 4.3,
+    difficulty: 2,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+
+  // ===== AI知识 (2个) =====
+  {
+    id: 'notion',
+    name: 'Notion',
+    slug: 'notion',
+    description: '全能知识管理和协作平台，AI 功能强大',
+    reason: '一站式管理文档、任务、知识库，团队协作友好',
+    fullReview: 'Notion 的优势是「一体化」。文档、任务、数据库和知识库都能放在同一个工作台中，AI 功能可以帮助总结、改写和生成内容。对于团队知识沉淀和跨部门协作，这是非常高性价比的方案。',
+    category: '知识管理',
+    categorySlug: 'knowledge',
+    pricingType: 'freemium',
+    priceRange: '免费版可用，团队版按席位计费',
+    website: 'https://www.notion.so',
+    features: ['数据库', '模板库', 'AI 写作', '权限管理', '团队协作'],
+    pros: ['功能全面', '协作强', '模板丰富'],
+    cons: ['大库性能一般', '结构自由度高但易混乱', 'AI 需额外订阅'],
+    alternatives: ['Obsidian', 'Craft'],
+    editorRating: 4.5,
+    difficulty: 2,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+  {
+    id: 'obsidian',
+    name: 'Obsidian',
+    slug: 'obsidian',
+    description: '本地优先的知识库工具，插件生态丰富',
+    reason: '数据掌握在自己手里，双链让知识更清晰',
+    fullReview: 'Obsidian 的特点是「本地 + 可扩展」。它把知识管理变成一张可连接的网络，双链与图谱视图非常适合做长期知识沉淀。AI 主要通过插件提供，适合喜欢折腾和高度自定义的用户。',
+    category: '知识管理',
+    categorySlug: 'knowledge',
+    pricingType: 'freemium',
+    priceRange: '个人免费，商用需付费许可',
+    website: 'https://obsidian.md',
+    features: ['双链笔记', '图谱视图', '插件生态', '本地存储', '多端同步'],
+    pros: ['可控性强', '生态丰富', '本地优先更安心'],
+    cons: ['学习曲线陡', '协作体验一般', 'AI 需插件支持'],
+    alternatives: ['Notion', 'Logseq'],
+    editorRating: 4.4,
+    difficulty: 3,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+
+  // ===== AI数据 (2个) =====
+  {
+    id: 'chatgpt-data',
+    name: 'ChatGPT Advanced Data Analysis',
+    slug: 'chatgpt-data',
+    description: 'ChatGPT 高级数据分析功能，支持上传文件和代码执行',
+    reason: '把数据交给它，几分钟生成图表和结论',
+    fullReview: '高级数据分析的核心价值是「把繁琐的数据处理变成对话」。你可以上传 Excel/CSV，直接让它清洗、分析并生成图表。适合快速探索数据、生成报告草稿。复杂分析仍需专业工具，但作为轻量分析助手非常高效。',
+    category: '数据分析',
+    categorySlug: 'data',
+    pricingType: 'paid',
+    priceRange: '随 ChatGPT Plus/Team 订阅',
+    website: 'https://chat.openai.com',
+    features: ['文件解析', '数据清洗', '可视化图表', '代码执行', '结果解释'],
+    pros: ['上手简单', '分析速度快', '图表输出方便'],
+    cons: ['大数据量受限', '复杂统计需验证', '需订阅'],
+    alternatives: ['Julius AI', 'ChatCSV'],
+    editorRating: 4.5,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
+    isFeatured: true
+  },
+  {
+    id: 'julius',
+    name: 'Julius AI',
+    slug: 'julius',
+    description: 'AI 数据分析助手，一键生成图表和报告',
+    reason: '适合非技术用户的「对话式分析」',
+    fullReview: 'Julius 更偏向业务用户：上传数据后直接用自然语言提问，它会自动生成图表并给出解读。适合运营、市场和产品做快速数据洞察。深度建模能力有限，但日常分析效率很高。',
+    category: '数据分析',
+    categorySlug: 'data',
+    pricingType: 'freemium',
+    priceRange: '免费版可用，专业版按月订阅',
+    website: 'https://julius.ai',
+    features: ['对话式分析', '自动图表', '报告导出', '数据摘要', '协作分享'],
+    pros: ['零门槛', '图表好看', '适合业务分析'],
+    cons: ['复杂分析受限', '数据量限制', '需要清晰问题描述'],
+    alternatives: ['ChatGPT 高级数据分析', 'ChatCSV'],
+    editorRating: 4.2,
+    difficulty: 1,
+    createdAt: '2026-02-28',
+    updatedAt: '2026-02-28',
+    isEditorsPick: false,
     isFeatured: true
   }
 ];

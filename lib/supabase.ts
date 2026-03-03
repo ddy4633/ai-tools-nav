@@ -1,10 +1,39 @@
 import { createClient } from '@supabase/supabase-js';
+import { toolsData } from '@/lib/content/tools-data';
+import { toolIcons } from '@/lib/content/tool-icons';
+import type { Tool } from '@/types/tool';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 // 懒加载 Supabase 客户端，避免构建时出错
 let supabaseClient: ReturnType<typeof createClient> | null = null;
+
+const toolDetailIndex = new Map<string, Tool>(
+  toolsData.map((tool) => [tool.id, tool])
+);
+const buildIcon = (id: string) => toolIcons[id] || `/tool-icons/${id}.svg`;
+
+function enrichTool<T extends { id: string }>(tool: T): T & Tool {
+  const detail = toolDetailIndex.get(tool.id);
+  const merged = { ...tool, ...detail } as T & Tool;
+  const pricingType = merged.pricing_type || merged.pricingType;
+
+  if (!merged.pricing_type && pricingType) {
+    merged.pricing_type = pricingType;
+  }
+  if (!merged.pricingType && pricingType) {
+    merged.pricingType = pricingType;
+  }
+  if (!merged.icon) {
+    merged.icon = buildIcon(tool.id);
+  }
+  if (!merged.average_rating && merged.editorRating) {
+    merged.average_rating = merged.editorRating;
+  }
+
+  return merged;
+}
 
 export const getSupabase = () => {
   if (!supabaseClient && supabaseUrl && supabaseKey) {
@@ -111,7 +140,7 @@ export async function getToolById(id: string) {
 
 // 模拟热度工具数据
 function getMockTrendingTools() {
-  return [
+  const tools = [
     {
       id: 'lovable',
       name: 'Lovable',
@@ -283,10 +312,12 @@ function getMockTrendingTools() {
       category: 'AI音频'
     }
   ];
+
+  return tools.map(enrichTool);
 }
 
 function getMockTools() {
-  return [
+  const tools = [
     // ===== AI聊天 (8个) =====
     { id: 'chatgpt', name: 'ChatGPT', description: 'OpenAI 开发的大型语言模型，支持对话、写作、编程等多种任务', category: 'AI聊天', pricing_type: 'freemium' as const, average_rating: 4.5, rating_count: 1280, website: 'https://chat.openai.com', repo_url: null },
     { id: 'claude', name: 'Claude', description: 'Anthropic 开发的 AI 助手，擅长长文本分析和推理，支持200K上下文', category: 'AI聊天', pricing_type: 'freemium' as const, average_rating: 4.7, rating_count: 890, website: 'https://claude.ai', repo_url: null },
@@ -383,6 +414,8 @@ function getMockTools() {
     { id: 'formula-bot', name: 'Formula Bot', description: 'Excel公式AI助手，自动生成和解释公式', category: '数据分析', pricing_type: 'freemium' as const, average_rating: 4.2, rating_count: 890, website: 'https://formulabot.com', repo_url: null },
     { id: 'lark-base', name: '飞书多维表格', description: '飞书出品的数据管理和AI分析工具', category: '数据分析', pricing_type: 'freemium' as const, average_rating: 4.4, rating_count: 567, website: 'https://www.feishu.cn/product/base', repo_url: null },
   ];
+
+  return tools.map(enrichTool);
 }
 
 function getMockCategories() {
