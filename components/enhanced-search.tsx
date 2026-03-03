@@ -193,18 +193,18 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
 
       {/* 搜索建议下拉框 */}
       {showSuggestions && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-border-light overflow-hidden z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-bg-card rounded-xl shadow-lg border border-border-card overflow-hidden z-50">
           {suggestions.length > 0 ? (
             <div className="max-h-80 overflow-y-auto">
               {/* 分类标题 */}
               {query.trim() === '' && searchHistory.length > 0 && (
-                <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary flex items-center gap-1">
+                <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary border-b border-border-subtle flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   历史记录
                 </div>
               )}
               {query.trim() === '' && (
-                <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary flex items-center gap-1">
+                <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary border-b border-border-subtle flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
                   热门搜索
                 </div>
@@ -225,7 +225,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
                     </span>
                   </div>
                   {suggestion.category && (
-                    <span className="text-xs text-text-muted bg-bg-secondary px-2 py-1 rounded">
+                    <span className="text-xs font-mono text-accent-cyan bg-bg-secondary px-2 py-1 rounded border border-border-subtle">
                       {suggestion.category}
                     </span>
                   )}

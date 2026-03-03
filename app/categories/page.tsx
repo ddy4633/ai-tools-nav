@@ -16,7 +16,7 @@ export default async function CategoriesPage() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* 页面标题 */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
+          <h1 className="text-3xl md:text-4xl font-mono font-bold text-text-primary mb-4">
             AI 工具分类
           </h1>
           <p className="text-text-secondary max-w-2xl mx-auto">
@@ -30,26 +30,26 @@ export default async function CategoriesPage() {
             <Link
               key={category.id}
               href={`/tools?category=${category.slug}`}
-              className="group bg-white rounded-xl p-6 shadow-soft hover:shadow-hover border border-transparent hover:border-accent-warm/20 transition-all"
+              className="group bg-bg-card rounded-xl p-6 shadow-card hover:shadow-hover border border-border-card hover:border-accent-cyan/30 transition-all"
             >
               <div className="flex items-start justify-between mb-4">
-                <h2 className="text-xl font-semibold text-text-primary group-hover:text-accent-warm transition-colors">
+                <h2 className="text-xl font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors">
                   {category.name}
                 </h2>
-                <span className="text-sm text-text-muted bg-bg-secondary px-2 py-1 rounded-full">
+                <span className="text-sm font-mono text-text-muted bg-bg-secondary px-2 py-1 rounded-full border border-border-subtle">
                   {category.count} 个工具
                 </span>
               </div>
               
               <div className="flex items-center justify-between">
-                <div className="flex-1 bg-bg-secondary rounded-full h-2 overflow-hidden">
+                <div className="flex-1 bg-bg-secondary rounded-full h-2 overflow-hidden border border-border-subtle">
                   <div
-                    className="h-full bg-accent-warm rounded-full transition-all"
+                    className="h-full bg-gradient-to-r from-accent-cyan to-accent-purple rounded-full transition-all"
                     style={{ width: `${Math.min((category.popularity / 100) * 100, 100)}%` }}
                   />
                 </div>
-                <span className="ml-3 text-sm text-text-muted">
-                  热度 {category.popularity}
+                <span className="ml-3 text-sm font-mono text-text-muted">
+                  // {category.popularity}
                 </span>
               </div>
             </Link>
@@ -62,7 +62,7 @@ export default async function CategoriesPage() {
             没有找到想要的分类？{' '}
             <a
               href="mailto:hello@ai.poph163.com"
-              className="text-accent-warm hover:text-accent-warm-hover"
+              className="text-accent-cyan hover:text-accent-cyan/80"
             >
               联系我们
             </a>
