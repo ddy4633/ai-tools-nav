@@ -107,12 +107,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Google Search Console Verification */}
-        <meta name="google-site-verification" content="your-google-verification-code" />
+        <meta name="google-site-verification" content="google-site-verification-code" />
         {/* Baidu Search Verification */}
-        <meta name="baidu-site-verification" content="your-baidu-verification-code" />
+        <meta name="baidu-site-verification" content="baidu-site-verification-code" />
         {/* Bing Webmaster Tools */}
-        <meta name="msvalidate.01" content="your-bing-verification-code" />
+        <meta name="msvalidate.01" content="bing-verification-code" />
         
+        {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
