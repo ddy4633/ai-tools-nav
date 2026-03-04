@@ -51,8 +51,22 @@ export default function Hero() {
 
   return (
     <section className="relative py-24 md:py-40 overflow-hidden">
-      {/* 背景网格 */}
-      <div className="absolute inset-0 bg-grid" />
+      {/* 背景网格 - 动态动画 */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* 静态网格 */}
+        <div className="absolute inset-0 bg-grid opacity-50" />
+        {/* 动态网格 */}
+        <div 
+          className="absolute inset-0 bg-grid animate-grid-move"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0, 245, 212, 0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 245, 212, 0.02) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+          }}
+        />
+      </div>
       
       {/* 动态渐变背景 - Vercel风格 */}
       <div 

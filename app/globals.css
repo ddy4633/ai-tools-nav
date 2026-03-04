@@ -161,6 +161,20 @@ html {
   }
 }
 
+/* 动态网格背景动画 */
+@keyframes grid-move {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(60px);
+  }
+}
+
+.animate-grid-move {
+  animation: grid-move 20s linear infinite;
+}
+
 .animate-scroll-left {
   animation: scroll-left 40s linear infinite;
 }
