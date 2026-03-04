@@ -4,6 +4,8 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import PageTransition from '@/components/transitions/PageTransition';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
+import { BackToTop } from '@/components/ui/BackToTop';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -120,6 +122,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-bg-primary text-text-primary font-sans antialiased">
+        <ScrollProgress />
         <div className="min-h-screen flex flex-col">
           <Header />
           <PageTransition>
@@ -127,6 +130,7 @@ export default function RootLayout({
           </PageTransition>
           <Footer />
         </div>
+        <BackToTop />
       </body>
     </html>
   );
