@@ -1,14 +1,19 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '2026年最值得关注的10个AI工具 - 从Grok 3到Manus',
   description: '盘点2026年最热门的AI工具：Grok 3、Qwen 2.5-Max、Kimi k1.5、Windsurf、Bolt.new、Kling AI等，深度解析它们的特点和适用场景。',
   keywords: ['AI工具推荐', '2026 AI工具', 'Grok 3', 'Manus', 'Kling AI', 'AI趋势'],
+  alternates: {
+    canonical: buildSiteUrl('/blog/top-ai-tools-2026'),
+  },
   openGraph: {
     title: '2026年最值得关注的10个AI工具',
     description: '从Grok 3到Manus，盘点今年最热门的AI工具',
+    url: buildSiteUrl('/blog/top-ai-tools-2026'),
     type: 'article',
     publishedTime: '2026-03-03',
   },

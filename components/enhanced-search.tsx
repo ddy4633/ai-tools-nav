@@ -48,6 +48,18 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
     setQuery(currentQuery);
   }, [currentQuery]);
 
+  useEffect(() => {
+    if (query === currentQuery) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      onSearch(query);
+    }, 200);
+
+    return () => window.clearTimeout(timer);
+  }, [query, currentQuery, onSearch]);
+
   // 加载搜索历史
   useEffect(() => {
     const history = localStorage.getItem('searchHistory');
@@ -135,9 +147,9 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
     e.preventDefault();
     if (query.trim()) {
       saveSearchHistory(query);
-      onSearch(query);
-      setShowSuggestions(false);
     }
+    onSearch(query);
+    setShowSuggestions(false);
   };
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {

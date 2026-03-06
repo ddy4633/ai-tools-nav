@@ -1,12 +1,11 @@
 import { MetadataRoute } from 'next';
 import { getAllTools, getCategories } from '@/lib/supabase';
 import { toolsData, categoriesData } from '@/lib/content/tools-data';
+import { buildSiteUrl } from '@/lib/site';
 
 export const revalidate = 86400; // 24 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://ai.poph163.com';
-
   let tools: { id: string; updated_at?: string }[] = [];
   let categories: { slug: string; updated_at?: string }[] = [];
 
@@ -27,43 +26,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: buildSiteUrl('/'),
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
     {
-      url: `${baseUrl}/tools`,
+      url: buildSiteUrl('/tools'),
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/categories`,
+      url: buildSiteUrl('/categories'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/blog`,
+      url: buildSiteUrl('/blog'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/about`,
+      url: buildSiteUrl('/about'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/submit`,
+      url: buildSiteUrl('/submit'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/trending`,
+      url: buildSiteUrl('/trending'),
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.8,
@@ -72,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Tool detail pages
   const toolPages: MetadataRoute.Sitemap = tools.map((tool) => ({
-    url: `${baseUrl}/tools/${tool.id}`,
+    url: buildSiteUrl(`/tools/${tool.id}`),
     lastModified: tool.updated_at ? new Date(tool.updated_at) : new Date(),
     changeFrequency: 'weekly',
     priority: 0.7,
@@ -80,7 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Category pages
   const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${baseUrl}/categories/${category.slug}`,
+    url: buildSiteUrl(`/categories/${category.slug}`),
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.6,
@@ -89,28 +88,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog article pages
   const blogPages: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}/blog/deepseek-guide`,
+      url: buildSiteUrl('/blog/deepseek-guide'),
       lastModified: new Date('2024-02-28'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/blog/ai-art-generators`,
+      url: buildSiteUrl('/blog/ai-art-generators'),
       lastModified: new Date('2024-03-01'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/blog/ai-writing-tools-free`,
+      url: buildSiteUrl('/blog/ai-writing-tools-free'),
       lastModified: new Date('2024-03-05'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/blog/chatgpt-china-alternatives`,
+      url: buildSiteUrl('/blog/chatgpt-china-alternatives'),
       lastModified: new Date('2024-03-08'),
       changeFrequency: 'monthly',
       priority: 0.6,
+    },
+    {
+      url: buildSiteUrl('/blog/top-ai-tools-2026'),
+      lastModified: new Date('2026-03-03'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
   ];
 

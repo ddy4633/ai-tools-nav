@@ -1,18 +1,19 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import SubmitForm from './SubmitForm';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '提交工具 - 推荐好用的 AI 工具 | 好工具',
   description: '发现了好用的 AI 工具？提交给我们，让更多人知道它。我们欢迎各种优质的 AI 工具推荐，包括 AI 写作、AI 绘画、编程开发、AI 对话、视频创作等各类工具。',
   keywords: ['提交工具', '推荐工具', 'AI工具推荐', '工具提交', 'AI工具收录', 'AI工具导航', '人工智能工具分享'],
   alternates: {
-    canonical: '/submit',
+    canonical: buildSiteUrl('/submit'),
   },
   openGraph: {
     title: '提交工具 - 推荐好用的 AI 工具',
     description: '发现了好用的 AI 工具？提交给我们，让更多人知道它。',
-    url: '/submit',
+    url: buildSiteUrl('/submit'),
     type: 'website',
   },
 };

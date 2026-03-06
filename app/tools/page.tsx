@@ -2,14 +2,19 @@ import { Metadata } from 'next';
 import { getAllTools, getCategories } from '@/lib/supabase';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
 import ToolsClient from './ToolsClient';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '全部 AI 工具 - 发现最好用的 AI 工具导航',
   description: '浏览精选 AI 工具，支持 AI 写作、图像生成、代码助手、聊天机器人等分类筛选和搜索。',
   keywords: ['AI工具', 'AI工具导航', '人工智能工具', 'AI写作', 'AI图像', 'AI编程', 'AI聊天'],
+  alternates: {
+    canonical: buildSiteUrl('/tools'),
+  },
   openGraph: {
     title: '全部 AI 工具 - 好工具',
     description: '浏览精选 AI 工具，支持分类筛选和搜索',
+    url: buildSiteUrl('/tools'),
     type: 'website',
   },
 };

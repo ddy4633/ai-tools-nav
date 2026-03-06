@@ -8,6 +8,7 @@ import { RatingForm } from '@/components/rating-form';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
 import ToolLogo from '@/components/ui/ToolLogo';
 import type { Tool } from '@/types/tool';
+import { buildSiteUrl } from '@/lib/site';
 
 interface ToolPageProps {
   params: Promise<{ id: string }>;
@@ -33,13 +34,19 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     };
   }
   
+  const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
+
   return {
     title: `${tool.name} - ${tool.category}AI工具`,
     description: `${tool.description}。了解更多关于${tool.name}的功能、定价和用户评价。`,
     keywords: [tool.name, tool.category, 'AI工具', '人工智能', '工具评测'],
+    alternates: {
+      canonical: toolUrl,
+    },
     openGraph: {
       title: `${tool.name} - ${tool.category}`,
       description: tool.description,
+      url: toolUrl,
       type: 'article',
     },
   };
@@ -66,8 +73,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
   const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
   const ratingCount = tool.rating_count ?? 0;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai.poph163.com';
-  const toolUrl = `${siteUrl}/tools/${tool.id}`;
+  const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
   const relatedTools = allTools
     .filter((item: Tool) => item.id !== tool.id && item.category === tool.category)
     .slice(0, 3);

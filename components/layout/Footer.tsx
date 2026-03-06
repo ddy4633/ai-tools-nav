@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Terminal, Github, Twitter, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { buildMailtoLink, siteConfig } from '@/lib/site';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -15,10 +16,10 @@ export default function Footer() {
   ];
 
   const socials = [
-    { name: 'GITHUB', href: 'https://github.com', icon: Github },
-    { name: 'TWITTER', href: 'https://twitter.com', icon: Twitter },
-    { name: 'EMAIL', href: 'mailto:hello@poph163.com', icon: Mail },
-  ];
+    { name: 'GITHUB', href: siteConfig.githubUrl, icon: Github },
+    siteConfig.xUrl ? { name: 'TWITTER', href: siteConfig.xUrl, icon: Twitter } : null,
+    { name: 'EMAIL', href: buildMailtoLink(), icon: Mail },
+  ].filter(Boolean) as Array<{ name: string; href: string; icon: typeof Github }>;
 
   return (
     <footer className="bg-bg-secondary border-t border-border-subtle py-12">

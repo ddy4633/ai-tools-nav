@@ -12,6 +12,7 @@
 
 ## 专题文档
 
+- `docs/ISSUE-REPORT-2026-03-06-ai.poph163.com.md`：`ai.poph163.com` 巡检、问题拆解、修复说明与上线 SOP
 - `docs/DESIGN-IMPROVEMENTS-6D.md`：6 维度设计改进
 - `docs/EXECUTIVE-SUMMARY.md`：执行摘要
 - `docs/ITERATION-EXECUTION-PLAN.md`：迭代执行计划

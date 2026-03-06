@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { buildSiteUrl, siteConfig } from '@/lib/site';
 
 export const revalidate = 86400; // 24 hours
 
@@ -21,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/_next/'],
       },
     ],
-    sitemap: 'https://ai.poph163.com/sitemap.xml',
-    host: 'https://ai.poph163.com',
+    sitemap: buildSiteUrl('/sitemap.xml'),
+    host: siteConfig.siteUrl,
   };
 }
