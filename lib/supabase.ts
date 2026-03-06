@@ -98,7 +98,7 @@ export async function getCategories() {
 }
 
 // 获取所有工具
-export async function getAllTools() {
+export async function getAllTools(): Promise<Tool[]> {
   const supabase = getSupabase();
   if (!supabase) {
     return getMockTools();
@@ -117,7 +117,7 @@ export async function getAllTools() {
 }
 
 // 根据 ID 获取工具
-export async function getToolById(id: string) {
+export async function getToolById(id: string): Promise<Tool | null> {
   const supabase = getSupabase();
   if (!supabase) {
     const mockTools = getMockTools();
@@ -316,7 +316,7 @@ function getMockTrendingTools() {
   return tools.map(enrichTool);
 }
 
-function getMockTools() {
+function getMockTools(): Tool[] {
   const tools = [
     // ===== AI聊天 (8个) =====
     { id: 'chatgpt', name: 'ChatGPT', description: 'OpenAI 开发的大型语言模型，支持对话、写作、编程等多种任务', category: 'AI聊天', pricing_type: 'freemium' as const, average_rating: 4.5, rating_count: 1280, website: 'https://chat.openai.com', repo_url: null },

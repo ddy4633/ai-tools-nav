@@ -3,10 +3,12 @@
 import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const router = useRouter();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -23,7 +25,7 @@ export default function Hero() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      window.location.href = `/tools?search=${encodeURIComponent(searchQuery)}`;
+      router.push(`/tools?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -170,15 +172,16 @@ export default function Hero() {
             variants={itemVariants}
             className="mt-6 flex flex-wrap items-center gap-3"
           >
-            <span className="text-sm font-mono text-text-muted">// popular:</span>
+            <span className="text-sm font-mono text-text-muted">{'// popular:'}</span>
             {quickTags.map((tag) => (
-              <a
+              <button
                 key={tag}
-                href={`/tools?search=${encodeURIComponent(tag)}`}
+                type="button"
+                onClick={() => router.push(`/tools?search=${encodeURIComponent(tag)}`)}
                 className="px-3 py-1 text-sm font-mono text-text-secondary border border-border-subtle rounded hover:border-accent-cyan/50 hover:text-accent-cyan hover:bg-accent-cyan/5 transition-all"
               >
                 {tag}
-              </a>
+              </button>
             ))}
           </motion.div>
         </motion.div>

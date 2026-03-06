@@ -2,7 +2,8 @@
 
 import { useState, useMemo, Suspense, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Search } from 'lucide-react';
+import ToolLogo from '@/components/ui/ToolLogo';
+import { Search } from 'lucide-react';
 import { EnhancedSearch } from '@/components/enhanced-search';
 import { ToolCardSkeletonGrid } from '@/components/ui/Skeleton';
 
@@ -14,7 +15,8 @@ interface Tool {
   category: string;
   categorySlug?: string;
   category_slug?: string;
-  pricing_type: 'free' | 'paid' | 'freemium';
+  pricing_type?: 'free' | 'paid' | 'freemium';
+  pricingType?: 'free' | 'paid' | 'freemium';
   icon?: string;
 }
 
@@ -92,7 +94,9 @@ export default function ToolsClient({
         tool.category_slug === selectedCategory;
 
       const matchesPricing =
-        selectedPricing === 'all' || tool.pricing_type === selectedPricing;
+        selectedPricing === 'all' ||
+        tool.pricing_type === selectedPricing ||
+        tool.pricingType === selectedPricing;
 
       return matchesSearch && matchesCategory && matchesPricing;
     });
@@ -113,7 +117,7 @@ export default function ToolsClient({
 
         {/* 分类筛选 */}
         <div className="mb-4">
-          <p className="text-sm font-mono text-text-muted mb-2">// 分类</p>
+          <p className="text-sm font-mono text-text-muted mb-2">{'// 分类'}</p>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedCategory('all')}
@@ -143,7 +147,7 @@ export default function ToolsClient({
 
         {/* 定价筛选 */}
         <div>
-          <p className="text-sm font-mono text-text-muted mb-2">// 定价</p>
+          <p className="text-sm font-mono text-text-muted mb-2">{'// 定价'}</p>
           <div className="flex gap-2">
             {(['all', 'free', 'paid', 'freemium'] as const).map((type) => (
               <button
@@ -165,7 +169,7 @@ export default function ToolsClient({
       {/* 结果统计 */}
       <div className="flex items-center justify-between mb-6">
         <p className="text-text-secondary font-mono">
-          // 共 <span className="text-accent-cyan">{filteredTools.length}</span> 个工具
+          {'// 共 '}<span className="text-accent-cyan">{filteredTools.length}</span>{' 个工具'}
         </p>
         {(search || selectedCategory !== 'all' || selectedPricing !== 'all') && (
           <button
@@ -221,7 +225,8 @@ function ToolsGrid({ tools }: { tools: Tool[] }) {
 }
 
 function ToolCard({ tool }: { tool: Tool }) {
-  const pricing = pricingLabels[tool.pricing_type];
+  const pricingType = tool.pricing_type ?? tool.pricingType ?? 'freemium';
+  const pricing = pricingLabels[pricingType];
 
   return (
     <Link
@@ -235,20 +240,15 @@ function ToolCard({ tool }: { tool: Tool }) {
       <div className="relative bg-bg-card rounded-xl p-6 border border-border-card group-hover:border-accent-cyan/40 transition-all duration-300 h-full group-hover:shadow-[0_0_30px_rgba(0,245,212,0.15)]">
         {/* 头部：图标 + 名称 */}
         <div className="flex items-start gap-4 mb-4">
-          <div className="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all duration-300 group-hover:scale-105">
-            {tool.icon ? (
-              <img 
-                src={tool.icon} 
-                alt=""
-                className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110" 
-                width={32} 
-                height={32}
-                loading="lazy"
-              />
-            ) : (
-              <span className="text-xl font-mono text-accent-cyan group-hover:text-accent-pink transition-colors">{tool.name[0]}</span>
-            )}
-          </div>
+          <ToolLogo
+            name={tool.name}
+            icon={tool.icon}
+            size={32}
+            alt={`${tool.name} logo`}
+            wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all duration-300 group-hover:scale-105"
+            imageClassName="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
+            textClassName="text-xl text-accent-cyan group-hover:text-accent-pink transition-colors"
+          />
           
           <div className="flex-1 min-w-0">
             <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors duration-300 truncate">
@@ -268,7 +268,7 @@ function ToolCard({ tool }: { tool: Tool }) {
         {/* 底部分类 */}
         <div className="flex items-center justify-between pt-4 border-t border-border-subtle group-hover:border-accent-cyan/20 transition-colors duration-300">
           <span className="text-xs font-mono text-text-muted group-hover:text-text-secondary transition-colors duration-300">
-            // {tool.category}
+            {`// ${tool.category}`}
           </span>
           <span className="text-xs font-mono text-accent-cyan opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 flex items-center gap-1">
             [VIEW] →

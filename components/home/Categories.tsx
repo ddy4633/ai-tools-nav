@@ -62,7 +62,7 @@ export default function Categories({ categories = [] }: CategoriesProps) {
         >
           <Folder className="w-6 h-6 text-accent-purple" />
           <h2 className="text-2xl font-mono font-bold text-text-primary">CATEGORIES</h2>
-          <span className="text-sm font-mono text-text-muted">// browse_by_tag</span>
+          <span className="text-sm font-mono text-text-muted">{'// browse_by_tag'}</span>
         </motion.div>
         
         <motion.div 

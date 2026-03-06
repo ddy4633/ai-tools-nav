@@ -207,7 +207,7 @@ export default function ChatGPTAlternativesPage() {
             </h2>
 
             <div className="space-y-6">
-              {toolsComparison.map((tool, index) => (
+              {toolsComparison.map((tool) => (
                 <div key={tool.name} className="bg-surface-card rounded-xl border border-border-light overflow-hidden hover:border-accent-warm/30 transition-all">
                   <div className="p-6">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
@@ -299,7 +299,7 @@ export default function ChatGPTAlternativesPage() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {useCases.map((useCase, index) => (
+              {useCases.map((useCase) => (
                 <div key={useCase.title} className="bg-surface-card rounded-xl p-6 border border-border-light hover:border-accent-warm/30 transition-all">
                   <div className="text-3xl mb-4">{useCase.icon}</div>
                   <h3 className="font-bold text-text-primary mb-2">{useCase.title}</h3>
@@ -356,7 +356,7 @@ export default function ChatGPTAlternativesPage() {
           <section className="text-center">
             <h3 className="text-xl font-bold text-text-primary mb-4">探索更多AI工具</h3>
             <p className="text-text-secondary mb-6">
-              访问我们的<a href="/tools" className="text-accent-warm hover:underline">AI工具库</a>，发现更多优质AI工具
+              访问我们的<Link href="/tools" className="text-accent-warm hover:underline">AI工具库</Link>，发现更多优质AI工具
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

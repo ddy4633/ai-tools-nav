@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, Filter, ArrowRight } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
+import ToolLogo from '@/components/ui/ToolLogo';
 
 interface Tool {
   id: string;
@@ -11,6 +12,7 @@ interface Tool {
   description: string;
   category: string;
   pricing_type: 'free' | 'paid' | 'freemium';
+  pricingType?: 'free' | 'paid' | 'freemium';
   icon?: string;
 }
 
@@ -181,20 +183,15 @@ function ToolCard({ tool, variants }: ToolCardProps) {
         <div className="relative h-full bg-bg-card border border-border-card rounded-xl p-6 hover:border-accent-cyan/30 transition-all duration-300">
           {/* 头部：图标 + 名称 */}
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-12 h-12 rounded-lg bg-bg-primary border border-border-subtle flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all">
-              {tool.icon ? (
-                <img 
-                  src={tool.icon} 
-                  alt={`${tool.name} logo`} 
-                  className="w-8 h-8 object-contain" 
-                  loading="lazy"
-                  width={32}
-                  height={32}
-                />
-              ) : (
-                <span className="text-xl font-mono text-accent-cyan">{tool.name[0]}</span>
-              )}
-            </div>
+            <ToolLogo
+              name={tool.name}
+              icon={tool.icon}
+              size={32}
+              alt={`${tool.name} logo`}
+              wrapperClassName="w-12 h-12 rounded-lg bg-bg-primary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all"
+              imageClassName="w-8 h-8"
+              textClassName="text-xl text-accent-cyan"
+            />
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors truncate">
                 {tool.name}
@@ -213,7 +210,7 @@ function ToolCard({ tool, variants }: ToolCardProps) {
           {/* 底部分类 */}
           <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
             <span className="text-xs font-mono text-text-muted">
-              // {tool.category}
+              {`// ${tool.category}`}
             </span>
             <span className="text-xs font-mono text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
               [VIEW]

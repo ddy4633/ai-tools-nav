@@ -1,5 +1,6 @@
 'use client';
 
+import NextLink from 'next/link';
 import { useState } from 'react';
 import { Send, Check, Loader2, Tag, Layers, Link, FileText, Sparkles } from 'lucide-react';
 
@@ -162,18 +163,18 @@ export default function SubmitForm() {
             当前为静态版本，暂不支持在线提交
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
+            <NextLink
               href="/tools" 
               className="inline-flex items-center justify-center px-6 py-3 bg-accent-warm text-white rounded-xl hover:bg-accent-warm-hover transition-all font-medium"
             >
               浏览工具
-            </a>
-            <a 
+            </NextLink>
+            <NextLink
               href="/" 
               className="inline-flex items-center justify-center px-6 py-3 bg-surface-base border border-border-medium text-text-primary rounded-xl hover:bg-surface-hover transition-all font-medium"
             >
               返回首页
-            </a>
+            </NextLink>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getAllTools, getCategories } from '@/lib/supabase';
+import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
 import ToolsClient from './ToolsClient';
 
 export const metadata: Metadata = {
@@ -18,20 +19,22 @@ export const revalidate = 3600;
 export default async function ToolsPage({
   searchParams,
 }: {
-  searchParams?: { search?: string; category?: string; pricing?: string };
+  searchParams?: Promise<{ search?: string; category?: string; pricing?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const [tools, categories] = await Promise.all([
     getAllTools(),
     getCategories(),
   ]);
 
-  const initialSearch = typeof searchParams?.search === 'string' ? searchParams.search : '';
-  const initialCategory = typeof searchParams?.category === 'string' ? searchParams.category : '';
-  const initialPricing = typeof searchParams?.pricing === 'string' ? searchParams.pricing : '';
+  const initialSearch = typeof resolvedSearchParams?.search === 'string' ? resolvedSearchParams.search : '';
+  const initialCategory = typeof resolvedSearchParams?.category === 'string' ? resolvedSearchParams.category : '';
+  const initialPricing = typeof resolvedSearchParams?.pricing === 'string' ? resolvedSearchParams.pricing : '';
 
   return (
     <div className="min-h-screen bg-bg-primary">
       <div className="max-w-6xl mx-auto px-6 py-12">
+        <Breadcrumb items={[{ ...breadcrumbPresets.tools, href: undefined }]} />
         {/* 页面标题 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-text-primary mb-2">

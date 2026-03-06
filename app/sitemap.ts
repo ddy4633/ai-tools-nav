@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]);
     tools = toolsResult || [];
     categories = categoriesResult || [];
-  } catch (error) {
+  } catch {
     // 使用本地备用数据
     tools = toolsData.map(t => ({ id: t.id, updated_at: t.updatedAt }));
     categories = categoriesData.map(c => ({ slug: c.slug }));

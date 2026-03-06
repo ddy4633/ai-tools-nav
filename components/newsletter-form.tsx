@@ -52,7 +52,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
       setStatus('success');
       setMessage('订阅成功！感谢您的关注');
       setEmail('');
-    } catch (error) {
+    } catch {
       setStatus('error');
       setMessage('订阅失败，请稍后重试');
     }

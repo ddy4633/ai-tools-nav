@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, X, Clock, TrendingUp } from 'lucide-react';
-import Link from 'next/link';
 
 interface SearchSuggestion {
   id: string;
@@ -41,6 +41,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // 同步外部查询参数（例如清除筛选）
   useEffect(() => {
@@ -142,7 +143,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     if (suggestion.type === 'tool') {
       // 直接跳转到工具详情
-      window.location.href = `/tools/${suggestion.id}`;
+      router.push(`/tools/${suggestion.id}`);
     } else {
       setQuery(suggestion.name);
       saveSearchHistory(suggestion.name);
@@ -225,6 +226,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
               {suggestions.map((suggestion) => (
                 <button
                   key={suggestion.id}
+                  type="button"
                   onClick={() => handleSuggestionClick(suggestion)}
                   className="w-full px-4 py-3 text-left hover:bg-bg-secondary transition-colors flex items-center justify-between group"
                 >

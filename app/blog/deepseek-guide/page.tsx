@@ -73,8 +73,8 @@ export default function DeepSeekGuidePage() {
               <h2 className="text-2xl font-bold text-text-primary">DeepSeek介绍 - 国产AI黑马</h2>
             </div>
             <div className="prose prose-lg max-w-none text-text-secondary leading-relaxed">
-              <p className="mb-4"><strong className="text-text-primary">DeepSeek（深度求索）</strong>是由杭州深度求索人工智能基础技术研究有限公司开发的AI大模型，于2024年1月正式发布。作为国内AI领域的新秀，DeepSeek凭借其出色的性能表现和极具竞争力的价格策略，迅速在全球AI市场掀起波澜，被誉为"国产AI黑马"。</p>
-              <p className="mb-4">DeepSeek-R1是其最新的推理模型，在数学、代码、逻辑推理等任务上表现优异，甚至在某些基准测试上超越了OpenAI的GPT-4。更令人瞩目的是，DeepSeek-R1的训练成本仅为600万美元，远低于GPT-4等模型的数亿美元，实现了"以低成本追赶顶尖模型"的突破。</p>
+              <p className="mb-4"><strong className="text-text-primary">DeepSeek（深度求索）</strong>是由杭州深度求索人工智能基础技术研究有限公司开发的AI大模型，于2024年1月正式发布。作为国内AI领域的新秀，DeepSeek凭借其出色的性能表现和极具竞争力的价格策略，迅速在全球AI市场掀起波澜，被誉为“国产AI黑马”。</p>
+              <p className="mb-4">DeepSeek-R1是其最新的推理模型，在数学、代码、逻辑推理等任务上表现优异，甚至在某些基准测试上超越了OpenAI的GPT-4。更令人瞩目的是，DeepSeek-R1的训练成本仅为600万美元，远低于GPT-4等模型的数亿美元，实现了“以低成本追赶顶尖模型”的突破。</p>
               <div className="bg-accent-warm/5 border-l-4 border-accent-warm p-4 rounded-r-lg my-6">
                 <p className="text-text-primary font-medium mb-2">DeepSeek核心亮点：</p>
                 <ul className="space-y-2">
@@ -100,8 +100,8 @@ export default function DeepSeekGuidePage() {
               <div className="bg-surface-card rounded-xl p-6 border border-border-light">
                 <h3 className="text-lg font-bold text-text-primary mb-4">2. 注册账号</h3>
                 <ul className="space-y-2 text-text-secondary">
-                  <li>点击页面右上角的"登录"按钮</li>
-                  <li>选择"注册"选项</li>
+                  <li>点击页面右上角的“登录”按钮</li>
+                  <li>选择“注册”选项</li>
                   <li>支持手机号注册或邮箱注册</li>
                   <li>输入验证码完成验证</li>
                   <li>设置密码完成注册</li>

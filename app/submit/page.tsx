@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import SubmitForm from './SubmitForm';
 
 export const metadata: Metadata = {
@@ -22,9 +23,9 @@ function Breadcrumb() {
     <nav aria-label="breadcrumb" className="max-w-2xl mx-auto px-4 sm:px-6 pt-6">
       <ol itemScope itemType="https://schema.org/BreadcrumbList" className="flex items-center gap-2 text-sm text-text-muted">
         <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-          <a itemProp="item" href="/" className="hover:text-accent-warm transition-colors">
+          <Link itemProp="item" href="/" className="hover:text-accent-warm transition-colors">
             <span itemProp="name">首页</span>
-          </a>
+          </Link>
           <meta itemProp="position" content="1" />
         </li>
         <li className="text-border-medium">&gt;</li>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion, Variants } from 'framer-motion';
 import { Star, ArrowRight } from 'lucide-react';
 import type { Tool } from '@/types/tool';
+import ToolLogo from '@/components/ui/ToolLogo';
 
 interface FeaturedToolsProps {
   tools: Tool[];
@@ -49,7 +50,7 @@ export default function FeaturedTools({ tools }: FeaturedToolsProps) {
           <div className="flex items-center gap-3">
             <Star className="w-6 h-6 text-accent-yellow fill-accent-yellow" />
             <h2 className="text-2xl font-mono font-bold text-text-primary">FEATURED</h2>
-            <span className="text-sm font-mono text-text-muted">// handpicked</span>
+            <span className="text-sm font-mono text-text-muted">{'// handpicked'}</span>
           </div>
           
           <Link
@@ -96,21 +97,15 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
           {/* 头部：图标 + 名称 */}
           
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all duration-300 group-hover:scale-105"
-            >
-              {tool.icon ? (
-                <img 
-                  src={tool.icon} 
-                  alt={`${tool.name} logo`} 
-                  className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110" 
-                  width={32} 
-                  height={32}
-                  loading="lazy"
-                />
-              ) : (
-                <span className="text-xl font-mono text-accent-cyan group-hover:text-accent-pink transition-colors">{tool.name[0]}</span>
-              )}
-            </div>
+            <ToolLogo
+              name={tool.name}
+              icon={tool.icon}
+              size={32}
+              alt={`${tool.name} logo`}
+              wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all duration-300 group-hover:scale-105"
+              imageClassName="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
+              textClassName="text-xl text-accent-cyan group-hover:text-accent-pink transition-colors"
+            />
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors duration-300 truncate"
               >
@@ -136,7 +131,7 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
           >
             <span className="text-xs font-mono text-text-muted group-hover:text-text-secondary transition-colors duration-300"
             >
-              // {tool.category}
+              {`// ${tool.category}`}
             </span>
             <span className="text-xs font-mono text-accent-cyan opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 flex items-center gap-1"
             >

@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Share2, Twitter, Linkedin, Copy, Check } from 'lucide-react';
-import { notFound } from 'next/navigation';
+import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '2026年最值得关注的10个AI工具 - 从Grok 3到Manus',
@@ -176,7 +175,7 @@ export default function TopAiTools2026Page() {
               <div>
                 <h3 className="text-lg font-semibold text-text-primary mb-2">AI编程：从辅助到代理</h3>
                 <p className="text-text-secondary">
-                  Windsurf的Cascade、Bolt.new的全栈生成、v0.dev的UI生成，标志着编程助手从"帮你写代码"进化到"帮你做项目"。
+                  Windsurf的Cascade、Bolt.new的全栈生成、v0.dev的UI生成，标志着编程助手从“帮你写代码”进化到“帮你做项目”。
                 </p>
               </div>
               <div>

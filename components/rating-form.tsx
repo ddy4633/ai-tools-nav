@@ -30,7 +30,7 @@ export function RatingForm({ toolId }: RatingFormProps) {
       } else {
         setMessage(`❌ ${result.message || '提交失败，请稍后重试。'}`);
       }
-    } catch (error) {
+    } catch {
       setMessage('❌ 网络错误，请检查网络连接。');
     } finally {
       setIsSubmitting(false);

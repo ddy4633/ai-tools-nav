@@ -3,6 +3,7 @@ import { getAllTools } from '@/lib/supabase';
 import Link from 'next/link';
 import { ArrowRight, Home } from 'lucide-react';
 import type { Tool } from '@/types/tool';
+import ToolLogo from '@/components/ui/ToolLogo';
 
 export const metadata: Metadata = {
   title: '生产力 AI工具 - 最好的生产力人工智能工具 | AI工具导航',
@@ -81,15 +82,15 @@ export default async function ProductivityCategoryPage() {
                   className="group block bg-white rounded-xl p-6 shadow-soft hover:shadow-hover border border-transparent hover:border-accent-warm/20 transition-all"
                 >
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-lg bg-bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
-                      {tool.icon ? (
-                        <img src={tool.icon} alt={`${tool.name} logo`} className="w-8 h-8 object-contain" loading="lazy" />
-                      ) : (
-                        <span className="text-xl text-accent-warm font-medium">
-                          {tool.name[0]}
-                        </span>
-                      )}
-                    </div>
+                    <ToolLogo
+                      name={tool.name}
+                      icon={tool.icon}
+                      size={32}
+                      alt={`${tool.name} logo`}
+                      wrapperClassName="w-12 h-12 rounded-lg bg-bg-primary flex-shrink-0"
+                      imageClassName="w-8 h-8"
+                      textClassName="text-xl text-accent-warm font-medium"
+                    />
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors truncate">
                         {tool.name}

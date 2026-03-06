@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { getCategories } from '@/lib/supabase';
 import Link from 'next/link';
+import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
 
 export const metadata: Metadata = {
   title: 'AI 工具分类 - 按类别浏览',
@@ -14,6 +15,7 @@ export default async function CategoriesPage() {
   return (
     <div className="min-h-screen bg-bg-primary">
       <div className="max-w-6xl mx-auto px-6 py-12">
+        <Breadcrumb items={[{ ...breadcrumbPresets.categories, href: undefined }]} />
         {/* 页面标题 */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-mono font-bold text-text-primary mb-4">
@@ -49,7 +51,7 @@ export default async function CategoriesPage() {
                   />
                 </div>
                 <span className="ml-3 text-sm font-mono text-text-muted">
-                  // {category.popularity}
+                  {`// ${category.popularity}`}
                 </span>
               </div>
             </Link>

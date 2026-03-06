@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Menu, X, Terminal } from 'lucide-react';
+import { Menu, X, Terminal } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CommandPalette } from '@/components/search/CommandPalette';

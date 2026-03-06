@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Check, AlertCircle } from 'lucide-react';
+import { Send, Check } from 'lucide-react';
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('');

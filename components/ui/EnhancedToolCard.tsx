@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Star, ArrowRight } from 'lucide-react';
 import type { Tool } from '@/types/tool';
+import ToolLogo from '@/components/ui/ToolLogo';
 
 interface EnhancedToolCardProps {
   tool: Tool;
@@ -121,23 +121,19 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
           <div className="relative z-10">
             {/* 头部：图标 + 名称 */}
             <div className="flex items-start gap-4 mb-4">
-              <motion.div 
-                className="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center flex-shrink-0 overflow-hidden"
+              <motion.div
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
               >
-                {tool.icon ? (
-                  <img 
-                    src={tool.icon} 
-                    alt="" 
-                    className="w-8 h-8 object-contain" 
-                    width={32} 
-                    height={32}
-                    loading="lazy"
-                  />
-                ) : (
-                  <span className="text-xl font-mono text-accent-cyan">{tool.name[0]}</span>
-                )}
+                <ToolLogo
+                  name={tool.name}
+                  icon={tool.icon}
+                  size={32}
+                  alt={`${tool.name} logo`}
+                  wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0"
+                  imageClassName="w-8 h-8"
+                  textClassName="text-xl text-accent-cyan"
+                />
               </motion.div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors duration-300 truncate">
@@ -161,7 +157,7 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
             >
               <span className="text-xs font-mono text-text-muted group-hover:text-text-secondary transition-colors duration-300"
               >
-                // {tool.category}
+                {`// ${tool.category}`}
               </span>
               <motion.span 
                 className="text-xs font-mono text-accent-cyan opacity-0 group-hover:opacity-100 flex items-center gap-1"

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Star, Zap } from 'lucide-react';
 import { EditorPick } from '@/types/tool';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import ToolLogo from '@/components/ui/ToolLogo';
 
 interface EditorPicksProps {
   picks: EditorPick[];
@@ -57,7 +59,7 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
           >
             EDITOR_PICKS
           </h2>
-          <span className="text-sm font-mono text-text-muted">// weekly_selection</span>
+          <span className="text-sm font-mono text-text-muted">{'// weekly_selection'}</span>
         </motion.div>
         
         {/* 精选卡片网格 */}
@@ -78,25 +80,20 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
               <div className="absolute -inset-px bg-gradient-to-r from-accent-cyan/20 via-accent-purple/20 to-accent-pink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
               <div className="relative bg-bg-card border border-border-card rounded-xl overflow-hidden hover:border-accent-cyan/30 transition-colors">
                 <Link 
-                  href={`/tools/${pick.tool.slug}`}
+                  href={`/tools/${pick.tool.id}`}
                   className="block p-6"
                 >
                   {/* 头部：图标 + 名称 */}
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all">
-                      {pick.tool.icon ? (
-                        <img 
-                          src={pick.tool.icon} 
-                          alt={`${pick.tool.name} logo`} 
-                          className="w-8 h-8 object-contain"
-                          width={32}
-                          height={32}
-                          loading="lazy"
-                        />
-                      ) : (
-                        <span className="text-xl font-mono text-accent-cyan">{pick.tool.name[0]}</span>
-                      )}
-                    </div>
+                    <ToolLogo
+                      name={pick.tool.name}
+                      icon={pick.tool.icon}
+                      size={32}
+                      alt={`${pick.tool.name} logo`}
+                      wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all"
+                      imageClassName="w-8 h-8"
+                      textClassName="text-xl text-accent-cyan"
+                    />
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors">
                         {pick.tool.name}
@@ -117,15 +114,15 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                   
                   {/* 推荐理由 */}
                   <p className="text-text-secondary text-sm leading-relaxed mb-4 font-mono">
-                    <span className="text-accent-cyan">"</span>
+                    <span className="text-accent-cyan">“</span>
                     {pick.tool.reason}
-                    <span className="text-accent-cyan">"</span>
+                    <span className="text-accent-cyan">”</span>
                   </p>
                   
                   {/* 底部分类 */}
                   <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
                     <span className="text-xs font-mono text-text-muted">
-                      // {pick.tool.category}
+                      {`// ${pick.tool.category}`}
                     </span>
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-accent-yellow fill-accent-yellow" />
@@ -139,13 +136,13 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                 {/* 编辑评语 */}
                 <div className="px-6 pb-6">
                   <div className="pt-4 border-t border-border-subtle flex items-start gap-3">
-                    <img 
-                      src={pick.editor.avatar} 
+                    <Image
+                      src={pick.editor.avatar}
                       alt={pick.editor.name}
-                      className="w-8 h-8 rounded-full flex-shrink-0 border border-border-subtle"
                       width={32}
                       height={32}
-                      loading="lazy"
+                      className="w-8 h-8 rounded-full flex-shrink-0 border border-border-subtle"
+                      unoptimized
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-text-secondary font-mono">

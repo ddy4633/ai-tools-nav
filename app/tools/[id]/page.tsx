@@ -5,6 +5,9 @@ import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { getToolById, getAllTools } from '@/lib/supabase';
 import { RatingDisplay } from '@/components/ui/star-rating';
 import { RatingForm } from '@/components/rating-form';
+import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
+import ToolLogo from '@/components/ui/ToolLogo';
+import type { Tool } from '@/types/tool';
 
 interface ToolPageProps {
   params: Promise<{ id: string }>;
@@ -44,8 +47,11 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
 
 export default async function ToolPage({ params }: ToolPageProps) {
   const { id } = await params;
-  const tool = await getToolById(id);
-  
+  const [tool, allTools] = await Promise.all([
+    getToolById(id),
+    getAllTools(),
+  ]);
+
   if (!tool) {
     notFound();
   }
@@ -56,12 +62,15 @@ export default async function ToolPage({ params }: ToolPageProps) {
     freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
   };
   
-  const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
+  const pricingType: keyof typeof pricingLabels = tool.pricing_type ?? tool.pricingType ?? 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
   const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
   const ratingCount = tool.rating_count ?? 0;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai.poph163.com';
   const toolUrl = `${siteUrl}/tools/${tool.id}`;
+  const relatedTools = allTools
+    .filter((item: Tool) => item.id !== tool.id && item.category === tool.category)
+    .slice(0, 3);
 
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -87,7 +96,14 @@ export default async function ToolPage({ params }: ToolPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="max-w-5xl mx-auto px-6 py-12">
+        <Breadcrumb
+          items={[
+            breadcrumbPresets.tools,
+            { label: tool.category, href: `/tools?category=${tool.categorySlug || tool.category}` },
+            { label: tool.name },
+          ]}
+        />
         {/* 返回链接 */}
         <Link
           href="/tools"
@@ -101,20 +117,15 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <div className="bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-xl bg-bg-primary border border-border-subtle flex items-center justify-center overflow-hidden">
-                {tool.icon ? (
-                  <img
-                    src={tool.icon}
-                    alt={`${tool.name} logo`}
-                    className="w-10 h-10 object-contain"
-                    loading="lazy"
-                    width={40}
-                    height={40}
-                  />
-                ) : (
-                  <span className="text-2xl font-mono text-accent-cyan">{tool.name[0]}</span>
-                )}
-              </div>
+              <ToolLogo
+                name={tool.name}
+                icon={tool.icon}
+                size={40}
+                priority
+                wrapperClassName="w-16 h-16 rounded-xl bg-bg-primary border border-border-subtle"
+                imageClassName="w-10 h-10"
+                textClassName="text-2xl text-accent-cyan"
+              />
               <div>
                 <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
                 <div className="flex items-center gap-3 mb-3">
@@ -254,6 +265,47 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         ) : null}
 
+        {relatedTools.length ? (
+          <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
+            <div className="flex items-center justify-between mb-4 gap-4">
+              <div>
+                <h3 className="text-xl font-bold text-text-primary">同类推荐</h3>
+                <p className="text-sm text-text-secondary mt-1">继续探索同分类下的相关工具</p>
+              </div>
+              <Link
+                href={`/tools?category=${tool.categorySlug || tool.category}`}
+                className="text-sm text-accent-cyan hover:opacity-80 transition-opacity"
+              >
+                查看全部
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {relatedTools.map((relatedTool) => (
+                  <Link
+                    key={relatedTool.id}
+                    href={`/tools/${relatedTool.id}`}
+                    className="rounded-xl border border-border-subtle bg-bg-primary p-4 hover:border-accent-cyan/40 transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <ToolLogo
+                        name={relatedTool.name}
+                        icon={relatedTool.icon}
+                        size={24}
+                        wrapperClassName="w-10 h-10 rounded-lg bg-bg-secondary border border-border-subtle shrink-0"
+                        imageClassName="w-6 h-6"
+                        textClassName="text-sm text-accent-cyan"
+                      />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-text-primary truncate">{relatedTool.name}</p>
+                        <p className="text-xs text-text-secondary line-clamp-2 mt-1">{relatedTool.description}</p>
+                      </div>
+                    </div>
+                  </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {/* 评分区域 */}
         <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
           <h2 className="text-2xl font-bold text-text-primary mb-6">用户评价</h2>
@@ -263,7 +315,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
         {/* 提示 */}
         <div className="mt-8 p-4 bg-accent-cyan/5 border border-accent-cyan/20 rounded-xl">
           <p className="text-sm text-text-secondary">
-            💡 提示：点击"访问官网"按钮可以跳转到工具的官方网站进行试用。
+            💡 提示：点击“访问官网”按钮可以跳转到工具的官方网站进行试用。
           </p>
         </div>
       </div>

@@ -56,7 +56,7 @@ export default function TrendingTools({ tools }: TrendingToolsProps) {
           <div className="flex items-center gap-3">
             <Flame className="w-6 h-6 text-accent-pink" />
             <h2 className="text-2xl font-mono font-bold text-text-primary">TRENDING</h2>
-            <span className="text-sm font-mono text-text-muted">// viral_now</span>
+            <span className="text-sm font-mono text-text-muted">{'// viral_now'}</span>
           </div>
           
           <Link

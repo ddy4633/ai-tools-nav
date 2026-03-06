@@ -1,15 +1,34 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, Command, ArrowRight } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
 import { toolsData } from '@/lib/content/tools-data';
+import { useRouter } from 'next/navigation';
 import type { Tool } from '@/types/tool';
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const router = useRouter();
+
+  // 过滤工具
+  const filteredTools = useMemo(() => {
+    if (!query.trim()) return toolsData.slice(0, 8);
+    const lowerQuery = query.toLowerCase();
+    return toolsData.filter(tool =>
+      tool.name.toLowerCase().includes(lowerQuery) ||
+      tool.description.toLowerCase().includes(lowerQuery) ||
+      tool.category.toLowerCase().includes(lowerQuery)
+    ).slice(0, 8);
+  }, [query]);
+
+  const navigateToTool = useCallback((tool: Tool) => {
+    router.push(`/tools/${tool.id}`);
+    setIsOpen(false);
+    setQuery('');
+  }, [router]);
 
   // 监听键盘快捷键
   useEffect(() => {
@@ -25,11 +44,11 @@ export function CommandPalette() {
       }
       // 键盘导航
       if (isOpen) {
-        if (e.key === 'ArrowDown') {
+        if (e.key === 'ArrowDown' && filteredTools.length > 0) {
           e.preventDefault();
           setSelectedIndex(prev => (prev + 1) % filteredTools.length);
         }
-        if (e.key === 'ArrowUp') {
+        if (e.key === 'ArrowUp' && filteredTools.length > 0) {
           e.preventDefault();
           setSelectedIndex(prev => (prev - 1 + filteredTools.length) % filteredTools.length);
         }
@@ -42,29 +61,8 @@ export function CommandPalette() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedIndex]);
+  }, [filteredTools, isOpen, navigateToTool, selectedIndex]);
 
-  // 重置选中索引当查询变化时
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
-
-  // 过滤工具
-  const filteredTools = useMemo(() => {
-    if (!query.trim()) return toolsData.slice(0, 8);
-    const lowerQuery = query.toLowerCase();
-    return toolsData.filter(tool => 
-      tool.name.toLowerCase().includes(lowerQuery) ||
-      tool.description.toLowerCase().includes(lowerQuery) ||
-      tool.category.toLowerCase().includes(lowerQuery)
-    ).slice(0, 8);
-  }, [query]);
-
-  const navigateToTool = (tool: Tool) => {
-    window.location.href = `/tools/${tool.slug}`;
-    setIsOpen(false);
-    setQuery('');
-  };
 
   return (
     <>
@@ -111,7 +109,10 @@ export function CommandPalette() {
                     placeholder="搜索工具名称、描述或分类..."
                     className="flex-1 bg-transparent text-text-primary text-lg outline-none placeholder:text-text-muted"
                     value={query}
-                    onChange={e => setQuery(e.target.value)}
+                    onChange={e => {
+                      setQuery(e.target.value);
+                      setSelectedIndex(0);
+                    }}
                     autoFocus
                   />
                   <kbd 
