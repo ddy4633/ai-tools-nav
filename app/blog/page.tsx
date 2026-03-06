@@ -11,6 +11,17 @@ export const metadata: Metadata = {
 // 模拟博客文章数据
 const blogPosts = [
   {
+    id: 'top-ai-tools-2026',
+    title: '2026年最值得关注的10个AI工具 - 从Grok 3到Manus',
+    excerpt: '盘点2026年最热门的AI工具：Grok 3、Qwen 2.5-Max、Kimi k1.5、Windsurf、Bolt.new、Kling AI等，深度解析它们的特点和适用场景。',
+    category: '工具推荐',
+    date: '2026-03-03',
+    readTime: '12 分钟',
+    tags: ['AI工具', '2026趋势', 'Grok 3', 'Manus', 'Kling AI'],
+    featured: true,
+    slug: 'top-ai-tools-2026',
+  },
+  {
     id: 1,
     title: '2024 年最值得关注的 10 个 AI 工具',
     excerpt: '从 ChatGPT 到 Midjourney，盘点今年最热门的 AI 工具及其应用场景，帮助你快速了解 AI 工具生态。',
@@ -18,7 +29,7 @@ const blogPosts = [
     date: '2024-03-15',
     readTime: '8 分钟',
     tags: ['AI工具', '效率', '推荐'],
-    featured: true,
+    featured: false,
   },
   {
     id: 'deepseek-guide',

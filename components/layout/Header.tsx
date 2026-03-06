@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Search, Menu, X, Terminal } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CommandPalette } from '@/components/search/CommandPalette';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,7 +16,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 glass border-b border-border-subtle">
+    <header className="sticky top-0 z-40 glass border-b border-border-subtle">
       {/* 霓虹下划线装饰 */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent" />
       
@@ -48,12 +49,9 @@ export default function Header() {
           
           {/* 右侧操作 */}
           <div className="flex items-center gap-4">
-            <Link
-              href="/tools"
-              className="hidden md:flex items-center gap-2 p-2 text-text-secondary hover:text-accent-cyan transition-colors"
-            >
-              <Search className="w-5 h-5" />
-            </Link>
+            {/* Command Palette 搜索按钮 */}
+            <CommandPalette />
+            
             <button 
               className="md:hidden p-2 text-text-secondary hover:text-accent-cyan transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

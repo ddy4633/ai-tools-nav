@@ -29,6 +29,9 @@ const Categories = dynamic(() => import('@/components/home/Categories'), {
 const NewsletterSection = dynamic(() => import('@/components/home/NewsletterSection'), {
   loading: () => <NewsletterSkeleton />,
 });
+const LogoWall = dynamic(() => import('@/components/home/LogoWall'), {
+  loading: () => <div className="h-32 bg-bg-secondary/50 animate-pulse" />,
+});
 
 export const revalidate = 3600;
 
@@ -74,6 +77,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
+      <LogoWall tools={displayTools} />
       <EditorPicks picks={editorPicks} />
       <TrendingTools tools={trending} />
       <FeaturedTools tools={displayTools} />
