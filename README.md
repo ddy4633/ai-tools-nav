@@ -80,25 +80,19 @@ NEXT_PUBLIC_SITE_URL=https://ai.poph163.com
 ```
 ai-tools-nav/
 ├── app/                    # Next.js App Router
-│   ├── page.tsx           # 首页
-│   ├── tools/             # 工具列表和详情
-│   ├── categories/        # 分类浏览
-│   ├── blog/              # 博客文章
-│   ├── about/             # 关于页面
-│   ├── api/               # API 路由
-│   ├── sitemap.ts         # 站点地图
-│   └── robots.ts          # 爬虫规则
-├── components/            # React 组件
-│   ├── home/             # 首页组件
-│   ├── tools/            # 工具相关组件
-│   ├── layout/           # 布局组件
-│   └── ui/               # 通用 UI 组件
-├── lib/                   # 工具函数
-│   └── supabase.ts       # Supabase 客户端
-├── content/               # 内容数据
-├── docs/                  # 项目文档
-├── public/                # 静态资源
-└── types/                 # TypeScript 类型
+├── components/             # React 组件
+├── lib/                    # 业务逻辑与工具函数
+├── content/                # 内容与导入数据
+├── public/                 # 静态资源与图标
+├── scripts/                # 数据脚本与运维脚本
+├── docs/                   # 核心文档、专题文档、历史归档
+│   ├── archive/            # 历史方案与自动迭代归档
+│   ├── iteration-reports/  # 迭代报告
+│   └── research/           # 研究文档
+├── research/               # 早期调研资料
+├── reviews/                # 评审记录
+├── tests/                  # 手工测试脚本
+└── types/                  # TypeScript 类型
 ```
 
 ## 核心功能模块
@@ -156,9 +150,15 @@ ai-tools-nav/
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ddy4633/ai-tools-nav)
 
+## 文档索引
+
+- 项目文档总览：[`docs/README.md`](docs/README.md)
+- 部署说明：[`docs/DEPLOY.md`](docs/DEPLOY.md)
+- 更新日志：[`docs/CHANGELOG.md`](docs/CHANGELOG.md)
+
 ## 更新日志
 
-查看 [CHANGELOG.md](./CHANGELOG.md) 了解详细更新历史。
+查看 [`docs/CHANGELOG.md`](docs/CHANGELOG.md) 了解详细更新历史。
 
 ## 贡献指南
 
