@@ -2,6 +2,16 @@
 
 import { Tool, EditorPick, Editor, Category } from '@/types/tool';
 import { toolIcons } from '@/lib/content/tool-icons';
+import sourcedBatchTools from '@/content/batch-2-tools-sourced';
+import sourcedBatchToolsRound2 from '@/content/batch-3-tools-sourced';
+import sourcedBatchToolsRound3 from '@/content/batch-4-tools-sourced';
+import sourcedBatchToolsRound4 from '@/content/batch-5-tools-sourced';
+import sourcedBatchToolsRound5 from '@/content/batch-6-tools-sourced';
+import sourcedBatchToolsRound6 from '@/content/batch-7-tools-sourced';
+import sourcedBatchToolsRound7 from '@/content/batch-8-tools-sourced';
+import sourcedBatchToolsRound8 from '@/content/batch-9-tools-sourced';
+import sourcedBatchToolsRound9 from '@/content/batch-10-tools-sourced';
+import sourcedBatchToolsRound10 from '@/content/batch-11-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -44,7 +54,8 @@ const dedupeTools = (tools: Tool[]): Tool[] => {
   const toolMap = new Map<string, Tool>();
 
   for (const tool of tools) {
-    toolMap.set(tool.id, normalizeTool(tool));
+    const previous = toolMap.get(tool.id);
+    toolMap.set(tool.id, normalizeTool(previous ? { ...previous, ...tool } : tool));
   }
 
   return Array.from(toolMap.values());
@@ -1293,7 +1304,7 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools(rawTools);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [

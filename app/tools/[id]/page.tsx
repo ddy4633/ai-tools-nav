@@ -255,6 +255,33 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         )}
 
+        {tool.reviewSources?.length ? (
+          <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
+            <h3 className="text-xl font-bold text-text-primary mb-4">站外评价摘要</h3>
+            <div className="space-y-4">
+              {tool.reviewSources.map((source) => (
+                <div
+                  key={`${source.source}-${source.url}`}
+                  className="rounded-xl border border-border-subtle bg-bg-primary p-4"
+                >
+                  <div className="flex items-center justify-between gap-4 mb-2">
+                    <p className="text-sm font-semibold text-text-primary">{source.source}</p>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-accent-cyan hover:opacity-80 transition-opacity"
+                    >
+                      查看来源
+                    </a>
+                  </div>
+                  <p className="text-sm text-text-secondary leading-6">{source.summary}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {tool.alternatives?.length ? (
           <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
             <h3 className="text-xl font-bold text-text-primary mb-4">替代工具</h3>

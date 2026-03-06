@@ -1,5 +1,11 @@
 // types/tool.ts - 工具类型定义
 
+export interface ToolReviewSource {
+  source: string;
+  url: string;
+  summary: string;
+}
+
 export interface Tool {
   id: string;
   name: string;
@@ -19,6 +25,7 @@ export interface Tool {
   features?: string[];
   pros?: string[];
   cons?: string[];
+  reviewSources?: ToolReviewSource[];
   alternatives?: string[];
   editorRating?: number;
   userRating?: number;
