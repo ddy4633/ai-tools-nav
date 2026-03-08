@@ -25,6 +25,63 @@ function enrichTool<T extends { id: string }>(tool: T): T & Tool {
   if (!merged.pricingType && pricingType) {
     merged.pricingType = pricingType;
   }
+
+  const affiliateUrl = merged.affiliate_url ?? merged.affiliateUrl;
+  if (!merged.affiliate_url && affiliateUrl) {
+    merged.affiliate_url = affiliateUrl;
+  }
+  if (!merged.affiliateUrl && affiliateUrl) {
+    merged.affiliateUrl = affiliateUrl;
+  }
+
+  const sponsorType = merged.sponsor_type ?? merged.sponsorType;
+  if (!merged.sponsor_type && sponsorType) {
+    merged.sponsor_type = sponsorType;
+  }
+  if (!merged.sponsorType && sponsorType) {
+    merged.sponsorType = sponsorType;
+  }
+
+  const sponsorLabel = merged.sponsor_label ?? merged.sponsorLabel;
+  if (!merged.sponsor_label && sponsorLabel) {
+    merged.sponsor_label = sponsorLabel;
+  }
+  if (!merged.sponsorLabel && sponsorLabel) {
+    merged.sponsorLabel = sponsorLabel;
+  }
+
+  const sponsorRank = merged.sponsor_rank ?? merged.sponsorRank;
+  if (merged.sponsor_rank == null && sponsorRank != null) {
+    merged.sponsor_rank = sponsorRank;
+  }
+  if (merged.sponsorRank == null && sponsorRank != null) {
+    merged.sponsorRank = sponsorRank;
+  }
+
+  const sponsorStartAt = merged.sponsor_start_at ?? merged.sponsorStartAt;
+  if (merged.sponsor_start_at == null && sponsorStartAt != null) {
+    merged.sponsor_start_at = sponsorStartAt;
+  }
+  if (merged.sponsorStartAt == null && sponsorStartAt != null) {
+    merged.sponsorStartAt = sponsorStartAt;
+  }
+
+  const sponsorEndAt = merged.sponsor_end_at ?? merged.sponsorEndAt;
+  if (merged.sponsor_end_at == null && sponsorEndAt != null) {
+    merged.sponsor_end_at = sponsorEndAt;
+  }
+  if (merged.sponsorEndAt == null && sponsorEndAt != null) {
+    merged.sponsorEndAt = sponsorEndAt;
+  }
+
+  const isSponsored = merged.is_sponsored ?? merged.isSponsored ?? Boolean(sponsorType);
+  if (merged.is_sponsored == null) {
+    merged.is_sponsored = isSponsored;
+  }
+  if (merged.isSponsored == null) {
+    merged.isSponsored = isSponsored;
+  }
+
   if (!merged.icon) {
     merged.icon = buildIcon(tool.id);
   }
@@ -58,7 +115,7 @@ export async function getTrendingTools(limit = 10) {
     return getMockTrendingTools();
   }
   
-  return data;
+  return data.map((item) => enrichTool(item));
 }
 
 export async function getFeaturedTools(limit = 8) {
@@ -77,7 +134,7 @@ export async function getFeaturedTools(limit = 8) {
     return getMockTools();
   }
   
-  return data;
+  return data.map((item) => enrichTool(item));
 }
 
 export async function getCategories() {
@@ -113,7 +170,7 @@ export async function getAllTools(): Promise<Tool[]> {
     return getMockTools();
   }
   
-  return data;
+  return data.map((item) => enrichTool(item));
 }
 
 // 根据 ID 获取工具
@@ -135,7 +192,7 @@ export async function getToolById(id: string): Promise<Tool | null> {
     return mockTools.find(t => t.id === id) || null;
   }
   
-  return data;
+  return enrichTool(data);
 }
 
 // 模拟热度工具数据

@@ -1,19 +1,19 @@
 import dynamic from 'next/dynamic';
 import Hero from '@/components/home/Hero';
-import { getTrendingTools, getFeaturedTools, getCategories } from '@/lib/supabase';
+import { getTrendingTools, getAllTools, getCategories } from '@/lib/supabase';
 import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data';
+import { getSponsoredToolsFromList } from '@/lib/monetization/sponsored';
 import type { Metadata } from 'next';
 
 import { Tool, Category, TrendingTool } from '@/types/tool';
-import { 
-  FeaturedToolsSkeleton, 
+import {
+  FeaturedToolsSkeleton,
   TrendingToolsSkeleton,
   CategoriesSkeleton,
   EditorPicksSkeleton,
-  NewsletterSkeleton
+  NewsletterSkeleton,
 } from '@/components/ui/Skeleton';
 
-// Dynamic imports for below-the-fold components with proper skeletons
 const TrendingTools = dynamic(() => import('@/components/home/TrendingTools'), {
   loading: () => <TrendingToolsSkeleton />,
 });
@@ -31,6 +31,9 @@ const NewsletterSection = dynamic(() => import('@/components/home/NewsletterSect
 });
 const LogoWall = dynamic(() => import('@/components/home/LogoWall'), {
   loading: () => <div className="h-32 bg-bg-secondary/50 animate-pulse" />,
+});
+const SponsoredTools = dynamic(() => import('@/components/home/SponsoredTools'), {
+  loading: () => <div className="h-44 bg-bg-secondary/40 animate-pulse" />,
 });
 
 export const revalidate = 3600;
@@ -54,33 +57,36 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   let trending: TrendingTool[] = [];
-  let tools: Tool[] = [];
+  let allTools: Tool[] = [];
   let categories: Category[] = [];
 
   try {
     const [trendingResult, toolsResult, categoriesResult] = await Promise.all([
       getTrendingTools(5),
-      getFeaturedTools(8),
+      getAllTools(),
       getCategories(),
     ]);
     trending = (trendingResult || []) as TrendingTool[];
-    tools = (toolsResult || []) as Tool[];
+    allTools = (toolsResult || []) as Tool[];
     categories = (categoriesResult || []) as Category[];
   } catch {
     // 静默处理错误，使用备用数据
   }
 
-  // 使用本地数据作为备用
   const displayCategories = categories.length > 0 ? categories : categoriesData;
-  const displayTools = tools.length > 0 ? tools : toolsData.slice(0, 8);
+  const displayAllTools = allTools.length > 0 ? allTools : toolsData;
+  const displaySponsoredTools = getSponsoredToolsFromList(displayAllTools, 3);
+  const displayFeaturedTools = displayAllTools.filter((tool) => tool.is_featured ?? tool.isFeatured).slice(0, 8);
+  const featuredTools = displayFeaturedTools.length > 0 ? displayFeaturedTools : displayAllTools.slice(0, 8);
 
   return (
     <>
       <Hero />
-      <LogoWall tools={displayTools} />
+      <SponsoredTools tools={displaySponsoredTools} />
+      <LogoWall tools={featuredTools} />
       <EditorPicks picks={editorPicks} />
       <TrendingTools tools={trending} />
-      <FeaturedTools tools={displayTools} />
+      <FeaturedTools tools={featuredTools} />
       <Categories categories={displayCategories} />
       <NewsletterSection />
     </>

@@ -1,14 +1,18 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { getToolById, getAllTools } from '@/lib/supabase';
 import { RatingDisplay } from '@/components/ui/star-rating';
 import { RatingForm } from '@/components/rating-form';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
 import ToolLogo from '@/components/ui/ToolLogo';
+import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Tool } from '@/types/tool';
 import { buildSiteUrl } from '@/lib/site';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
+import { resolveToolPrimaryUrl } from '@/lib/tracking';
 
 interface ToolPageProps {
   params: Promise<{ id: string }>;
@@ -74,6 +78,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
   const ratingCount = tool.rating_count ?? 0;
   const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
+  const hasPrimaryCta = Boolean(resolveToolPrimaryUrl(tool));
   const relatedTools = allTools
     .filter((item: Tool) => item.id !== tool.id && item.category === tool.category)
     .slice(0, 3);
@@ -134,13 +139,14 @@ export default async function ToolPage({ params }: ToolPageProps) {
               />
               <div>
                 <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex flex-wrap items-center gap-3 mb-3">
                   <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
                     {pricing.text}
                   </span>
                   <span className="text-sm text-text-secondary bg-bg-secondary px-3 py-1 rounded-lg border border-border-subtle">
                     {tool.category}
                   </span>
+                  <SponsorBadge tool={tool} />
                 </div>
                 {/* 评分显示 */}
                 <RatingDisplay 
@@ -165,25 +171,28 @@ export default async function ToolPage({ params }: ToolPageProps) {
           
           {/* 操作按钮 */}
           <div className="flex flex-wrap gap-4">
-            <a
-              href={tool.website || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
+            <ToolPrimaryCta
+              tool={tool}
+              placement="tool_detail_primary_cta"
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-purple text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
-            >
-              访问官网
-              <ExternalLink className="w-4 h-4" />
-            </a>
+            />
             
             {tool.repo_url && (
-              <a
+              <TrackedExternalLink
                 href={tool.repo_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                trackingPayload={{
+                  placement: 'tool_detail_repo_cta',
+                  toolId: tool.id,
+                  toolName: tool.name,
+                  targetUrl: tool.repo_url,
+                  isAffiliate: false,
+                }}
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border-subtle text-text-secondary font-medium rounded-xl hover:border-accent-cyan hover:text-accent-cyan transition-colors"
               >
                 查看源码
-              </a>
+              </TrackedExternalLink>
             )}
             
             <Link
@@ -348,7 +357,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
         {/* 提示 */}
         <div className="mt-8 p-4 bg-accent-cyan/5 border border-accent-cyan/20 rounded-xl">
           <p className="text-sm text-text-secondary">
-            💡 提示：点击“访问官网”按钮可以跳转到工具的官方网站进行试用。
+            {hasPrimaryCta
+              ? '💡 提示：如已配置合作链接，主按钮会优先跳转到合作链接；否则跳转到工具官网。'
+              : '💡 提示：当前工具暂未配置外部访问链接，可后续补充官网或合作链接。'}
           </p>
         </div>
       </div>

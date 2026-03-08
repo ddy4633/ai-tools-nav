@@ -2,7 +2,23 @@
 
 import NextLink from 'next/link';
 import { useState } from 'react';
-import { Send, Check, Loader2, Tag, Layers, Link, FileText, Sparkles } from 'lucide-react';
+import {
+  Send,
+  Check,
+  Loader2,
+  Tag,
+  Layers,
+  Link as LinkIcon,
+  FileText,
+  Sparkles,
+  Mail,
+  User,
+  Building2,
+  Clock3,
+  Megaphone,
+} from 'lucide-react';
+import { isBusinessSubmission, submitToolSubmissionApi, validateSubmissionEmail } from '@/lib/submission/client';
+import type { SubmissionPlan } from '@/lib/submission/types';
 
 const categories = [
   { value: 'writing', label: 'AI 写作', icon: '✍️' },
@@ -17,41 +33,84 @@ const categories = [
 ];
 
 const popularTags = [
-  '免费', '开源', '在线', 'API', '移动端', 'Chrome插件', 
-  'macOS', 'Windows', 'SaaS', 'GPT-4', 'Midjourney', 'Stable Diffusion'
+  '免费', '开源', '在线', 'API', '移动端', 'Chrome插件',
+  'macOS', 'Windows', 'SaaS', 'GPT-4', 'Midjourney', 'Stable Diffusion',
 ];
 
-interface FormData {
+const submissionPlans: Array<{
+  value: SubmissionPlan;
+  title: string;
+  description: string;
+  helper: string;
+  icon: typeof Sparkles;
+}> = [
+  {
+    value: 'free',
+    title: '免费收录',
+    description: '进入常规审核队列，适合自然推荐。',
+    helper: '标准审核',
+    icon: Sparkles,
+  },
+  {
+    value: 'priority',
+    title: '加急评估',
+    description: '适合活动排期、发布周或需要更快反馈的工具。',
+    helper: '商务加急',
+    icon: Clock3,
+  },
+  {
+    value: 'sponsored',
+    title: '赞助置顶',
+    description: '适合首页、分类页、专题页的商业化曝光。',
+    helper: '商务投放',
+    icon: Megaphone,
+  },
+];
+
+const budgetOptions = ['< 3,000 元', '3,000 - 10,000 元', '10,000 - 30,000 元', '30,000 元以上'];
+
+interface SubmitFormData {
   name: string;
   website: string;
   description: string;
   category: string;
   tags: string[];
   reason: string;
+  submitterName: string;
+  submitterEmail: string;
+  companyName: string;
+  submissionType: SubmissionPlan;
+  budgetRange: string;
 }
 
 export default function SubmitForm() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof SubmitFormData, string>>>({});
   const [submitError, setSubmitError] = useState('');
-  const [formData, setFormData] = useState<FormData>({
+  const [successMessage, setSuccessMessage] = useState('');
+  const [formData, setFormData] = useState<SubmitFormData>({
     name: '',
     website: '',
     description: '',
     category: '',
     tags: [],
     reason: '',
+    submitterName: '',
+    submitterEmail: '',
+    companyName: '',
+    submissionType: 'free',
+    budgetRange: '',
   });
   const [tagInput, setTagInput] = useState('');
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {};
-    
+    const newErrors: Partial<Record<keyof SubmitFormData, string>> = {};
+
     if (!formData.name.trim()) {
       newErrors.name = '请输入工具名称';
     } else if (formData.name.length < 2) {
-      newErrors.name = '工具名称至少需要2个字符';
+      newErrors.name = '工具名称至少需要 2 个字符';
     }
 
     if (!formData.website.trim()) {
@@ -60,14 +119,14 @@ export default function SubmitForm() {
       try {
         new URL(formData.website);
       } catch {
-        newErrors.website = '请输入有效的URL链接';
+        newErrors.website = '请输入有效的 URL 链接';
       }
     }
 
     if (!formData.description.trim()) {
       newErrors.description = '请输入工具简介';
     } else if (formData.description.length < 10) {
-      newErrors.description = '简介至少需要10个字符';
+      newErrors.description = '简介至少需要 10 个字符';
     }
 
     if (!formData.category) {
@@ -77,16 +136,42 @@ export default function SubmitForm() {
     if (!formData.reason.trim()) {
       newErrors.reason = '请输入推荐理由';
     } else if (formData.reason.length < 10) {
-      newErrors.reason = '推荐理由至少需要10个字符';
+      newErrors.reason = '推荐理由至少需要 10 个字符';
+    }
+
+    if (!formData.submitterEmail.trim()) {
+      newErrors.submitterEmail = '请输入联系邮箱';
+    } else if (!validateSubmissionEmail(formData.submitterEmail.trim())) {
+      newErrors.submitterEmail = '请输入有效的联系邮箱';
+    }
+
+    if (isBusinessSubmission(formData.submissionType) && !formData.budgetRange) {
+      newErrors.budgetRange = '请选择预算区间，便于商务快速评估';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleInputChange = (field: keyof SubmitFormData, value: string) => {
+    setFormData((previous) => {
+      const next = { ...previous, [field]: value };
+
+      if (field === 'submissionType' && value === 'free') {
+        next.budgetRange = '';
+      }
+
+      return next;
+    });
+
+    if (errors[field]) {
+      setErrors((previous) => ({ ...previous, [field]: undefined }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -95,82 +180,80 @@ export default function SubmitForm() {
     setSubmitError('');
 
     try {
-      const storageKey = 'toolSubmissions';
-      const payload = {
+      const result = await submitToolSubmissionApi({
         ...formData,
-        createdAt: new Date().toISOString(),
-      };
+        name: formData.name.trim(),
+        website: formData.website.trim(),
+        description: formData.description.trim(),
+        reason: formData.reason.trim(),
+        submitterName: formData.submitterName.trim(),
+        submitterEmail: formData.submitterEmail.trim(),
+        companyName: formData.companyName.trim(),
+      });
 
-      let list: typeof payload[] = [];
-      const raw = window.localStorage.getItem(storageKey);
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) {
-            list = parsed as typeof payload[];
-          }
-        } catch {
-          list = [];
-        }
+      if (!result.success) {
+        setSubmitError(result.message || '提交失败，请稍后重试');
+        return;
       }
 
-      list.unshift(payload);
-      window.localStorage.setItem(storageKey, JSON.stringify(list));
+      setSuccessMessage(result.message || '提交成功');
       setSubmitted(true);
     } catch {
-      setSubmitError('本地保存失败，请检查浏览器存储权限');
+      setSubmitError('提交失败，请稍后重试');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleAddTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim()) && formData.tags.length < 5) {
-      setFormData({ ...formData, tags: [...formData.tags, tagInput.trim()] });
+    const value = tagInput.trim();
+    if (value && !formData.tags.includes(value) && formData.tags.length < 5) {
+      setFormData((previous) => ({ ...previous, tags: [...previous.tags, value] }));
       setTagInput('');
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setFormData({ ...formData, tags: formData.tags.filter(tag => tag !== tagToRemove) });
+    setFormData((previous) => ({
+      ...previous,
+      tags: previous.tags.filter((tag) => tag !== tagToRemove),
+    }));
   };
 
   const handleQuickTag = (tag: string) => {
     if (!formData.tags.includes(tag) && formData.tags.length < 5) {
-      setFormData({ ...formData, tags: [...formData.tags, tag] });
-    }
-  };
-
-  const handleInputChange = (field: keyof FormData, value: string) => {
-    setFormData({ ...formData, [field]: value });
-    if (errors[field]) {
-      setErrors({ ...errors, [field]: undefined });
+      setFormData((previous) => ({ ...previous, tags: [...previous.tags, tag] }));
     }
   };
 
   if (submitted) {
+    const isBusiness = isBusinessSubmission(formData.submissionType);
+
     return (
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <div className="text-center bg-surface-card rounded-2xl p-8 sm:p-12 border border-border-light shadow-lg">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
             <Check className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-text-primary mb-4">感谢你的推荐！</h1>
+          <h1 className="text-3xl font-bold text-text-primary mb-4">提交成功</h1>
           <p className="text-text-secondary text-lg mb-2">
-            已在本地保存对 <strong className="text-accent-warm">{formData.name}</strong> 的推荐
+            已收到 <strong className="text-accent-warm">{formData.name}</strong> 的{isBusiness ? '商务合作' : '收录推荐'}信息
           </p>
+          <p className="text-text-muted mb-2">{successMessage}</p>
           <p className="text-text-muted mb-8">
-            当前为静态版本，暂不支持在线提交
+            {isBusiness
+              ? '我们会通过你填写的邮箱进一步沟通排期、预算和合作位。'
+              : '审核结果会通过你填写的邮箱同步。'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <NextLink
-              href="/tools" 
+              href="/tools"
               className="inline-flex items-center justify-center px-6 py-3 bg-accent-warm text-white rounded-xl hover:bg-accent-warm-hover transition-all font-medium"
             >
               浏览工具
             </NextLink>
             <NextLink
-              href="/" 
+              href="/"
               className="inline-flex items-center justify-center px-6 py-3 bg-surface-base border border-border-medium text-text-primary rounded-xl hover:bg-surface-hover transition-all font-medium"
             >
               返回首页
@@ -183,50 +266,80 @@ export default function SubmitForm() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-      {/* Header */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-warm/10 rounded-full text-accent-warm text-sm font-medium mb-4">
+      <div className="text-center mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-warm/10 text-accent-warm rounded-full mb-4">
           <Sparkles className="w-4 h-4" />
-          共同发现优秀工具
+          <span className="text-sm font-medium">提交工具 / 商务合作</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-4">
-          推荐 AI 工具
-        </h1>
-        <p className="text-text-secondary text-lg max-w-md mx-auto">
-          发现了好用的 AI 工具？告诉我们，让更多人受益
+        <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-3">让更多人发现你的 AI 工具</h1>
+        <p className="text-text-secondary max-w-xl mx-auto">
+          支持免费收录、加急评估和赞助置顶三种模式。免费提交进入审核队列，商务方案会优先进入合作沟通。
         </p>
       </div>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-surface-card rounded-2xl p-6 sm:p-8 border border-border-light shadow-sm">
-        {/* Tool Name */}
+      <form onSubmit={handleSubmit} className="bg-surface-card rounded-2xl p-6 sm:p-8 border border-border-light shadow-lg">
+        <div className="mb-8">
+          <label className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+            <Sparkles className="w-4 h-4 text-accent-warm" />
+            收录方案 <span className="text-red-500">*</span>
+          </label>
+          <div className="grid sm:grid-cols-3 gap-3">
+            {submissionPlans.map((plan) => {
+              const Icon = plan.icon;
+              const active = formData.submissionType === plan.value;
+              return (
+                <button
+                  key={plan.value}
+                  type="button"
+                  onClick={() => handleInputChange('submissionType', plan.value)}
+                  className={`text-left rounded-2xl border p-4 transition-all ${
+                    active
+                      ? 'border-accent-warm bg-accent-warm/10 shadow-sm'
+                      : 'border-border-medium hover:border-accent-warm/50 hover:bg-surface-hover'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? 'bg-accent-warm text-white' : 'bg-surface-base text-accent-warm'}`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-text-primary text-sm">{plan.title}</p>
+                      <p className="text-xs text-accent-warm">{plan.helper}</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-text-secondary leading-relaxed">{plan.description}</p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="mb-6">
           <label htmlFor="name" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
             <Sparkles className="w-4 h-4 text-accent-warm" />
             工具名称 <span className="text-red-500">*</span>
           </label>
           <input
-            type="text"
             id="name"
+            type="text"
             value={formData.name}
             onChange={(e) => handleInputChange('name', e.target.value)}
             className={`w-full px-4 py-3 bg-surface-base border rounded-xl text-text-primary focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all ${
               errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : 'border-border-medium'
             }`}
-            placeholder="例如：ChatGPT、Midjourney"
+            placeholder="例如：ChatGPT、Midjourney、Cursor"
           />
           {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
         </div>
 
-        {/* Website */}
         <div className="mb-6">
           <label htmlFor="website" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
-            <Link className="w-4 h-4 text-accent-warm" />
+            <LinkIcon className="w-4 h-4 text-accent-warm" />
             官方网站 <span className="text-red-500">*</span>
           </label>
           <input
-            type="url"
             id="website"
+            type="url"
             value={formData.website}
             onChange={(e) => handleInputChange('website', e.target.value)}
             className={`w-full px-4 py-3 bg-surface-base border rounded-xl text-text-primary focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all ${
@@ -237,7 +350,6 @@ export default function SubmitForm() {
           {errors.website && <p className="mt-1 text-sm text-red-500">{errors.website}</p>}
         </div>
 
-        {/* Category */}
         <div className="mb-6">
           <label className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
             <Layers className="w-4 h-4 text-accent-warm" />
@@ -263,7 +375,6 @@ export default function SubmitForm() {
           {errors.category && <p className="mt-2 text-sm text-red-500">{errors.category}</p>}
         </div>
 
-        {/* Description */}
         <div className="mb-6">
           <label htmlFor="description" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
             <FileText className="w-4 h-4 text-accent-warm" />
@@ -283,14 +394,12 @@ export default function SubmitForm() {
           <p className="mt-1 text-xs text-text-muted text-right">{formData.description.length} / 500</p>
         </div>
 
-        {/* Tags */}
         <div className="mb-6">
           <label className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
             <Tag className="w-4 h-4 text-accent-warm" />
-            标签 <span className="text-text-muted font-normal">(可选，最多5个)</span>
+            标签 <span className="text-text-muted font-normal">(可选，最多 5 个)</span>
           </label>
-          
-          {/* Selected Tags */}
+
           {formData.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
               {formData.tags.map((tag) => (
@@ -311,9 +420,8 @@ export default function SubmitForm() {
             </div>
           )}
 
-          {/* Quick Tags */}
           <div className="flex flex-wrap gap-2 mb-3">
-            {popularTags.filter(tag => !formData.tags.includes(tag)).slice(0, 8).map((tag) => (
+            {popularTags.filter((tag) => !formData.tags.includes(tag)).slice(0, 8).map((tag) => (
               <button
                 key={tag}
                 type="button"
@@ -326,13 +434,12 @@ export default function SubmitForm() {
             ))}
           </div>
 
-          {/* Custom Tag Input */}
           <div className="flex gap-2">
             <input
               type="text"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
               disabled={formData.tags.length >= 5}
               className="flex-1 px-4 py-2 bg-surface-base border border-border-medium rounded-xl text-text-primary focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all disabled:opacity-50"
               placeholder="自定义标签，按回车添加"
@@ -348,8 +455,7 @@ export default function SubmitForm() {
           </div>
         </div>
 
-        {/* Reason */}
-        <div className="mb-8">
+        <div className="mb-6">
           <label htmlFor="reason" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
             <Send className="w-4 h-4 text-accent-warm" />
             推荐理由 <span className="text-red-500">*</span>
@@ -368,7 +474,84 @@ export default function SubmitForm() {
           <p className="mt-1 text-xs text-text-muted text-right">{formData.reason.length} / 1000</p>
         </div>
 
-        {/* Submit Button */}
+        <div className="grid sm:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label htmlFor="submitterName" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
+              <User className="w-4 h-4 text-accent-warm" />
+              联系人 <span className="text-text-muted font-normal">(可选)</span>
+            </label>
+            <input
+              id="submitterName"
+              type="text"
+              value={formData.submitterName}
+              onChange={(e) => handleInputChange('submitterName', e.target.value)}
+              className="w-full px-4 py-3 bg-surface-base border border-border-medium rounded-xl text-text-primary focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all"
+              placeholder="你的姓名或团队称呼"
+            />
+          </div>
+          <div>
+            <label htmlFor="submitterEmail" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
+              <Mail className="w-4 h-4 text-accent-warm" />
+              联系邮箱 <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="submitterEmail"
+              type="email"
+              value={formData.submitterEmail}
+              onChange={(e) => handleInputChange('submitterEmail', e.target.value)}
+              className={`w-full px-4 py-3 bg-surface-base border rounded-xl text-text-primary focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all ${
+                errors.submitterEmail ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : 'border-border-medium'
+              }`}
+              placeholder="name@company.com"
+            />
+            {errors.submitterEmail && <p className="mt-1 text-sm text-red-500">{errors.submitterEmail}</p>}
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="companyName" className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
+            <Building2 className="w-4 h-4 text-accent-warm" />
+            公司 / 团队 <span className="text-text-muted font-normal">(可选)</span>
+          </label>
+          <input
+            id="companyName"
+            type="text"
+            value={formData.companyName}
+            onChange={(e) => handleInputChange('companyName', e.target.value)}
+            className="w-full px-4 py-3 bg-surface-base border border-border-medium rounded-xl text-text-primary focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all"
+            placeholder="例如：OpenAI / 某某创业团队"
+          />
+        </div>
+
+        {isBusinessSubmission(formData.submissionType) && (
+          <div className="mb-8">
+            <label className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+              <Megaphone className="w-4 h-4 text-accent-warm" />
+              预算区间 <span className="text-red-500">*</span>
+            </label>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {budgetOptions.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => handleInputChange('budgetRange', option)}
+                  className={`px-4 py-3 rounded-xl border text-sm text-left transition-all ${
+                    formData.budgetRange === option
+                      ? 'border-accent-warm bg-accent-warm/10 text-accent-warm'
+                      : 'border-border-medium hover:border-accent-warm/50 hover:bg-surface-hover text-text-secondary'
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+            {errors.budgetRange && <p className="mt-2 text-sm text-red-500">{errors.budgetRange}</p>}
+            <p className="mt-2 text-xs text-text-muted">
+              仅用于商务初步评估，不会在前台公开展示。
+            </p>
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={isSubmitting}
@@ -382,7 +565,7 @@ export default function SubmitForm() {
           ) : (
             <>
               <Send className="w-5 h-5" />
-              提交推荐
+              {isBusinessSubmission(formData.submissionType) ? '提交商务线索' : '提交推荐'}
             </>
           )}
         </button>
@@ -391,8 +574,8 @@ export default function SubmitForm() {
           <p className="text-sm text-red-600 text-center mt-3">{submitError}</p>
         )}
 
-        <p className="text-xs text-text-muted text-center mt-4">
-          当前为静态版本，提交内容仅保存在本地浏览器
+        <p className="text-xs text-text-muted text-center mt-4 leading-relaxed">
+          提交后会进入站点 API 流程，可接 webhook 或内部 CRM；免费收录走审核，商务方案会优先通过邮箱联系。
         </p>
       </form>
     </div>

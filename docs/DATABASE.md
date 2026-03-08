@@ -52,6 +52,7 @@ CREATE TABLE tools (
   name VARCHAR(200) NOT NULL,           -- 工具名称
   description TEXT,                      -- 描述
   website VARCHAR(500),                  -- 官网
+  affiliate_url VARCHAR(500),            -- 联盟 / 合作跳转链接
   repo_url VARCHAR(500),                 -- GitHub 仓库
   category_id UUID REFERENCES categories(id),  -- 分类外键
   
@@ -62,6 +63,12 @@ CREATE TABLE tools (
   
   -- 特性
   is_featured BOOLEAN DEFAULT FALSE,     -- 是否精选
+  is_sponsored BOOLEAN DEFAULT FALSE,    -- 是否赞助位
+  sponsor_type VARCHAR(50),              -- 赞助类型：首页 / 分类页 / Newsletter
+  sponsor_label VARCHAR(100),            -- 前台展示标签
+  sponsor_rank INTEGER DEFAULT 999,      -- 赞助位排序
+  sponsor_start_at TIMESTAMP WITH TIME ZONE, -- 赞助开始时间
+  sponsor_end_at TIMESTAMP WITH TIME ZONE,   -- 赞助结束时间
   
   -- 热度指标
   hype_score INTEGER DEFAULT 0,          -- 热度分数 0-100
@@ -125,7 +132,15 @@ CREATE TABLE submissions (
   description TEXT,
   website VARCHAR(500) NOT NULL,
   category VARCHAR(100),
+  tags TEXT[] DEFAULT '{}',
+  reason TEXT,
+  submitter_name VARCHAR(200),
   submitter_email VARCHAR(200),
+  company_name VARCHAR(200),
+  submission_type VARCHAR(20) DEFAULT 'free' CHECK (
+    submission_type IN ('free', 'priority', 'sponsored')
+  ),
+  budget_range VARCHAR(100),
   status VARCHAR(20) DEFAULT 'pending' CHECK (
     status IN ('pending', 'approved', 'rejected')
   ),
@@ -293,3 +308,15 @@ INSERT INTO tools (name, description, website, category_id, pricing_type, is_fea
 ---
 
 **最后更新**: 2026-02-25
+
+
+### 获取赞助位工具
+```sql
+SELECT *
+FROM tools
+WHERE is_sponsored = TRUE
+  AND (sponsor_start_at IS NULL OR sponsor_start_at <= NOW())
+  AND (sponsor_end_at IS NULL OR sponsor_end_at >= NOW())
+ORDER BY sponsor_rank ASC, updated_at DESC
+LIMIT 3;
+```

@@ -6,6 +6,8 @@ export interface ToolReviewSource {
   summary: string;
 }
 
+export type ToolSponsorType = 'featured_listing' | 'homepage_spotlight' | 'category_spotlight' | 'newsletter_spotlight';
+
 export interface Tool {
   id: string;
   name: string;
@@ -20,6 +22,20 @@ export interface Tool {
   pricingType?: 'free' | 'paid' | 'freemium';
   priceRange?: string;
   website?: string;
+  affiliate_url?: string | null;
+  affiliateUrl?: string | null;
+  sponsor_type?: ToolSponsorType | null;
+  sponsorType?: ToolSponsorType | null;
+  sponsor_label?: string | null;
+  sponsorLabel?: string | null;
+  sponsor_rank?: number | null;
+  sponsorRank?: number | null;
+  sponsor_start_at?: string | null;
+  sponsorStartAt?: string | null;
+  sponsor_end_at?: string | null;
+  sponsorEndAt?: string | null;
+  is_sponsored?: boolean;
+  isSponsored?: boolean;
   icon?: string;
   screenshots?: string[];
   features?: string[];

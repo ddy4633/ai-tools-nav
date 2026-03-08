@@ -296,3 +296,60 @@ interface Category {
 ---
 
 **最后更新**: 2026-02-25
+
+---
+
+## HTTP API
+
+### `/api/tools`
+
+获取前台工具列表与赞助位数据。
+
+**请求方式**:
+
+```http
+GET /api/tools
+```
+
+**查询参数**:
+
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `type` | string | 否 | `all` | 可选：`all`、`trending`、`featured`、`sponsored` |
+| `limit` | number | 否 | `100` | 返回数量上限，范围 `1~200` |
+| `category` | string | 否 | - | 分类 slug 或分类名称，如 `code`、`AI编程` |
+| `sponsor_type` | string | 否 | - | 仅 `type=sponsored` 时生效，可选：`all`、`featured_listing`、`homepage_spotlight`、`category_spotlight`、`newsletter_spotlight` |
+| `active_only` | boolean | 否 | `true` | 仅 `type=sponsored` 时生效，是否只返回当前生效赞助位 |
+
+**示例**:
+
+```bash
+/api/tools?type=sponsored&sponsor_type=homepage_spotlight&active_only=true&limit=3
+/api/tools?type=sponsored&category=code&sponsor_type=category_spotlight&limit=5
+/api/tools?type=all&category=writing&limit=20
+```
+
+**返回结构**:
+
+```json
+{
+  "success": true,
+  "data": [],
+  "count": 3,
+  "filters": {
+    "type": "sponsored",
+    "limit": 3,
+    "category": "code",
+    "sponsorType": "category_spotlight",
+    "activeOnly": true
+  },
+  "timestamp": "2026-03-08T00:00:00.000Z"
+}
+```
+
+**典型场景**:
+
+- 首页赞助区块取数
+- 分类赞助位编排
+- 后续后台运营面板取数
+- 商务排期预览与排查

@@ -6,6 +6,7 @@ import { EditorPick } from '@/types/tool';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import ToolLogo from '@/components/ui/ToolLogo';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 
 interface EditorPicksProps {
   picks: EditorPick[];
@@ -152,6 +153,21 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                         @ {pick.editor.name}
                       </p>
                     </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-border-subtle flex items-center justify-between gap-3">
+                    <Link
+                      href={`/tools/${pick.tool.id}`}
+                      className="inline-flex items-center gap-1 text-xs font-mono text-accent-cyan hover:opacity-80 transition-opacity"
+                    >
+                      查看详情
+                    </Link>
+                    <ToolPrimaryCta
+                      tool={pick.tool}
+                      placement="home_editor_pick_primary_cta"
+                      affiliateLabel="合作链接"
+                      websiteLabel="官网"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-lg border border-accent-cyan/40 text-accent-cyan hover:bg-accent-cyan/10 transition-colors"
+                    />
                   </div>
                 </div>
               </div>

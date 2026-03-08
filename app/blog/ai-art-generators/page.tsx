@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { toolsData } from '@/lib/content/tools-data';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import { 
   Paintbrush, 
   Star, 
@@ -10,8 +12,7 @@ import {
   ArrowRight,
   Sparkles,
   Palette,
-  Image as ImageIcon,
-  ExternalLink
+  Image as ImageIcon
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -28,6 +29,16 @@ export const metadata: Metadata = {
     type: 'article',
   },
 };
+
+const indexedToolIds = new Set(toolsData.map((tool) => tool.id));
+
+function getToolDetailHref(id: string, name: string) {
+  if (indexedToolIds.has(id)) {
+    return `/tools/${id}`;
+  }
+
+  return `/tools?search=${encodeURIComponent(name)}`;
+}
 
 // AI绘画工具数据
 const aiArtTools = [
@@ -272,17 +283,13 @@ export default function AIArtGeneratorsPage() {
 
                 {/* 操作按钮 */}
                 <div className="flex gap-3">
-                  <a
-                    href={tool.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <ToolPrimaryCta
+                    tool={tool}
+                    placement="blog_art_primary_cta"
                     className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    访问官网
-                  </a>
+                  />
                   <Link
-                    href="/tools"
+                    href={getToolDetailHref(tool.id, tool.name)}
                     className="px-4 py-2 border border-border-light text-text-secondary text-sm font-medium rounded-lg hover:border-purple-500 hover:text-purple-500 transition-colors"
                   >
                     查看详情

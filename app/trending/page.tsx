@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
 import { getTrendingTools } from '@/lib/supabase';
 import Link from 'next/link';
-import { ArrowRight, Home, TrendingUp, Star, GitFork } from 'lucide-react';
+import { ArrowRight, Home, TrendingUp, Star, GitFork, Github } from 'lucide-react';
 import type { TrendingTool } from '@/types/tool';
+import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 
 export const metadata: Metadata = {
   title: '热门 AI工具排行 - 最受欢迎的人工智能工具 | AI工具导航',
@@ -25,7 +27,6 @@ export default async function TrendingPage() {
   return (
     <div className="min-h-screen bg-bg-primary">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* 面包屑导航 */}
         <nav className="flex items-center gap-2 text-sm text-text-muted mb-8">
           <Link href="/" className="flex items-center gap-1 hover:text-accent-warm transition-colors">
             <Home className="w-4 h-4" />
@@ -35,7 +36,6 @@ export default async function TrendingPage() {
           <span className="text-text-primary">热门排行</span>
         </nav>
 
-        {/* 页面标题 */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp className="w-8 h-8 text-accent-warm" />
@@ -49,7 +49,6 @@ export default async function TrendingPage() {
           </p>
         </div>
 
-        {/* 排行说明 */}
         <div className="bg-white rounded-xl p-4 shadow-soft mb-8">
           <div className="flex flex-wrap items-center gap-4">
             <span className="text-sm text-text-muted">热度等级：</span>
@@ -61,21 +60,19 @@ export default async function TrendingPage() {
           </div>
         </div>
 
-        {/* 工具排行列表 */}
         {tools.length > 0 ? (
           <div className="space-y-4">
             {tools.map((tool: TrendingTool, index: number) => {
               const tier = tierLabels[tool.tier] || tierLabels['⭐ STABLE'];
               const hasMetrics = tool.metrics?.github?.stars > 0;
-              
+              const detailHref = `/tools/${tool.id}`;
+
               return (
-                <Link
+                <div
                   key={tool.id}
-                  href={`/tools/${tool.id}`}
-                  className="group block bg-white rounded-xl p-6 shadow-soft hover:shadow-hover border border-transparent hover:border-accent-warm/20 transition-all"
+                  className="group bg-white rounded-xl p-6 shadow-soft hover:shadow-hover border border-transparent hover:border-accent-warm/20 transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    {/* 排名 */}
                     <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-bg-primary flex items-center justify-center">
                       <span className={`text-xl font-bold ${
                         index < 3 ? 'text-accent-warm' : 'text-text-muted'
@@ -85,11 +82,13 @@ export default async function TrendingPage() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-start justify-between mb-2 gap-4">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors">
-                            {tool.name}
-                          </h3>
+                          <Link href={detailHref} className="hover:text-accent-warm transition-colors">
+                            <h3 className="text-lg font-medium text-text-primary group-hover:text-accent-warm transition-colors">
+                              {tool.name}
+                            </h3>
+                          </Link>
                           <span className={`text-xs px-2 py-0.5 rounded ${tier.className}`}>
                             {tier.text}
                           </span>
@@ -99,18 +98,36 @@ export default async function TrendingPage() {
                           <span>热度 {tool.hype_score}</span>
                         </div>
                       </div>
-                      
+
                       <p className="text-text-secondary text-sm mb-3 line-clamp-2">
                         {tool.one_liner || tool.description}
                       </p>
 
-                      {/* 指标 */}
-                      {hasMetrics && (
-                        <div className="flex items-center gap-4 text-xs text-text-muted">
-                          <div className="flex items-center gap-1">
-                            <Star className="w-3 h-3" />
-                            <span>{tool.metrics.github.stars.toLocaleString()} stars</span>
-                          </div>
+                      {hasMetrics && tool.metrics?.github && (
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted">
+                          {tool.repo_url ? (
+                            <TrackedExternalLink
+                              href={tool.repo_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              trackingPayload={{
+                                placement: 'trending_page_repo_metric',
+                                toolId: tool.id,
+                                toolName: tool.name,
+                                targetUrl: tool.repo_url,
+                                isAffiliate: false,
+                              }}
+                              className="flex items-center gap-1 hover:text-accent-warm transition-colors"
+                            >
+                              <Github className="w-3 h-3" />
+                              <span>{tool.metrics.github.stars.toLocaleString()} stars</span>
+                            </TrackedExternalLink>
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <Star className="w-3 h-3" />
+                              <span>{tool.metrics.github.stars.toLocaleString()} stars</span>
+                            </div>
+                          )}
                           {tool.metrics.github.forks > 0 && (
                             <div className="flex items-center gap-1">
                               <GitFork className="w-3 h-3" />
@@ -125,7 +142,7 @@ export default async function TrendingPage() {
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-bg-primary">
+                      <div className="flex flex-wrap items-center justify-between gap-3 mt-3 pt-3 border-t border-bg-primary">
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-text-muted bg-bg-secondary px-2 py-1 rounded">
                             {tool.category}
@@ -136,14 +153,26 @@ export default async function TrendingPage() {
                             </span>
                           )}
                         </div>
-                        <span className="flex items-center gap-1 text-xs text-accent-warm opacity-0 group-hover:opacity-100 transition-opacity">
-                          查看详情
-                          <ArrowRight className="w-3 h-3" />
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <ToolPrimaryCta
+                            tool={tool}
+                            placement="trending_page_primary_cta"
+                            affiliateLabel="合作链接"
+                            websiteLabel="官网"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-accent-warm/30 text-accent-warm hover:bg-accent-warm/10 transition-colors"
+                          />
+                          <Link
+                            href={detailHref}
+                            className="inline-flex items-center gap-1 text-xs text-accent-warm hover:text-accent-warm-hover transition-colors"
+                          >
+                            查看详情
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
@@ -162,7 +191,6 @@ export default async function TrendingPage() {
           </div>
         )}
 
-        {/* 返回首页 */}
         <div className="mt-12 text-center">
           <Link
             href="/"

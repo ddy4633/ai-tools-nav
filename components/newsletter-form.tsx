@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Mail, Check, AlertCircle } from 'lucide-react';
+import { subscribeToNewsletterApi, validateEmail } from '@/lib/newsletter/client';
 
 interface NewsletterFormProps {
   variant?: 'default' | 'inline' | 'minimal';
@@ -12,20 +13,18 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
-  const validateEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email.trim()) {
+
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
       setStatus('error');
       setMessage('请输入邮箱地址');
       return;
     }
 
-    if (!validateEmail(email)) {
+    if (!validateEmail(trimmedEmail)) {
       setStatus('error');
       setMessage('请输入有效的邮箱地址');
       return;
@@ -35,22 +34,20 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
     setMessage('');
 
     try {
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 存储到localStorage（实际项目中应发送到后端）
-      const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
-      if (subscribers.includes(email)) {
+      const result = await subscribeToNewsletterApi({
+        email: trimmedEmail,
+        source: `newsletter_form_${variant}`,
+        tags: ['site-newsletter', variant],
+      });
+
+      if (!result.success) {
         setStatus('error');
-        setMessage('您已经订阅过了');
+        setMessage(result.message || '订阅失败，请稍后重试');
         return;
       }
-      
-      subscribers.push(email);
-      localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
-      
+
       setStatus('success');
-      setMessage('订阅成功！感谢您的关注');
+      setMessage(result.message || '订阅成功！感谢您的关注');
       setEmail('');
     } catch {
       setStatus('error');
@@ -60,53 +57,60 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
 
   if (variant === 'minimal') {
     return (
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="输入邮箱订阅"
-          className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:border-white/40"
-        />
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="px-4 py-2 bg-white text-accent-warm font-medium rounded-lg hover:bg-white/90 disabled:opacity-50 transition-colors"
-        >
-          {status === 'loading' ? '...' : '订阅'}
-        </button>
-        {status === 'success' && (
-          <Check className="w-5 h-5 text-green-400" />
-        )}
-      </form>
+      <div>
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="输入邮箱订阅"
+            className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:border-white/40"
+          />
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="px-4 py-2 bg-white text-accent-warm font-medium rounded-lg hover:bg-white/90 disabled:opacity-50 transition-colors"
+          >
+            {status === 'loading' ? '...' : '订阅'}
+          </button>
+          {status === 'success' && (
+            <Check className="w-5 h-5 text-green-400" />
+          )}
+        </form>
+        {status === 'error' && <p className="mt-2 text-sm text-red-300">{message}</p>}
+      </div>
     );
   }
 
   if (variant === 'inline') {
     return (
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">
-        <div className="flex-1 relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            className="w-full pl-10 pr-4 py-3 bg-bg-secondary border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm transition-colors"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover disabled:opacity-50 transition-colors whitespace-nowrap"
-        >
-          {status === 'loading' ? '订阅中...' : '立即订阅'}
-        </button>
-      </form>
+      <div>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">
+          <div className="flex-1 relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="w-full pl-10 pr-4 py-3 bg-bg-secondary border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm transition-colors"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover disabled:opacity-50 transition-colors whitespace-nowrap"
+          >
+            {status === 'loading' ? '订阅中...' : '立即订阅'}
+          </button>
+        </form>
+        {status !== 'idle' && status !== 'loading' && (
+          <p className={`mt-3 text-sm ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}>{message}</p>
+        )}
+      </div>
     );
   }
 
-  // default variant
   return (
     <div className="bg-gradient-to-br from-accent-warm/5 to-accent-cool/5 rounded-2xl p-8 border border-border-light">
       <div className="flex items-center gap-3 mb-4">
