@@ -1,576 +1,428 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { toolsData } from '@/lib/content/tools-data';
-import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
-import { 
-  PenTool, 
-  Star, 
-  Zap, 
-  DollarSign, 
-  CheckCircle, 
-  XCircle,
+import {
   ArrowRight,
-  Sparkles,
+  CheckCircle2,
   FileText,
-  Lightbulb,
-  Briefcase,
-  GraduationCap
+  GraduationCap,
+  PenTool,
+  Sparkles,
+  Star,
+  XCircle,
 } from 'lucide-react';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import ToolLogo from '@/components/ui/ToolLogo';
+import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: '免费AI写作工具 - 2025最好用的AI写作软件推荐 | AI工具导航',
-  description: '精选2025年最值得使用的免费AI写作工具，包含ChatGPT、Claude、Notion AI等AI写作软件的详细评测、功能对比和使用场景指南。',
-  keywords: ['免费AI写作工具', 'AI写作软件', 'AI写作助手', 'ChatGPT写作', 'Claude写作', 'AI文案生成', '免费AI写作'],
+  title: '免费 AI 写作工具推荐 - 2026 值得先试的 8 个选择',
+  description: '从 ChatGPT、Claude 到 Notion AI，按预算、写作深度和团队场景拆解 2026 年值得先试的 AI 写作工具。',
+  keywords: ['免费AI写作工具', 'AI写作软件', 'AI写作助手', 'ChatGPT写作', 'Claude写作', 'AI文案生成'],
   alternates: {
-    canonical: 'https://ai.poph163.com/blog/ai-writing-tools-free',
+    canonical: buildSiteUrl('/blog/ai-writing-tools-free'),
   },
   openGraph: {
-    title: '免费AI写作工具 - 2025最好用的AI写作软件推荐',
-    description: '精选最好的免费AI写作工具，功能对比评测与使用指南',
-    url: 'https://ai.poph163.com/blog/ai-writing-tools-free',
+    title: '免费 AI 写作工具推荐 - 2026 值得先试的 8 个选择',
+    description: '按预算、写作深度和团队场景拆解值得先试的 AI 写作工具。',
+    url: buildSiteUrl('/blog/ai-writing-tools-free'),
     type: 'article',
   },
 };
 
-const indexedToolIds = new Set(toolsData.map((tool) => tool.id));
+const pricingStyles: Record<string, string> = {
+  免费: 'border-accent-cyan/30 bg-accent-cyan/10 text-accent-cyan',
+  免费试用: 'border-accent-yellow/30 bg-accent-yellow/10 text-accent-yellow',
+  付费: 'border-accent-pink/30 bg-accent-pink/10 text-accent-pink',
+};
 
-function getToolDetailHref(id: string, name: string) {
-  if (indexedToolIds.has(id)) {
-    return `/tools/${id}`;
-  }
-
-  return `/tools?search=${encodeURIComponent(name)}`;
-}
-
-// 免费AI写作工具数据
 const aiWritingTools = [
   {
     id: 'chatgpt',
     name: 'ChatGPT',
-    description: 'OpenAI开发的AI聊天助手，具备强大的写作和文本生成能力，支持中文内容创作，免费版功能已足够日常使用。',
+    description: '最稳的通用写作入口，适合从提纲、初稿到改写润色的整条链路。',
     pricing: '免费试用',
-    priceDetail: '免费版GPT-3.5可用',
+    priceDetail: '免费版可起步，Plus 升级空间明确',
     rating: 4.8,
-    features: ['多语言写作', '文章续写', '文案优化', '翻译润色', '代码文档'],
-    pros: ['中文写作流畅', '免费版功能强大', '上下文理解好', '多场景适用'],
-    cons: ['高峰期需排队', '偶尔产生幻觉', '长文本有限制'],
-    bestFor: '日常写作、文案创作、内容优化、学生作业',
+    features: ['多语言写作', '文章续写', '文案优化', '翻译润色'],
+    pros: ['中文写作流畅', '通用性最强', '适合从零开始搭框架'],
+    cons: ['高峰时段波动明显', '偶尔会生成过度顺滑的空话'],
+    bestFor: '通用内容写作、自由职业者、需要快速出初稿的人',
     website: 'https://chat.openai.com',
   },
   {
     id: 'claude',
     name: 'Claude',
-    description: 'Anthropic开发的AI助手，以长文本处理和深度分析能力著称，写作风格细腻，特别适合深度内容创作。',
+    description: '更适合长文、深度稿和研究类材料，结构感和长文本处理都更稳。',
     pricing: '免费试用',
-    priceDetail: '免费版有使用限额',
+    priceDetail: '免费额度可试，重度用需要升级',
     rating: 4.9,
-    features: ['超长文本处理', '深度分析写作', '学术写作', '创意写作', '文档总结'],
-    pros: ['200K超长上下文', '中文表达优美', '逻辑严谨', '诚实可靠'],
-    cons: ['免费版限额严格', '无实时联网', '响应速度较慢'],
-    bestFor: '学术论文、深度文章、研究报告、长文档处理',
+    features: ['长文本处理', '深度分析写作', '学术写作', '文档总结'],
+    pros: ['长上下文优势明显', '逻辑严谨', '长稿更少跑偏'],
+    cons: ['免费额度更克制', '实时联网场景不占优'],
+    bestFor: '论文、报告、白皮书、长文改写与深度写作',
     website: 'https://claude.ai',
   },
   {
     id: 'notion-ai',
     name: 'Notion AI',
-    description: '集成在Notion笔记中的AI写作助手，可快速生成内容、续写、翻译和总结，与笔记工作流无缝结合。',
+    description: '适合已经在 Notion 里工作的团队，把写作和知识管理直接连在一起。',
     pricing: '免费试用',
-    priceDetail: '免费用户有试用额度',
+    priceDetail: '试用后更适合团队协作场景',
     rating: 4.5,
-    features: ['笔记内嵌AI', '内容续写', '头脑风暴', '语法检查', '多语言翻译'],
-    pros: ['与工作流整合', '操作便捷', '模板丰富', '协作友好'],
-    cons: ['需Notion账户', '免费额度有限', '重度使用需付费'],
-    bestFor: '笔记整理、团队协作、知识管理、项目文档',
+    features: ['笔记内嵌 AI', '内容续写', '头脑风暴', '多语言翻译'],
+    pros: ['工作流整合好', '多人协作自然', '适合会议与文档'],
+    cons: ['离开 Notion 场景价值会下降', '单点能力不算极强'],
+    bestFor: '团队协作、项目文档、知识库运营',
     website: 'https://www.notion.so/product/ai',
   },
   {
     id: 'jasper',
     name: 'Jasper',
-    description: '专注于营销文案的AI写作工具，提供丰富的模板和创作框架，帮助快速生成高质量营销内容。',
+    description: '更偏营销团队，适合做品牌语气稳定、模板化批量输出和广告文案。',
     pricing: '付费',
-    priceDetail: '提供7天免费试用',
+    priceDetail: '更适合商业团队而不是轻量个人用户',
     rating: 4.4,
-    features: ['营销模板库', 'SEO优化', '品牌语调', '多语言支持', '团队协作'],
-    pros: ['营销场景专业', '模板丰富', 'SEO友好', '支持批量生成'],
-    cons: ['无永久免费版', '价格较高', '学习成本略高'],
-    bestFor: '营销人员、内容营销、社交媒体、广告文案',
+    features: ['营销模板库', 'SEO 优化', '品牌语调', '团队协作'],
+    pros: ['营销模板专业', '品牌一致性更好', '适合批量生产'],
+    cons: ['价格较高', '不适合作为零预算起步工具'],
+    bestFor: '营销团队、内容运营、电商与品牌文案',
     website: 'https://www.jasper.ai',
   },
   {
     id: 'copy-ai',
     name: 'Copy.ai',
-    description: '专注于营销和销售文案的AI写作工具，提供90+内容模板，免费版每月提供2000字额度。',
+    description: '模板多、上手快，适合需要短平快写出销售或营销材料的团队。',
     pricing: '免费试用',
-    priceDetail: '每月2000字免费',
+    priceDetail: '免费额度适合低成本试错',
     rating: 4.3,
-    features: ['90+内容模板', '博客写作', '社交媒体', '邮件营销', '产品描述'],
-    pros: ['免费额度实在', '模板丰富', '营销导向', '界面友好'],
-    cons: ['中文支持一般', '创意类内容较弱', '免费版功能受限'],
-    bestFor: '营销文案、电商内容、社交媒体运营、英文写作',
+    features: ['内容模板', '博客写作', '社交媒体', '产品描述'],
+    pros: ['模板丰富', '适合短内容', '试错成本低'],
+    cons: ['中文上限一般', '深度写作能力不足'],
+    bestFor: '营销短内容、社媒运营、轻量商用文案',
     website: 'https://www.copy.ai',
   },
   {
     id: 'quillbot',
     name: 'QuillBot',
-    description: '专业的改写和润色工具，提供改写、语法检查、总结和引用生成等功能，学术写作的好帮手。',
+    description: '更偏“改”而不是“写”，适合改写、降重、润色和学术表达修正。',
     pricing: '免费试用',
-    priceDetail: '基础功能免费',
+    priceDetail: '基础改写功能足够常用',
     rating: 4.2,
-    features: ['智能改写', '语法检查', '文本总结', '引用生成', '同义词替换'],
-    pros: ['改写功能强大', '学术写作友好', '浏览器插件', '免费版够用'],
-    cons: ['中文支持有限', '生成类功能弱', '创意写作一般'],
-    bestFor: '论文改写、降重、语法检查、学术写作',
+    features: ['智能改写', '语法检查', '文本总结', '引用生成'],
+    pros: ['改写强', '适合论文与英文内容', '浏览器插件方便'],
+    cons: ['不适合做主写作工具', '中文能力有限'],
+    bestFor: '论文改写、降重、英文润色与校对',
     website: 'https://quillbot.com',
   },
   {
     id: 'writesonic',
     name: 'Writesonic',
-    description: '全能型AI写作平台，支持博客、广告、电商等多种场景，免费版每月提供10000字额度。',
+    description: '偏全能型平台，适合博客 SEO、电商页面和带流量目标的内容团队。',
     pricing: '免费试用',
-    priceDetail: '每月10000字免费',
+    priceDetail: '免费额度适合验证是否匹配工作流',
     rating: 4.1,
-    features: ['博客写作', 'SEO优化', '电商文案', '聊天机器人', '图片生成'],
-    pros: ['免费额度大', '功能全面', 'SEO工具', '支持Chatsonic对话'],
-    cons: ['中文质量一般', '高级功能付费', '界面稍显复杂'],
-    bestFor: '博客作者、电商卖家、SEO内容、英文创作',
+    features: ['博客写作', 'SEO 优化', '电商文案', '聊天助手'],
+    pros: ['SEO 场景友好', '模块多', '适合增长团队'],
+    cons: ['界面复杂', '中文质量不够稳定'],
+    bestFor: '博客 SEO、电商团队、偏增长导向的内容运营',
     website: 'https://writesonic.com',
   },
   {
     id: 'rytr',
     name: 'Rytr',
-    description: '性价比高的AI写作工具，支持40+场景模板，免费版每月可生成10000字符，适合轻量用户。',
+    description: '便宜、简单，适合轻量级使用者先建立 AI 写作习惯。',
     pricing: '免费试用',
-    priceDetail: '每月10000字符免费',
+    priceDetail: '更像低成本起步工具',
     rating: 4.0,
-    features: ['40+写作场景', '多语言支持', '语气调整', '改写功能', '团队协作'],
-    pros: ['免费额度充足', '价格实惠', '场景丰富', '简单易用'],
-    cons: ['中文质量一般', '深度内容弱', 'UI设计简单'],
-    bestFor: '轻量写作、邮件撰写、社交媒体、创意写作',
+    features: ['场景模板', '语气调整', '改写功能', '多语言支持'],
+    pros: ['上手门槛低', '价格友好', '适合轻度写作者'],
+    cons: ['深度内容能力弱', '不适合高标准品牌内容'],
+    bestFor: '轻量写作、邮件、社媒和个人试用',
     website: 'https://rytr.me',
   },
 ];
 
+const quickDecisions = [
+  {
+    title: '零预算先试',
+    description: '先从 ChatGPT 或 Claude 开始，建立自己的提问和改稿习惯。',
+  },
+  {
+    title: '长文和深度稿',
+    description: 'Claude 更适合报告、论文、研究材料和长文结构整理。',
+  },
+  {
+    title: '营销团队',
+    description: 'Jasper 和 Copy.ai 更适合模板化产出和品牌语气管理。',
+  },
+];
+
+const scenarioSuggestions = [
+  {
+    title: '学术写作',
+    icon: GraduationCap,
+    description: 'Claude + QuillBot 的组合更适合长文理解、改写和降重。',
+  },
+  {
+    title: '内容团队',
+    icon: FileText,
+    description: 'ChatGPT 负责起稿，Notion AI 负责协作整理，是更稳的组合。',
+  },
+  {
+    title: '营销输出',
+    icon: PenTool,
+    description: 'Jasper、Copy.ai 更适合广告文案、社媒内容和批量营销稿。',
+  },
+];
+
+const aiWritingToolCards = aiWritingTools.map((tool) => ({
+  ...tool,
+  ...getToolCardData(tool),
+}));
+
 export default function AIWritingToolsFreePage() {
   return (
     <div className="min-h-screen bg-bg-primary">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border-light">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-warm/5 via-transparent to-accent-cool/5" />
-        <div className="container mx-auto px-4 py-16 sm:py-20 relative">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-warm/10 rounded-full text-accent-warm text-sm font-medium mb-6">
-              <PenTool className="w-4 h-4" />
-              AI写作工具
+      <PageHero
+        eyebrow="AI 写作专题"
+        title="免费 AI 写作工具"
+        highlight="先看适合谁，再看能写什么。"
+        description="真正影响写作效率的，不是工具数量，而是你能不能快速找到和自己工作流匹配的那一类。这个页面按预算、写作深度和团队场景来拆，不再只堆工具名。"
+        metrics={[
+          { value: `${aiWritingTools.length}`, label: '重点工具', hint: '覆盖通用写作、深度写作和营销团队场景。' },
+          { value: '零预算 / 长文 / 营销', label: '主要筛选维度', hint: '先按用途看，再按价格看。' },
+          { value: '对比表 + 场景建议', label: '内容结构', hint: '帮助你 5 分钟内完成第一轮判断。' },
+        ]}
+        actions={[
+          { href: '/tools?category=writing', label: '查看全部写作工具', tone: 'secondary' },
+          { href: '/advertise', label: '做专题合作', tone: 'primary' },
+        ]}
+        aside={
+          <div>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              先看结论
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">
-              免费AI写作工具推荐
-            </h1>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              精选2025年最值得使用的免费AI写作工具，从日常写作到专业创作，
-              帮你找到最适合的AI写作助手，提升写作效率10倍
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-12">
-        {/* 介绍部分 */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="bg-surface-card rounded-2xl p-8 border border-border-light">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <Sparkles className="w-6 h-6 text-accent-warm" />
-              为什么要使用AI写作工具？
-            </h2>
-            <div className="prose prose-lg max-w-none text-text-secondary space-y-4">
-              <p>
-                AI写作工具正在 revolutionize 内容创作的方式。无论你是学生、职场人士、
-                内容创作者还是专业写作者，AI写作助手都能帮你：
-              </p>
-              <ul className="space-y-2 list-disc list-inside">
-                <li><strong>克服写作障碍</strong>：输入关键词或大纲，AI帮你快速生成初稿</li>
-                <li><strong>提升写作效率</strong>：将数小时的写作任务缩短到几分钟</li>
-                <li><strong>优化内容质量</strong>：自动检查语法、润色表达、调整语气</li>
-                <li><strong>多语言创作</strong>：轻松将内容翻译成多种语言或进行本地化</li>
-                <li><strong>激发创意灵感</strong>：AI提供不同角度的观点和表达方式</li>
-              </ul>
-              <p>
-                本页面为你整理了<strong>8款最值得推荐的免费AI写作工具</strong>，
-                包括ChatGPT、Claude、Notion AI等热门选择，以及Copy.ai、QuillBot等专业工具。
-                每款工具都有详细的功能介绍、优缺点分析和适用场景建议。
-              </p>
+            <div className="mt-5 space-y-3">
+              {quickDecisions.map((item) => (
+                <div key={item.title} className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <p className="text-sm font-medium text-text-primary">{item.title}</p>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        }
+      />
 
-        {/* 推荐工具列表 */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-            推荐免费AI写作工具
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {aiWritingTools.map((tool) => (
-              <div
-                key={tool.id}
-                className="bg-surface-card rounded-2xl p-6 border border-border-light hover:border-accent-warm/30 transition-all hover:shadow-lg"
-              >
-                <div className="flex items-start justify-between mb-4">
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="工具清单"
+          title="值得先试的 AI 写作工具"
+          description="每张卡片都围绕同一个问题：它适合谁，优点在哪里，缺点会不会影响你的工作流。"
+        />
+
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {aiWritingToolCards.map((tool) => (
+            <article key={tool.id} className="rounded-[30px] border border-white/10 bg-white/5 p-6 transition hover:border-white/16">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <ToolLogo
+                    name={tool.name}
+                    icon={tool.icon}
+                    size={56}
+                    wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/20"
+                    imageClassName="h-10 w-10"
+                    textClassName="text-lg text-text-primary"
+                  />
                   <div>
-                    <h3 className="text-xl font-bold text-text-primary mb-1">{tool.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                        tool.pricing === '免费' 
-                          ? 'bg-green-500/10 text-green-600' 
-                          : tool.pricing === '免费试用'
-                          ? 'bg-yellow-500/10 text-yellow-600'
-                          : 'bg-accent-warm/10 text-accent-warm'
-                      }`}>
+                    <h2 className="text-2xl font-semibold text-text-primary">{tool.name}</h2>
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span className={`rounded-full border px-2.5 py-1 text-xs ${pricingStyles[tool.pricing] ?? pricingStyles['免费试用']}`}>
                         {tool.pricing}
                       </span>
                       <span className="text-xs text-text-muted">{tool.priceDetail}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <span className="text-sm font-semibold text-text-primary">{tool.rating}</span>
-                  </div>
                 </div>
-
-                <p className="text-text-secondary text-sm mb-4 leading-relaxed">
-                  {tool.description}
-                </p>
-
-                {/* 功能标签 */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {tool.features.map((feature) => (
-                    <span
-                      key={feature}
-                      className="px-2 py-1 bg-surface-base text-text-secondary text-xs rounded-md"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-
-                {/* 优缺点 */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <p className="text-xs font-medium text-green-600 mb-2 flex items-center gap-1">
-                      <CheckCircle className="w-3 h-3" />
-                      优点
-                    </p>
-                    <ul className="text-xs text-text-secondary space-y-1">
-                      {tool.pros.map((pro) => (
-                        <li key={pro}>• {pro}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-red-500 mb-2 flex items-center gap-1">
-                      <XCircle className="w-3 h-3" />
-                      缺点
-                    </p>
-                    <ul className="text-xs text-text-secondary space-y-1">
-                      {tool.cons.map((con) => (
-                        <li key={con}>• {con}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* 适用场景 */}
-                <div className="bg-accent-warm/5 rounded-lg p-3 mb-4">
-                  <p className="text-xs text-text-secondary">
-                    <strong>适用：</strong>{tool.bestFor}
-                  </p>
-                </div>
-
-                {/* 操作按钮 */}
-                <div className="flex gap-3">
-                  <ToolPrimaryCta
-                    tool={tool}
-                    placement="blog_writing_primary_cta"
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-accent-warm text-white text-sm font-medium rounded-lg hover:bg-accent-warm-hover transition-colors"
-                  />
-                  <Link
-                    href={getToolDetailHref(tool.id, tool.name)}
-                    className="px-4 py-2 border border-border-light text-text-secondary text-sm font-medium rounded-lg hover:border-accent-warm hover:text-accent-warm transition-colors"
-                  >
-                    查看详情
-                  </Link>
+                <div className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-primary">
+                  {tool.rating.toFixed(1)}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* 对比表格 */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-            AI写作工具对比表
-          </h2>
-          
-          <div className="bg-surface-card rounded-2xl border border-border-light overflow-hidden overflow-x-auto">
-            <table className="w-full min-w-[800px]">
+              <p className="mt-4 text-sm leading-7 text-text-secondary">{tool.description}</p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {tool.features.map((feature) => (
+                  <span
+                    key={feature}
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <div className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <div className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckCircle2 className="h-4 w-4 text-accent-cyan" />
+                    优点
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-text-secondary">
+                    {tool.pros.map((pro) => (
+                      <li key={pro}>+ {pro}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <div className="flex items-center gap-2 text-sm text-text-primary">
+                    <XCircle className="h-4 w-4 text-accent-pink" />
+                    缺点
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-text-secondary">
+                    {tool.cons.map((con) => (
+                      <li key={con}>- {con}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-[22px] border border-white/8 bg-black/10 p-4 text-sm leading-7 text-text-secondary">
+                <strong className="text-text-primary">更适合：</strong>
+                {tool.bestFor}
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-3">
+                <ToolPrimaryCta
+                  tool={tool}
+                  placement="blog_writing_primary_cta"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                />
+                <Link
+                  href={getToolDetailHref(tool.id, tool.name)}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                >
+                  查看详情
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="横向对比"
+            title="一张表看完第一轮差异"
+            description="这张表不是为了取代详情页，而是为了帮你先剔除明显不合适的选项。"
+          />
+
+          <div className="mt-10 overflow-x-auto rounded-[30px] border border-white/10 bg-white/5">
+            <table className="w-full min-w-[880px]">
               <thead>
-                <tr className="bg-surface-base border-b border-border-light">
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">工具名称</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">价格</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">核心功能</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">中文支持</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">最佳适用</th>
+                <tr className="border-b border-white/8 bg-black/10">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">工具</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">价格</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">更擅长</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">中文表现</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">适合谁</th>
                 </tr>
               </thead>
               <tbody>
-                {aiWritingTools.map((tool, index) => (
-                  <tr 
-                    key={tool.id} 
-                    className={`border-b border-border-light last:border-b-0 ${index % 2 === 1 ? 'bg-surface-base/30' : ''}`}
-                  >
+                {aiWritingToolCards.map((tool, index) => (
+                  <tr key={tool.id} className={index % 2 === 1 ? 'bg-black/10' : ''}>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-text-primary">{tool.name}</div>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                        <span className="text-xs text-text-muted">{tool.rating}</span>
+                      <div className="flex items-center gap-3">
+                        <ToolLogo
+                          name={tool.name}
+                          icon={tool.icon}
+                          size={32}
+                          wrapperClassName="h-9 w-9 rounded-xl border border-white/10 bg-black/20"
+                          imageClassName="h-6 w-6"
+                          textClassName="text-sm text-text-primary"
+                        />
+                        <div>
+                          <div className="font-medium text-text-primary">{tool.name}</div>
+                          <div className="mt-1 flex items-center gap-1 text-xs text-text-muted">
+                            <Star className="h-3 w-3 text-accent-yellow fill-accent-yellow" />
+                            {tool.rating.toFixed(1)}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                        tool.pricing === '免费' 
-                          ? 'bg-green-500/10 text-green-600' 
-                          : tool.pricing === '免费试用'
-                          ? 'bg-yellow-500/10 text-yellow-600'
-                          : 'bg-accent-warm/10 text-accent-warm'
-                      }`}>
+                      <span className={`rounded-full border px-2.5 py-1 text-xs ${pricingStyles[tool.pricing] ?? pricingStyles['免费试用']}`}>
                         {tool.pricing}
                       </span>
-                      <div className="text-xs text-text-muted mt-1">{tool.priceDetail}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1">
-                        {tool.features.slice(0, 2).map((feature) => (
-                          <span key={feature} className="text-xs text-text-secondary bg-surface-base px-2 py-0.5 rounded">
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
+                    <td className="px-6 py-4 text-sm text-text-secondary">{tool.features.slice(0, 2).join(' / ')}</td>
+                    <td className="px-6 py-4 text-sm text-text-secondary">
+                      {['chatgpt', 'claude', 'notion-ai'].includes(tool.id) ? '较强' : tool.id === 'jasper' ? '一般' : '有限'}
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={`text-xs ${
-                        tool.id === 'chatgpt' || tool.id === 'claude'
-                          ? 'text-green-600'
-                          : tool.id === 'notion-ai'
-                          ? 'text-green-600'
-                          : 'text-yellow-600'
-                      }`}>
-                        {tool.id === 'chatgpt' || tool.id === 'claude' || tool.id === 'notion-ai' ? '优秀'
-                          : tool.id === 'jasper' ? '一般'
-                          : '有限'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-xs text-text-secondary line-clamp-2">
-                        {tool.bestFor}
-                      </span>
-                    </td>
+                    <td className="px-6 py-4 text-sm text-text-secondary">{tool.bestFor}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
+      </section>
 
-        {/* 使用场景建议 */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold text-text-primary mb-8 text-center">
-            不同场景的AI写作工具选择建议
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
-                <GraduationCap className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">学术写作</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                推荐使用 <strong>Claude</strong>（长文档处理）+ <strong>QuillBot</strong>（改写润色）。
-                这对组合能帮你完成从论文初稿到降重的全流程。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium inline-flex items-center gap-1"
-              >
-                查看学术工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="适用场景"
+            title="按场景更容易选对"
+            description="如果你不是来研究工具，而是想尽快开始干活，就直接从自己的场景切入。"
+          />
 
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-accent-warm/10 rounded-xl flex items-center justify-center mb-4">
-                <Briefcase className="w-6 h-6 text-accent-warm" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">职场办公</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                推荐使用 <strong>Notion AI</strong>（工作流整合）+ <strong>ChatGPT</strong>（全能助手）。
-                适合会议纪要、报告撰写、邮件处理等场景。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium inline-flex items-center gap-1"
-              >
-                查看办公工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-4">
-                <Lightbulb className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">营销创作</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                推荐使用 <strong>Jasper</strong>（专业营销）+ <strong>Copy.ai</strong>（模板丰富）。
-                专注于广告文案、社媒内容和产品描述的批量生成。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium inline-flex items-center gap-1"
-              >
-                查看营销工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {scenarioSuggestions.map((item) => (
+              <article key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                  <item.icon className="h-5 w-5 text-accent-cyan" />
+                </div>
+                <h3 className="mt-5 text-xl font-semibold text-text-primary">{item.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+              </article>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* 选择建议 */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold text-text-primary mb-8 text-center">
-            如何选择适合你的AI写作工具？
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-4">
-                <DollarSign className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">预算优先</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                推荐 <strong>ChatGPT免费版</strong> 或 <strong>Rytr免费版</strong>。
-                两者都提供充足的免费额度，足以满足日常写作需求。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium inline-flex items-center gap-1"
-              >
-                查看免费工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-accent-warm/10 rounded-xl flex items-center justify-center mb-4">
-                <FileText className="w-6 h-6 text-accent-warm" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">内容质量</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                推荐 <strong>Claude</strong>（深度写作）或 <strong>ChatGPT Plus</strong>。
-                这两者在中文写作和逻辑表达上表现最佳。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium inline-flex items-center gap-1"
-              >
-                查看高质量工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
-                <Zap className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">快速上手</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                推荐 <strong>Copy.ai</strong> 或 <strong>Notion AI</strong>。
-                模板丰富、操作直观，几分钟就能开始创作。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-accent-warm hover:text-accent-warm-hover font-medium inline-flex items-center gap-1"
-              >
-                查看易用工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* 使用技巧 */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="bg-surface-card rounded-2xl p-8 border border-border-light">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <Lightbulb className="w-6 h-6 text-yellow-500" />
-              AI写作工具使用技巧
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-semibold text-text-primary mb-2">1. 提供清晰的上下文</h3>
-                <p className="text-sm text-text-secondary">
-                  告诉AI你的目标读者、写作风格和文章长度要求，这样生成的内容会更符合预期。
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-text-primary mb-2">2. 使用迭代优化</h3>
-                <p className="text-sm text-text-secondary">
-                  不要期望一次生成完美内容。先生成大纲，再逐段优化，最后整体润色。
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-text-primary mb-2">3. 人工审核必不可少</h3>
-                <p className="text-sm text-text-secondary">
-                  AI可能会产生事实错误或不符合语境的表达，务必人工审核后再发布。
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-text-primary mb-2">4. 善用模板和提示词</h3>
-                <p className="text-sm text-text-secondary">
-                  保存好用的提示词模板，建立自己的提示词库，提升后续写作效率。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA部分 */}
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-accent-warm/10 to-accent-cool/10 rounded-2xl p-8 border border-accent-warm/20 text-center">
-            <h2 className="text-2xl font-bold text-text-primary mb-4">
-              探索更多AI工具
-            </h2>
-            <p className="text-text-secondary mb-6 max-w-xl mx-auto">
-              除了AI写作工具，我们还整理了AI绘画、AI编程、AI视频等各类人工智能工具，
-              帮助你全面提升工作效率。
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <div className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 text-center shadow-[0_28px_70px_rgba(0,0,0,0.25)]">
+            <h2 className="text-3xl font-semibold text-text-primary">继续往前走，不只停在这篇文章里</h2>
+            <p className="mt-4 text-base leading-8 text-text-secondary">
+              如果你已经有了第一轮判断，可以继续去工具详情页看推荐理由，也可以直接回工具库扩大筛选范围。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link
-                href="/"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover transition-colors"
+                href="/tools?category=writing"
+                className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
               >
-                <Sparkles className="w-5 h-5" />
-                返回首页
-              </Link>
-              <Link
-                href="/tools"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-accent-warm text-accent-warm font-medium rounded-xl hover:bg-accent-warm hover:text-white transition-colors"
-              >
-                <FileText className="w-5 h-5" />
-                浏览全部工具
+                查看写作工具库
+                <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-accent-warm hover:text-accent-warm transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
               >
-                查看更多文章
+                回到专题内容中心
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -1,237 +1,445 @@
 import { Metadata } from 'next';
-import { Calendar, Clock, MessageCircle, Zap, Award, Users, Bot } from 'lucide-react';
 import Link from 'next/link';
+import {
+  ArrowRight,
+  BrainCircuit,
+  CheckCircle2,
+  Code2,
+  FileText,
+  Gauge,
+  MessagesSquare,
+  Sparkles,
+  XCircle,
+} from 'lucide-react';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import ToolLogo from '@/components/ui/ToolLogo';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'DeepSeek使用教程 - 国产AI大模型DeepSeek怎么用 | AI工具导航',
-  description: 'DeepSeek使用教程详解：DeepSeek是什么？如何注册使用DeepSeek？DeepSeek vs ChatGPT对比分析，DeepSeek优缺点及使用技巧。国产AI大模型DeepSeek全面指南。',
-  keywords: ['DeepSeek', 'DeepSeek教程', 'DeepSeek使用', '国产AI', 'AI大模型', 'DeepSeek注册', 'DeepSeek vs ChatGPT'],
+  title: 'DeepSeek 使用教程 - 2026 怎么上手、适合谁、值不值得继续用',
+  description: '用一页看懂 DeepSeek 的上手路径、适用场景、和 ChatGPT 的差别，以及怎样把它真正放进自己的中文工作流。',
+  keywords: ['DeepSeek 教程', 'DeepSeek 使用', 'DeepSeek 怎么用', '国产 AI', 'AI 对话工具', 'DeepSeek 与 ChatGPT'],
   alternates: {
-    canonical: 'https://ai.poph163.com/blog/deepseek-guide',
+    canonical: buildSiteUrl('/blog/deepseek-guide'),
   },
   openGraph: {
-    title: 'DeepSeek使用教程 - 国产AI大模型DeepSeek怎么用',
-    description: 'DeepSeek完整使用指南：注册、使用技巧、与ChatGPT对比分析',
+    title: 'DeepSeek 使用教程 - 2026 怎么上手、适合谁、值不值得继续用',
+    description: '先判断它适不适合你，再决定要不要把工作流迁进去。',
+    url: buildSiteUrl('/blog/deepseek-guide'),
     type: 'article',
-    publishedTime: '2024-02-28',
-    authors: ['AI工具导航'],
+    publishedTime: '2026-03-10',
   },
 };
+
+const publishDate = '2026-03-10';
+const readTime = '12 分钟';
+
+const deepseekTool = getToolCardData({
+  id: 'deepseek',
+  name: 'DeepSeek',
+  website: 'https://chat.deepseek.com',
+});
+
+const quickDecisions = [
+  {
+    title: '中文推理和代码优先',
+    description: '如果你日常做中文问答、推理拆解和代码解释，DeepSeek 很适合先成为主力入口。',
+  },
+  {
+    title: '想先把试错成本压低',
+    description: '它更适合作为第一站，因为进入门槛低，适合先把自己的提问习惯练起来。',
+  },
+  {
+    title: '不要把它当万能替代',
+    description: '遇到多模态、成熟生态和复杂协作需求时，仍然要和其他工具配合使用。',
+  },
+];
+
+const fitSignals = [
+  {
+    title: '日常中文工作流',
+    icon: MessagesSquare,
+    description: '更适合日报、提纲、会议纪要、内容整理和常见中文问答场景。',
+  },
+  {
+    title: '推理与代码任务',
+    icon: Code2,
+    description: '当你更在意拆解问题、解释代码和给出步骤时，它通常更省心。',
+  },
+  {
+    title: '文档理解与总结',
+    icon: FileText,
+    description: '适合作为长文摘要、资料消化和知识梳理的第一轮工具。',
+  },
+];
+
+const onboardingSteps = [
+  {
+    title: '先选一个固定场景',
+    detail: '不要一上来什么都试。先用它处理一个高频任务，比如日报、提纲、总结或代码报错。',
+  },
+  {
+    title: '把提问拆成三段',
+    detail: '目标、背景、输出格式缺一不可。DeepSeek 的稳定度会在结构化输入里明显更好。',
+  },
+  {
+    title: '先拿它做第一版',
+    detail: '最适合的切入点不是终稿，而是让它先给思路、骨架、清单和改写方向。',
+  },
+  {
+    title: '留下自己的高频模板',
+    detail: '把常用提示词存下来，才是真正把工具变成工作流，而不是每次重新摸索。',
+  },
+];
+
+const comparisonRows = [
+  {
+    label: '更适合的任务',
+    deepseek: '中文问答、推理拆解、代码说明、低成本试错',
+    chatgpt: '通用协作、多模态体验、生态联动、成熟工作流',
+  },
+  {
+    label: '上手门槛',
+    deepseek: '更适合国内用户直接开始，学习成本更低',
+    chatgpt: '强在广度，但对环境和搭配要求更高',
+  },
+  {
+    label: '输出气质',
+    deepseek: '偏直接、偏务实，适合先拿到结构化答案',
+    chatgpt: '更圆润、更通用，适合复杂协作和多轮打磨',
+  },
+  {
+    label: '推荐角色',
+    deepseek: '中文内容团队、学生、开发者、轻量办公人群',
+    chatgpt: '跨语言团队、重度工具用户、需要更多生态的人',
+  },
+];
+
+const strengths = {
+  pros: [
+    '中文表达自然，做中文任务时更容易直接进入状态。',
+    '推理、代码解释和步骤拆解场景更容易得到务实结果。',
+    '适合先建立自己的 AI 使用习惯，试错成本更可控。',
+  ],
+  cons: [
+    '不是所有创意类输出都更强，文学性和品牌表达仍要复核。',
+    '如果你依赖成熟插件、多模态协作和外部生态，替代感没那么完整。',
+    '把它当成一站式解决方案，往往会误判它真正强的场景。',
+  ],
+};
+
+const promptPlaybook = [
+  {
+    title: '做日报和周报',
+    icon: MessagesSquare,
+    prompt:
+      '你是一名项目助理。请根据下面的原始记录，整理一版适合发给团队的周报。保留重点成果、风险、下周计划，并用项目符号输出。',
+  },
+  {
+    title: '做代码解释',
+    icon: Code2,
+    prompt:
+      '请把这段代码当成给新同事的入职讲解，先说明它解决什么问题，再按执行顺序解释关键逻辑，最后指出最容易改错的地方。',
+  },
+  {
+    title: '做资料总结',
+    icon: FileText,
+    prompt:
+      '请把这份资料拆成三层输出：先给一句话结论，再给 5 个关键要点，最后给我一份可直接执行的行动清单。',
+  },
+  {
+    title: '做问题拆解',
+    icon: BrainCircuit,
+    prompt:
+      '请不要直接给答案，先帮我把问题拆成 4 个判断步骤。每一步都说明为什么重要、需要补哪些信息、以及下一步怎么推进。',
+  },
+];
+
+const faqs = [
+  {
+    question: '第一次用 DeepSeek，最值得先试什么任务？',
+    answer: '先挑一个高频、重复、反馈快的场景，例如日报、内容提纲、代码报错解释或资料总结。这样最容易判断它是否真的适合你。',
+  },
+  {
+    question: 'DeepSeek 能完全替代 ChatGPT 吗？',
+    answer: '更好的判断方式不是“能不能替代”，而是“哪一段工作流更适合它”。推理、中文问答和低成本试错适合先交给 DeepSeek，生态协作和更复杂的综合任务再看其他工具。',
+  },
+  {
+    question: '为什么同样的问题，有时回答质量差很多？',
+    answer: '大多数波动来自输入方式。把任务目标、背景信息和输出格式说清楚，通常比只换一个模型更有效。',
+  },
+  {
+    question: '怎样判断它值不值得长期留在工作流里？',
+    answer: '看三个指标：是否减少了你的空白启动时间、是否让第一版更快出现、以及是否能沉淀成可复用模板。三项里占两项，就值得继续留。',
+  },
+];
 
 export default function DeepSeekGuidePage() {
   return (
     <div className="min-h-screen bg-bg-primary">
-      <div className="bg-surface-card border-b border-border-light">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-text-muted hover:text-accent-warm transition-colors">首页</Link>
-            <span className="text-text-muted">/</span>
-            <Link href="/blog" className="text-text-muted hover:text-accent-warm transition-colors">博客</Link>
-            <span className="text-text-muted">/</span>
-            <span className="text-text-secondary">DeepSeek使用教程</span>
+      <PageHero
+        eyebrow="国产大模型教程"
+        title="DeepSeek 使用教程"
+        highlight="先判断它适不适合你，再决定要不要迁入工作流。"
+        description="这页不打算把 DeepSeek 讲成万能答案，而是帮你做三个判断：它适合哪类人、第一次应该怎么上手、以及它和 ChatGPT 的差别会不会真实影响你的日常使用。"
+        metrics={[
+          {
+            value: '3 个判断问题',
+            label: '这页的阅读目标',
+            hint: '适合谁、怎么上手、和谁搭配用。',
+          },
+          {
+            value: '上手路径 + 对比 + 模板',
+            label: '内容结构',
+            hint: '帮助你从看文章直接走到开始实操。',
+          },
+          {
+            value: '中文推理 / 代码 / 总结',
+            label: '最常见的命中场景',
+            hint: '这些场景最容易快速感受到差异。',
+          },
+        ]}
+        actions={[
+          { href: getToolDetailHref(deepseekTool.id, deepseekTool.name), label: '查看 DeepSeek 详情', tone: 'primary' },
+          { href: '/blog/chatgpt-china-alternatives', label: '再看国内替代方案', tone: 'secondary' },
+        ]}
+        aside={
+          <div>
+            <div className="flex items-center gap-3 rounded-[24px] border border-white/10 bg-black/10 p-4">
+              <ToolLogo
+                name={deepseekTool.name}
+                icon={deepseekTool.icon}
+                size={48}
+                wrapperClassName="h-12 w-12 rounded-2xl border border-white/10 bg-black/20"
+                imageClassName="h-8 w-8"
+                textClassName="text-base text-text-primary"
+              />
+              <div>
+                <p className="text-sm font-medium text-text-primary">{deepseekTool.name}</p>
+                <p className="mt-1 text-xs leading-6 text-text-muted">适合把中文推理和低成本试错先跑通。</p>
+              </div>
+            </div>
+            <div className="mt-5 flex items-center gap-2 text-sm text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              先看结论
+            </div>
+            <div className="mt-5 space-y-3">
+              {quickDecisions.map((item) => (
+                <div key={item.title} className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <p className="text-sm font-medium text-text-primary">{item.title}</p>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+      >
+        <div className="flex flex-wrap gap-2 text-sm text-text-muted">
+          {[`更新于 ${publishDate}`, readTime, '适合中文工作流首次落地'].map((item) => (
+            <span key={item} className="rounded-full border border-white/10 bg-black/10 px-3 py-1.5">
+              {item}
+            </span>
+          ))}
+        </div>
+      </PageHero>
+
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="适合谁用"
+          title="如果你符合这三类需求，DeepSeek 值得先试"
+          description="把它放进工作流之前，先判断自己的真实需求，而不是先被模型名字带着走。"
+        />
+
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {fitSignals.map((item) => (
+            <article key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                <item.icon className="h-5 w-5 text-accent-cyan" />
+              </div>
+              <h2 className="mt-5 text-xl font-semibold text-text-primary">{item.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="快速上手"
+            title="第一次用，建议按这条路径走"
+            description="把工具跑通最忌讳一开始就追求复杂。先让它在一个可重复的任务上稳定出结果。"
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {onboardingSteps.map((step, index) => (
+              <article key={step.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10 text-sm font-semibold text-text-primary">
+                  {index + 1}
+                </div>
+                <h2 className="mt-5 text-lg font-semibold text-text-primary">{step.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{step.detail}</p>
+              </article>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="bg-surface-card border-b border-border-light">
-        <div className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="px-3 py-1 bg-accent-warm/10 text-accent-warm rounded-full text-sm font-medium">使用教程</span>
-              <span className="px-3 py-1 bg-accent-cool/10 text-accent-cool rounded-full text-sm font-medium">AI大模型</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-primary mb-6 leading-tight">DeepSeek使用教程</h1>
-            <p className="text-xl text-text-secondary mb-8 leading-relaxed">
-              国产AI黑马DeepSeek完整使用指南：从注册到精通，深度对比ChatGPT，掌握提示词技巧
-            </p>
-            <div className="flex flex-wrap items-center gap-6 text-text-muted">
-              <div className="flex items-center gap-2"><Calendar className="w-4 h-4" /><span>2024-02-28</span></div>
-              <div className="flex items-center gap-2"><Clock className="w-4 h-4" /><span>15 分钟阅读</span></div>
-              <div className="flex items-center gap-2"><MessageCircle className="w-4 h-4" /><span>国产AI大模型</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="横向对比"
+            title="和 ChatGPT 的差别，不要只看谁更强"
+            description="真正影响体验的，往往不是榜单名次，而是你在什么任务上用、是否能顺手融入当前工作流。"
+          />
 
-      <article className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-surface-card rounded-xl p-6 border border-border-light mb-10">
-            <h2 className="text-lg font-bold text-text-primary mb-4">目录</h2>
-            <ul className="space-y-2">
-              <li><a href="#what-is-deepseek" className="text-text-secondary hover:text-accent-warm transition-colors">1. DeepSeek介绍 - 国产AI黑马</a></li>
-              <li><a href="#how-to-use" className="text-text-secondary hover:text-accent-warm transition-colors">2. 如何注册和使用DeepSeek</a></li>
-              <li><a href="#vs-chatgpt" className="text-text-secondary hover:text-accent-warm transition-colors">3. DeepSeek vs ChatGPT对比</a></li>
-              <li><a href="#pros-cons" className="text-text-secondary hover:text-accent-warm transition-colors">4. DeepSeek的优缺点</a></li>
-              <li><a href="#tips" className="text-text-secondary hover:text-accent-warm transition-colors">5. 使用技巧和提示词示例</a></li>
-              <li><a href="#faq" className="text-text-secondary hover:text-accent-warm transition-colors">6. 常见问题FAQ</a></li>
-            </ul>
-          </div>
-
-          <section id="what-is-deepseek" className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-accent-warm/10 flex items-center justify-center"><Bot className="w-5 h-5 text-accent-warm" /></div>
-              <h2 className="text-2xl font-bold text-text-primary">DeepSeek介绍 - 国产AI黑马</h2>
-            </div>
-            <div className="prose prose-lg max-w-none text-text-secondary leading-relaxed">
-              <p className="mb-4"><strong className="text-text-primary">DeepSeek（深度求索）</strong>是由杭州深度求索人工智能基础技术研究有限公司开发的AI大模型，于2024年1月正式发布。作为国内AI领域的新秀，DeepSeek凭借其出色的性能表现和极具竞争力的价格策略，迅速在全球AI市场掀起波澜，被誉为“国产AI黑马”。</p>
-              <p className="mb-4">DeepSeek-R1是其最新的推理模型，在数学、代码、逻辑推理等任务上表现优异，甚至在某些基准测试上超越了OpenAI的GPT-4。更令人瞩目的是，DeepSeek-R1的训练成本仅为600万美元，远低于GPT-4等模型的数亿美元，实现了“以低成本追赶顶尖模型”的突破。</p>
-              <div className="bg-accent-warm/5 border-l-4 border-accent-warm p-4 rounded-r-lg my-6">
-                <p className="text-text-primary font-medium mb-2">DeepSeek核心亮点：</p>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2"><Zap className="w-5 h-5 text-accent-warm flex-shrink-0 mt-0.5" /><span><strong>超强推理能力</strong> - 在数学推理、代码生成、逻辑分析等任务上表现出色</span></li>
-                  <li className="flex items-start gap-2"><Zap className="w-5 h-5 text-accent-warm flex-shrink-0 mt-0.5" /><span><strong>开源开放</strong> - 采用MIT许可证开源，开发者可自由使用和修改</span></li>
-                  <li className="flex items-start gap-2"><Zap className="w-5 h-5 text-accent-warm flex-shrink-0 mt-0.5" /><span><strong>价格优势</strong> - API调用成本仅为GPT-4的1/10到1/20</span></li>
-                  <li className="flex items-start gap-2"><Zap className="w-5 h-5 text-accent-warm flex-shrink-0 mt-0.5" /><span><strong>中文优化</strong> - 针对中文语境深度优化，中文表达更加自然流畅</span></li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section id="how-to-use" className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-accent-cool/10 flex items-center justify-center"><Users className="w-5 h-5 text-accent-cool" /></div>
-              <h2 className="text-2xl font-bold text-text-primary">如何注册和使用DeepSeek</h2>
-            </div>
-            <div className="space-y-6">
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <h3 className="text-lg font-bold text-text-primary mb-4">1. 访问官方网站</h3>
-                <p className="text-text-secondary">打开浏览器，访问 DeepSeek 官方网站：<a href="https://chat.deepseek.com" target="_blank" rel="noopener noreferrer" className="text-accent-warm hover:underline">chat.deepseek.com</a></p>
-              </div>
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <h3 className="text-lg font-bold text-text-primary mb-4">2. 注册账号</h3>
-                <ul className="space-y-2 text-text-secondary">
-                  <li>点击页面右上角的“登录”按钮</li>
-                  <li>选择“注册”选项</li>
-                  <li>支持手机号注册或邮箱注册</li>
-                  <li>输入验证码完成验证</li>
-                  <li>设置密码完成注册</li>
-                </ul>
-              </div>
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <h3 className="text-lg font-bold text-text-primary mb-4">3. 开始对话</h3>
-                <p className="text-text-secondary mb-4">登录后，你将进入DeepSeek的对话界面：</p>
-                <ul className="space-y-2 text-text-secondary">
-                  <li>在底部输入框输入你的问题或需求</li>
-                  <li>支持普通对话模式和深度思考模式（R1）</li>
-                  <li>点击发送按钮或按 Enter 键提交</li>
-                  <li>DeepSeek会快速生成回复</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section id="vs-chatgpt" className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-accent-cool/10 flex items-center justify-center"><Award className="w-5 h-5 text-accent-cool" /></div>
-              <h2 className="text-2xl font-bold text-text-primary">DeepSeek vs ChatGPT对比</h2>
-            </div>
-            <p className="text-text-secondary mb-6">作为当前AI领域的两大代表，DeepSeek和ChatGPT各有特色。以下是详细对比：</p>
-            <div className="overflow-x-auto mb-8">
-              <table className="w-full bg-surface-card rounded-xl border border-border-light overflow-hidden">
-                <thead>
-                  <tr className="bg-surface-base">
-                    <th className="px-6 py-4 text-left text-text-primary font-bold">对比项</th>
-                    <th className="px-6 py-4 text-left text-accent-warm font-bold">DeepSeek</th>
-                    <th className="px-6 py-4 text-left text-accent-cool font-bold">ChatGPT</th>
+          <div className="mt-10 overflow-x-auto rounded-[30px] border border-white/10 bg-white/5">
+            <table className="w-full min-w-[880px]">
+              <thead>
+                <tr className="border-b border-white/8 bg-black/10">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">判断项</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">DeepSeek</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">ChatGPT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((row, index) => (
+                  <tr key={row.label} className={index % 2 === 1 ? 'bg-black/10' : ''}>
+                    <td className="px-6 py-4 text-sm font-medium text-text-primary">{row.label}</td>
+                    <td className="px-6 py-4 text-sm leading-7 text-text-secondary">{row.deepseek}</td>
+                    <td className="px-6 py-4 text-sm leading-7 text-text-secondary">{row.chatgpt}</td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-border-light">
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">开发公司</td><td className="px-6 py-4 text-text-secondary">深度求索（中国）</td><td className="px-6 py-4 text-text-secondary">OpenAI（美国）</td></tr>
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">最新模型</td><td className="px-6 py-4 text-text-secondary">DeepSeek-R1 / V3</td><td className="px-6 py-4 text-text-secondary">GPT-4o / o1</td></tr>
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">推理能力</td><td className="px-6 py-4 text-green-500">数学/代码顶尖</td><td className="px-6 py-4 text-green-500">综合能力强</td></tr>
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">中文表现</td><td className="px-6 py-4 text-green-500">中文优化好</td><td className="px-6 py-4 text-text-secondary">良好</td></tr>
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">使用成本</td><td className="px-6 py-4 text-green-500 font-medium">免费（个人版）</td><td className="px-6 py-4 text-text-secondary">GPT-4需付费</td></tr>
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">API价格</td><td className="px-6 py-4 text-green-500 font-medium">极低</td><td className="px-6 py-4 text-text-secondary">较高</td></tr>
-                  <tr><td className="px-6 py-4 text-text-secondary font-medium">开源情况</td><td className="px-6 py-4 text-green-500">开源</td><td className="px-6 py-4 text-red-400">闭源</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section id="pros-cons" className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-accent-warm/10 flex items-center justify-center"><Zap className="w-5 h-5 text-accent-warm" /></div>
-              <h2 className="text-2xl font-bold text-text-primary">DeepSeek的优缺点</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-bold text-green-600">优点</h3>
-                <div className="space-y-3">
-                  <div className="bg-surface-card p-4 rounded-lg border border-border-light">
-                    <p className="font-medium text-text-primary mb-1">推理能力突出</p>
-                    <p className="text-sm text-text-secondary">在数学、编程、逻辑推理等任务上表现优异</p>
-                  </div>
-                  <div className="bg-surface-card p-4 rounded-lg border border-border-light">
-                    <p className="font-medium text-text-primary mb-1">极致性价比</p>
-                    <p className="text-sm text-text-secondary">个人用户免费使用，API价格极低</p>
-                  </div>
-                  <div className="bg-surface-card p-4 rounded-lg border border-border-light">
-                    <p className="font-medium text-text-primary mb-1">中文优化</p>
-                    <p className="text-sm text-text-secondary">针对中文语境深度优化</p>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-lg font-bold text-red-500">缺点</h3>
-                <div className="space-y-3">
-                  <div className="bg-surface-card p-4 rounded-lg border border-border-light">
-                    <p className="font-medium text-text-primary mb-1">创意写作稍逊</p>
-                    <p className="text-sm text-text-secondary">在创意写作、文学性表达方面略逊于GPT-4</p>
-                  </div>
-                  <div className="bg-surface-card p-4 rounded-lg border border-border-light">
-                    <p className="font-medium text-text-primary mb-1">功能相对单一</p>
-                    <p className="text-sm text-text-secondary">暂不支持图片生成、语音对话等多模态功能</p>
-                  </div>
-                  <div className="bg-surface-card p-4 rounded-lg border border-border-light">
-                    <p className="font-medium text-text-primary mb-1">生态待完善</p>
-                    <p className="text-sm text-text-secondary">插件生态和第三方集成还不如ChatGPT丰富</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="tips" className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-accent-cool/10 flex items-center justify-center"><Zap className="w-5 h-5 text-accent-cool" /></div>
-              <h2 className="text-2xl font-bold text-text-primary">使用技巧和提示词示例</h2>
-            </div>
-            <div className="space-y-6">
-              <div className="bg-accent-warm/5 border border-accent-warm/20 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-text-primary mb-4">高效提示词技巧</h3>
-                <ul className="space-y-3 text-text-secondary">
-                  <li><strong className="text-text-primary">1. 明确任务目标</strong> - 清晰说明你想要什么</li>
-                  <li><strong className="text-text-primary">2. 提供背景信息</strong> - 给出足够的上下文</li>
-                  <li><strong className="text-text-primary">3. 指定输出格式</strong> - 告诉DeepSeek你希望以什么形式呈现结果</li>
-                  <li><strong className="text-text-primary">4. 分步拆解复杂任务</strong> - 复杂问题拆成多个小问题逐个解决</li>
-                  <li><strong className="text-text-primary">5. 善用R1模式</strong> - 推理任务一定要开启R1深度思考模式</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section id="faq" className="mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-accent-warm/10 flex items-center justify-center"><MessageCircle className="w-5 h-5 text-accent-warm" /></div>
-              <h2 className="text-2xl font-bold text-text-primary">常见问题FAQ</h2>
-            </div>
-            <div className="space-y-4">
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <h3 className="font-bold text-text-primary mb-2">DeepSeek是免费的吗？</h3>
-                <p className="text-text-secondary">是的，DeepSeek目前对个人用户完全免费，可以无限制使用。</p>
-              </div>
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <h3 className="font-bold text-text-primary mb-2">DeepSeek和ChatGPT哪个更好？</h3>
-                <p className="text-text-secondary">两者各有优势。DeepSeek在数学推理、代码生成方面更强，且免费；ChatGPT在创意写作、多模态任务上更全面。</p>
-              </div>
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <h3 className="font-bold text-text-primary mb-2">DeepSeek支持哪些语言？</h3>
-                <p className="text-text-secondary">DeepSeek支持多种语言，但对中文有特别优化，中文表达更加自然流畅。</p>
-              </div>
-            </div>
-          </section>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </article>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="优劣判断"
+            title="哪些地方值得留下来，哪些地方要提前知道"
+            description="别只看优点。真正有帮助的是，提前知道它会在哪些场景帮你加速，在哪些场景反而会让你误判。"
+          />
+
+          <div className="mt-10 grid gap-4 lg:grid-cols-2">
+            <article className="rounded-[30px] border border-white/10 bg-white/5 p-6">
+              <div className="flex items-center gap-2 text-text-primary">
+                <CheckCircle2 className="h-5 w-5 text-accent-cyan" />
+                <h2 className="text-xl font-semibold">值得留下来的地方</h2>
+              </div>
+              <div className="mt-5 space-y-3">
+                {strengths.pros.map((item) => (
+                  <div key={item} className="rounded-[22px] border border-white/8 bg-black/10 p-4 text-sm leading-7 text-text-secondary">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="rounded-[30px] border border-white/10 bg-white/5 p-6">
+              <div className="flex items-center gap-2 text-text-primary">
+                <XCircle className="h-5 w-5 text-accent-pink" />
+                <h2 className="text-xl font-semibold">提前知道的限制</h2>
+              </div>
+              <div className="mt-5 space-y-3">
+                {strengths.cons.map((item) => (
+                  <div key={item} className="rounded-[22px] border border-white/8 bg-black/10 p-4 text-sm leading-7 text-text-secondary">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="提问模板"
+            title="把回答质量拉稳的 4 种写法"
+            description="当你不确定该怎么提问时，直接从这些结构开始，通常比临场发挥更稳。"
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            {promptPlaybook.map((item) => (
+              <article key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                  <item.icon className="h-5 w-5 text-accent-yellow" />
+                </div>
+                <h2 className="mt-5 text-xl font-semibold text-text-primary">{item.title}</h2>
+                <div className="mt-4 rounded-[22px] border border-white/8 bg-black/10 p-4 text-sm leading-7 text-text-secondary">
+                  {item.prompt}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <SectionHeading
+            eyebrow="常见问题"
+            title="第一次试用最容易卡住的地方"
+            description="如果你只打算花 10 分钟做第一轮试用，先看这四个问题就够了。"
+            align="center"
+          />
+
+          <div className="mt-10 space-y-4">
+            {faqs.map((item) => (
+              <article key={item.question} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <h2 className="text-lg font-semibold text-text-primary">{item.question}</h2>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <div className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 text-center shadow-[0_28px_70px_rgba(0,0,0,0.25)]">
+            <div className="flex justify-center">
+              <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-secondary">
+                <Gauge className="h-4 w-4 text-accent-cyan" />
+                先把一个任务跑顺，再决定要不要深度依赖
+              </div>
+            </div>
+            <h2 className="mt-6 text-3xl font-semibold text-text-primary">如果你已经想开始试，就别停在文章里</h2>
+            <p className="mt-4 text-base leading-8 text-text-secondary">
+              现在最值得做的动作，是直接拿一个真实任务去试 DeepSeek，然后再回到工具库看它适合和谁配合使用。
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <ToolPrimaryCta
+                tool={deepseekTool}
+                placement="blog_deepseek_primary_cta"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+              />
+              <Link
+                href={getToolDetailHref(deepseekTool.id, deepseekTool.name)}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+              >
+                查看工具详情
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/blog/chatgpt-china-alternatives"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+              >
+                看替代方案对比
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

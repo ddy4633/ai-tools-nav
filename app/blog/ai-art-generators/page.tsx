@@ -1,477 +1,432 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { toolsData } from '@/lib/content/tools-data';
-import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
-import { 
-  Paintbrush, 
-  Star, 
-  Zap, 
-  DollarSign, 
-  CheckCircle, 
-  XCircle,
+import {
   ArrowRight,
+  CheckCircle2,
+  DollarSign,
+  Image as ImageIcon,
+  Paintbrush,
   Sparkles,
-  Palette,
-  Image as ImageIcon
+  Star,
+  XCircle,
 } from 'lucide-react';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import ToolLogo from '@/components/ui/ToolLogo';
+import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'AI绘画网站推荐 - 免费AI图像生成工具排行榜 | AI工具导航',
-  description: '2024年最新AI绘画网站推荐，精选Midjourney、Stable Diffusion、DALL-E等免费AI图像生成工具，包含详细功能对比、价格分析和适用场景指南。',
-  keywords: ['AI绘画', 'AI图像生成', 'Midjourney', 'Stable Diffusion', 'DALL-E', '免费AI绘画工具', 'AI画画'],
+  title: 'AI 绘画网站推荐 - 2026 值得先试的图像生成工具',
+  description: '从 Midjourney、Stable Diffusion 到 DALL-E 3，按预算、出图质量和上手难度拆解 2026 年值得先试的 AI 绘画工具。',
+  keywords: ['AI绘画', 'AI图像生成', 'Midjourney', 'Stable Diffusion', 'DALL-E', 'AI画画'],
   alternates: {
-    canonical: 'https://ai.poph163.com/blog/ai-art-generators',
+    canonical: buildSiteUrl('/blog/ai-art-generators'),
   },
   openGraph: {
-    title: 'AI绘画网站推荐 - 免费AI图像生成工具排行榜',
-    description: '精选最好的AI绘画网站，免费与付费工具对比评测',
-    url: 'https://ai.poph163.com/blog/ai-art-generators',
+    title: 'AI 绘画网站推荐 - 2026 值得先试的图像生成工具',
+    description: '按预算、出图质量和上手难度拆解值得先试的 AI 绘画工具。',
+    url: buildSiteUrl('/blog/ai-art-generators'),
     type: 'article',
   },
 };
 
-const indexedToolIds = new Set(toolsData.map((tool) => tool.id));
+const pricingStyles: Record<string, string> = {
+  免费: 'border-accent-cyan/30 bg-accent-cyan/10 text-accent-cyan',
+  免费试用: 'border-accent-yellow/30 bg-accent-yellow/10 text-accent-yellow',
+  付费: 'border-accent-pink/30 bg-accent-pink/10 text-accent-pink',
+};
 
-function getToolDetailHref(id: string, name: string) {
-  if (indexedToolIds.has(id)) {
-    return `/tools/${id}`;
-  }
-
-  return `/tools?search=${encodeURIComponent(name)}`;
-}
-
-// AI绘画工具数据
 const aiArtTools = [
   {
     id: 'midjourney',
     name: 'Midjourney',
-    description: '目前最热门的AI绘画工具，以艺术感和细节著称，适合创作高质量概念艺术和插画作品。',
+    description: '如果你追求第一眼就能打动人的风格感和完成度，它仍然是最稳的入口之一。',
     pricing: '付费',
-    priceDetail: '$10/月起',
+    priceDetail: '$10/月起，更适合专业创作',
     rating: 4.9,
-    features: ['极高图像质量', '艺术感强', 'Discord社区活跃', '风格多样'],
-    pros: ['生成效果顶级', '细节丰富', '社区氛围好'],
-    cons: ['需翻墙使用', '无免费额度', '需Discord'],
-    bestFor: '专业设计师、艺术家、高质量创作需求',
+    features: ['高完成度', '风格强', '社区氛围成熟', '概念图友好'],
+    pros: ['成片率高', '细节和氛围感突出', '风格成熟'],
+    cons: ['没有免费层', '对新手不算最低门槛', '依赖 Discord 工作流'],
+    bestFor: '专业设计师、品牌视觉、概念设计和高要求商业出图',
     website: 'https://www.midjourney.com',
   },
   {
     id: 'stable-diffusion',
     name: 'Stable Diffusion',
-    description: '开源免费的AI绘画模型，支持本地部署，拥有庞大的模型生态和高度可定制性。',
+    description: '更像一套能力底座，适合要极致控制、低成本和本地部署的人。',
     pricing: '免费',
-    priceDetail: '开源免费',
+    priceDetail: '开源免费，但学习成本更高',
     rating: 4.7,
-    features: ['完全免费', '开源可定制', '本地部署', '模型丰富'],
-    pros: ['零成本使用', '隐私安全', '高度可控'],
-    cons: ['配置门槛高', '需硬件支持', '学习曲线陡峭'],
-    bestFor: '技术用户、隐私敏感用户、批量生成需求',
+    features: ['开源可控', '本地部署', '模型生态丰富', '扩展能力强'],
+    pros: ['零授权成本', '可玩性高', '适合批量和深定制'],
+    cons: ['配置门槛高', '硬件要求高', '不适合纯轻量用户'],
+    bestFor: '技术用户、工作室、本地部署和深度控制场景',
     website: 'https://stability.ai',
   },
   {
     id: 'dall-e-3',
     name: 'DALL-E 3',
-    description: 'OpenAI推出的AI绘画工具，与ChatGPT深度整合，文字理解能力出色，操作简单易用。',
+    description: '更适合想直接用自然语言描述需求、快速出图的人，理解提示词更省心。',
     pricing: '付费',
-    priceDetail: 'ChatGPT Plus订阅',
+    priceDetail: '通常跟随 ChatGPT 付费能力使用',
     rating: 4.6,
-    features: ['文字理解精准', '与ChatGPT整合', '对话式创作', '中文支持好'],
-    pros: ['提示词理解强', '操作便捷', '生成速度快'],
-    cons: ['需订阅ChatGPT Plus', '风格相对单一', '自由度较低'],
-    bestFor: '初学者、内容创作者、快速原型设计',
+    features: ['提示词理解强', '对话式生成', '中文友好', '上手简单'],
+    pros: ['易用度高', '理解需求更直观', '适合快速原型'],
+    cons: ['风格上限不如 Midjourney', '控制感偏弱'],
+    bestFor: '产品经理、内容创作者、需要快速试图的人',
     website: 'https://openai.com/dall-e-3',
   },
   {
     id: 'leonardo',
     name: 'Leonardo.AI',
-    description: '专为游戏开发和创意产业设计的AI绘画平台，提供丰富的预设模型和精细控制选项。',
+    description: '更适合游戏、角色和素材制作，兼顾免费试用和专业模型选择。',
     pricing: '免费试用',
-    priceDetail: '每日150积分免费',
+    priceDetail: '有日常试用额度，适合先试后买',
     rating: 4.5,
-    features: ['每日免费额度', '游戏资源专精', '模型训练', '实时生成'],
-    pros: ['有免费额度', '专业模型多', '训练自定义模型'],
-    cons: ['高级功能付费', '免费额度有限'],
-    bestFor: '游戏开发者、概念设计师、素材制作',
+    features: ['免费额度', '模型训练', '游戏素材友好', '控制项丰富'],
+    pros: ['试错成本低', '适合角色和素材', '专业模型多'],
+    cons: ['高级能力需付费', '对新手仍有选择成本'],
+    bestFor: '游戏开发、角色设定、素材生产与概念设计',
     website: 'https://leonardo.ai',
   },
   {
     id: 'ideogram',
     name: 'Ideogram',
-    description: '专注于文字渲染的AI绘画工具，在图片中生成可读文字方面表现突出。',
+    description: '在“图片里带可读文字”这件事上更稳定，适合海报、封面和社媒图。',
     pricing: '免费',
-    priceDetail: '基础版免费',
+    priceDetail: '基础版可直接开始',
     rating: 4.4,
-    features: ['文字渲染优秀', '海报设计', 'Logo生成', '多比例支持'],
-    pros: ['文字显示准确', '适合商业设计', '操作简单'],
-    cons: ['艺术感一般', '免费版有水印'],
-    bestFor: '平面设计师、海报制作、带文字图片需求',
+    features: ['文字渲染', '海报设计', 'Logo 场景', '社媒素材'],
+    pros: ['文字效果明显更稳', '做平面内容很方便', '新手友好'],
+    cons: ['纯艺术风格上限一般', '免费版仍有限制'],
+    bestFor: '海报、封面、社媒图和带字图片内容',
     website: 'https://ideogram.ai',
   },
   {
     id: 'adobe-firefly',
     name: 'Adobe Firefly',
-    description: 'Adobe推出的生成式AI工具，与Photoshop、Illustrator等软件深度集成。',
+    description: '适合已经在 Adobe 工作流里的人，生成、编辑和交付衔接更顺。',
     pricing: '免费试用',
-    priceDetail: '每月25积分免费',
+    priceDetail: '更适合已在 Adobe 生态里的人',
     rating: 4.3,
-    features: ['与Adobe套件集成', '商业安全', '生成式填充', '矢量生成'],
-    pros: ['工作流整合', '版权安全', '专业工具链'],
-    cons: ['Adobe生态依赖', '免费额度少'],
-    bestFor: 'Adobe用户、商业设计师、专业工作流程',
+    features: ['Adobe 集成', '商业安全', '生成式填充', '设计链路顺'],
+    pros: ['商业使用更安心', '与现有设计工具衔接自然'],
+    cons: ['离开 Adobe 生态价值下降', '免费额度有限'],
+    bestFor: 'Adobe 用户、品牌设计团队、专业设计流程',
     website: 'https://www.adobe.com/products/firefly.html',
   },
   {
     id: 'bing-image-creator',
     name: 'Bing Image Creator',
-    description: '微软推出的免费AI绘画工具，基于DALL-E技术，无需注册即可使用。',
+    description: '最适合零门槛试用，尤其是第一次接触 AI 出图的人。',
     pricing: '免费',
-    priceDetail: '完全免费',
+    priceDetail: '完全免费，适合快速尝试',
     rating: 4.2,
-    features: ['完全免费', '基于DALL-E', '无需注册', 'Boost加速'],
-    pros: ['零门槛使用', '速度快', '基础功能完善'],
-    cons: ['功能较简单', '效果不如付费工具', '国内访问受限'],
-    bestFor: '初学者、临时使用、轻量级需求',
+    features: ['完全免费', '上手简单', '速度快', '轻量试用'],
+    pros: ['零成本', '不必复杂学习', '适合轻需求'],
+    cons: ['上限有限', '精细控制不足'],
+    bestFor: '初学者、临时需求、快速试图',
     website: 'https://www.bing.com/create',
   },
   {
     id: 'playground',
     name: 'Playground AI',
-    description: '用户友好的AI绘画平台，提供免费额度，支持多种模型切换和图层编辑。',
+    description: '更适合预算有限又想多试几个模型的人，适合把试错成本拉低。',
     pricing: '免费试用',
-    priceDetail: '每日500张免费',
+    priceDetail: '免费额度较多，适合跑大量实验',
     rating: 4.1,
-    features: ['每日大量免费', '多模型支持', '图层编辑', '社区分享'],
-    pros: ['免费额度多', '操作简单', '社交功能好'],
-    cons: ['高峰期需排队', '高级模型付费'],
-    bestFor: '预算有限用户、初学者、快速尝试',
+    features: ['多模型支持', '免费额度多', '图层编辑', '实验成本低'],
+    pros: ['试验空间大', '适合跑风格对比', '新手也能慢慢摸索'],
+    cons: ['高峰期表现波动', '高阶能力仍要付费'],
+    bestFor: '预算有限用户、多模型尝试、风格试验',
     website: 'https://playgroundai.com',
   },
 ];
 
+const quickDecisions = [
+  {
+    title: '想要第一眼就惊艳',
+    description: '先看 Midjourney，它更适合成片感和视觉冲击力优先的需求。',
+  },
+  {
+    title: '想把成本压低',
+    description: '先看 Stable Diffusion 或 Bing Image Creator，视你的技术能力决定。',
+  },
+  {
+    title: '想快速上手出图',
+    description: 'DALL-E 3 和 Ideogram 的理解成本更低，更适合快速试图。',
+  },
+];
+
+const scenarioSuggestions = [
+  {
+    title: '预算有限',
+    icon: DollarSign,
+    description: '优先考虑 Stable Diffusion、Bing Image Creator 和 Playground AI。',
+  },
+  {
+    title: '专业创作',
+    icon: Paintbrush,
+    description: '优先看 Midjourney 和 Leonardo.AI，出图上限更高。',
+  },
+  {
+    title: '快速上手',
+    icon: ImageIcon,
+    description: '优先看 DALL-E 3 和 Ideogram，理解成本更低。',
+  },
+];
+
+const aiArtToolCards = aiArtTools.map((tool) => ({
+  ...tool,
+  ...getToolCardData(tool),
+}));
+
 export default function AIArtGeneratorsPage() {
   return (
     <div className="min-h-screen bg-bg-primary">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border-light">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5" />
-        <div className="container mx-auto px-4 py-16 sm:py-20 relative">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full text-purple-600 text-sm font-medium mb-6">
-              <Palette className="w-4 h-4" />
-              AI绘画工具
+      <PageHero
+        eyebrow="AI 绘画专题"
+        title="AI 绘画工具"
+        highlight="先看出图目标，再看模型名字。"
+        description="选出图工具最怕一上来就被名字和风格带偏。这个页面把工具拆成三类：追求成片感、追求低成本、追求低门槛。先看目标，再看平台。"
+        metrics={[
+          { value: `${aiArtTools.length}`, label: '重点工具', hint: '覆盖高质量出图、免费试用和低门槛试图三类需求。' },
+          { value: '质量 / 成本 / 上手难度', label: '核心判断维度', hint: '比单看热度更接近真实决策。' },
+          { value: '对比表 + 场景建议', label: '内容结构', hint: '帮助你快速排除不适合自己的工具。' },
+        ]}
+        actions={[
+          { href: '/tools?category=image', label: '查看全部图像工具', tone: 'secondary' },
+          { href: '/advertise', label: '做专题合作', tone: 'primary' },
+        ]}
+        aside={
+          <div>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              先看结论
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">
-              AI绘画网站推荐
-            </h1>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              精选2024年最值得使用的AI绘画网站，从免费工具到专业级软件，
-              帮你找到最适合的AI图像生成解决方案
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-12">
-        {/* 介绍部分 */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="bg-surface-card rounded-2xl p-8 border border-border-light">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <Sparkles className="w-6 h-6 text-purple-500" />
-              什么是AI绘画工具？
-            </h2>
-            <div className="prose prose-lg max-w-none text-text-secondary space-y-4">
-              <p>
-                AI绘画工具是利用人工智能技术，根据文字描述（提示词）自动生成图像的在线服务。
-                这些工具通过深度学习模型理解自然语言，并将其转化为视觉艺术作品。
-              </p>
-              <p>
-                无论你是专业设计师、内容创作者，还是只是想尝试AI绘画的初学者，
-                市场上都有适合你的工具。从<strong>Midjourney</strong>的艺术风格到
-                <strong>Stable Diffusion</strong>的开源自由，再到<strong>DALL-E 3</strong>的便捷易用，
-                每款工具都有其独特优势。
-              </p>
-              <p>
-                本页面为你整理了2024年最值得推荐的8款AI绘画网站，包含详细的功能对比、
-                价格分析和适用场景指南，帮助你快速找到适合自己的AI绘画工具。
-              </p>
+            <div className="mt-5 space-y-3">
+              {quickDecisions.map((item) => (
+                <div key={item.title} className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <p className="text-sm font-medium text-text-primary">{item.title}</p>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        }
+      />
 
-        {/* 推荐工具列表 */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-            推荐AI绘画工具
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {aiArtTools.map((tool) => (
-              <div
-                key={tool.id}
-                className="bg-surface-card rounded-2xl p-6 border border-border-light hover:border-purple-500/30 transition-all hover:shadow-lg"
-              >
-                <div className="flex items-start justify-between mb-4">
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="工具清单"
+          title="值得先试的 AI 绘画工具"
+          description="每张卡片都围绕同一个问题：画得够不够好、上手难不难、值不值得你把工作流迁进去。"
+        />
+
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {aiArtToolCards.map((tool) => (
+            <article key={tool.id} className="rounded-[30px] border border-white/10 bg-white/5 p-6 transition hover:border-white/16">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <ToolLogo
+                    name={tool.name}
+                    icon={tool.icon}
+                    size={56}
+                    wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/20"
+                    imageClassName="h-10 w-10"
+                    textClassName="text-lg text-text-primary"
+                  />
                   <div>
-                    <h3 className="text-xl font-bold text-text-primary mb-1">{tool.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                        tool.pricing === '免费' 
-                          ? 'bg-green-500/10 text-green-600' 
-                          : tool.pricing === '免费试用'
-                          ? 'bg-yellow-500/10 text-yellow-600'
-                          : 'bg-purple-500/10 text-purple-600'
-                      }`}>
+                    <h2 className="text-2xl font-semibold text-text-primary">{tool.name}</h2>
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span className={`rounded-full border px-2.5 py-1 text-xs ${pricingStyles[tool.pricing] ?? pricingStyles['免费试用']}`}>
                         {tool.pricing}
                       </span>
                       <span className="text-xs text-text-muted">{tool.priceDetail}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
-                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                    <span className="text-sm font-semibold text-text-primary">{tool.rating}</span>
-                  </div>
                 </div>
-
-                <p className="text-text-secondary text-sm mb-4 leading-relaxed">
-                  {tool.description}
-                </p>
-
-                {/* 功能标签 */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {tool.features.map((feature) => (
-                    <span
-                      key={feature}
-                      className="px-2 py-1 bg-surface-base text-text-secondary text-xs rounded-md"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-
-                {/* 优缺点 */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <p className="text-xs font-medium text-green-600 mb-2 flex items-center gap-1">
-                      <CheckCircle className="w-3 h-3" />
-                      优点
-                    </p>
-                    <ul className="text-xs text-text-secondary space-y-1">
-                      {tool.pros.map((pro) => (
-                        <li key={pro}>• {pro}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-red-500 mb-2 flex items-center gap-1">
-                      <XCircle className="w-3 h-3" />
-                      缺点
-                    </p>
-                    <ul className="text-xs text-text-secondary space-y-1">
-                      {tool.cons.map((con) => (
-                        <li key={con}>• {con}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* 适用场景 */}
-                <div className="bg-purple-50 rounded-lg p-3 mb-4">
-                  <p className="text-xs text-purple-700">
-                    <strong>适用：</strong>{tool.bestFor}
-                  </p>
-                </div>
-
-                {/* 操作按钮 */}
-                <div className="flex gap-3">
-                  <ToolPrimaryCta
-                    tool={tool}
-                    placement="blog_art_primary_cta"
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors"
-                  />
-                  <Link
-                    href={getToolDetailHref(tool.id, tool.name)}
-                    className="px-4 py-2 border border-border-light text-text-secondary text-sm font-medium rounded-lg hover:border-purple-500 hover:text-purple-500 transition-colors"
-                  >
-                    查看详情
-                  </Link>
+                <div className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-primary">
+                  {tool.rating.toFixed(1)}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* 对比表格 */}
-        <div className="max-w-6xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-            AI绘画工具对比表
-          </h2>
-          
-          <div className="bg-surface-card rounded-2xl border border-border-light overflow-hidden overflow-x-auto">
-            <table className="w-full min-w-[800px]">
+              <p className="mt-4 text-sm leading-7 text-text-secondary">{tool.description}</p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {tool.features.map((feature) => (
+                  <span
+                    key={feature}
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <div className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <div className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckCircle2 className="h-4 w-4 text-accent-cyan" />
+                    优点
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-text-secondary">
+                    {tool.pros.map((pro) => (
+                      <li key={pro}>+ {pro}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <div className="flex items-center gap-2 text-sm text-text-primary">
+                    <XCircle className="h-4 w-4 text-accent-pink" />
+                    缺点
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-text-secondary">
+                    {tool.cons.map((con) => (
+                      <li key={con}>- {con}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-5 rounded-[22px] border border-white/8 bg-black/10 p-4 text-sm leading-7 text-text-secondary">
+                <strong className="text-text-primary">更适合：</strong>
+                {tool.bestFor}
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-3">
+                <ToolPrimaryCta
+                  tool={tool}
+                  placement="blog_art_primary_cta"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                />
+                <Link
+                  href={getToolDetailHref(tool.id, tool.name)}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                >
+                  查看详情
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="横向对比"
+            title="一张表看完第一轮差异"
+            description="如果你已经知道自己最看重的是质量、预算还是门槛，这张表能帮你更快筛掉不匹配的工具。"
+          />
+
+          <div className="mt-10 overflow-x-auto rounded-[30px] border border-white/10 bg-white/5">
+            <table className="w-full min-w-[880px]">
               <thead>
-                <tr className="bg-surface-base border-b border-border-light">
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">工具名称</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">价格</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">核心功能</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">上手难度</th>
-                  <th className="text-left px-6 py-4 text-sm font-semibold text-text-primary">最佳适用</th>
+                <tr className="border-b border-white/8 bg-black/10">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">工具</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">价格</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">更擅长</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">上手难度</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">适合谁</th>
                 </tr>
               </thead>
               <tbody>
-                {aiArtTools.map((tool, index) => (
-                  <tr 
-                    key={tool.id} 
-                    className={`border-b border-border-light last:border-b-0 ${index % 2 === 1 ? 'bg-surface-base/30' : ''}`}
-                  >
+                {aiArtToolCards.map((tool, index) => (
+                  <tr key={tool.id} className={index % 2 === 1 ? 'bg-black/10' : ''}>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-text-primary">{tool.name}</div>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                        <span className="text-xs text-text-muted">{tool.rating}</span>
+                      <div className="flex items-center gap-3">
+                        <ToolLogo
+                          name={tool.name}
+                          icon={tool.icon}
+                          size={32}
+                          wrapperClassName="h-9 w-9 rounded-xl border border-white/10 bg-black/20"
+                          imageClassName="h-6 w-6"
+                          textClassName="text-sm text-text-primary"
+                        />
+                        <div>
+                          <div className="font-medium text-text-primary">{tool.name}</div>
+                          <div className="mt-1 flex items-center gap-1 text-xs text-text-muted">
+                            <Star className="h-3 w-3 text-accent-yellow fill-accent-yellow" />
+                            {tool.rating.toFixed(1)}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                        tool.pricing === '免费' 
-                          ? 'bg-green-500/10 text-green-600' 
-                          : tool.pricing === '免费试用'
-                          ? 'bg-yellow-500/10 text-yellow-600'
-                          : 'bg-purple-500/10 text-purple-600'
-                      }`}>
+                      <span className={`rounded-full border px-2.5 py-1 text-xs ${pricingStyles[tool.pricing] ?? pricingStyles['免费试用']}`}>
                         {tool.pricing}
                       </span>
-                      <div className="text-xs text-text-muted mt-1">{tool.priceDetail}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1">
-                        {tool.features.slice(0, 2).map((feature) => (
-                          <span key={feature} className="text-xs text-text-secondary bg-surface-base px-2 py-0.5 rounded">
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`text-xs ${
-                        tool.id === 'bing-image-creator' || tool.id === 'dall-e-3'
-                          ? 'text-green-600'
-                          : tool.id === 'midjourney'
-                          ? 'text-yellow-600'
-                          : 'text-text-secondary'
-                      }`}>
-                        {tool.id === 'bing-image-creator' || tool.id === 'dall-e-3' ? '简单'
-                          : tool.id === 'midjourney' ? '中等'
-                          : tool.id === 'stable-diffusion' ? '困难'
+                    <td className="px-6 py-4 text-sm text-text-secondary">{tool.features.slice(0, 2).join(' / ')}</td>
+                    <td className="px-6 py-4 text-sm text-text-secondary">
+                      {tool.id === 'bing-image-creator' || tool.id === 'dall-e-3'
+                        ? '简单'
+                        : tool.id === 'stable-diffusion'
+                          ? '困难'
                           : '中等'}
-                      </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-xs text-text-secondary line-clamp-2">
-                        {tool.bestFor}
-                      </span>
-                    </td>
+                    <td className="px-6 py-4 text-sm text-text-secondary">{tool.bestFor}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
+      </section>
 
-        {/* 选择建议 */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <h2 className="text-2xl font-bold text-text-primary mb-8 text-center">
-            如何选择适合你的AI绘画工具？
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-4">
-                <DollarSign className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">预算有限</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                如果你不想花钱，推荐使用 <strong>Stable Diffusion</strong>（技术向）
-                或 <strong>Bing Image Creator</strong>（简单使用）。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-1"
-              >
-                查看免费工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="适用场景"
+            title="按目标选，比按平台选更快"
+            description="很多人不是选不出工具，而是用错了判断顺序。先看你的出图目标，再看平台名称。"
+          />
 
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-4">
-                <Paintbrush className="w-6 h-6 text-purple-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">专业创作</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                如果你追求最高质量的图像效果，推荐 <strong>Midjourney</strong> 或 
-                <strong>Leonardo.AI</strong>。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-1"
-              >
-                查看专业工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
-                <Zap className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="font-bold text-text-primary mb-2">快速上手</h3>
-              <p className="text-sm text-text-secondary mb-3">
-                如果你是AI绘画新手，推荐 <strong>DALL-E 3</strong> 或 
-                <strong>Ideogram</strong>，操作简单易懂。
-              </p>
-              <Link 
-                href="/tools" 
-                className="text-sm text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-1"
-              >
-                查看易用工具 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {scenarioSuggestions.map((item) => (
+              <article key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                  <item.icon className="h-5 w-5 text-accent-cyan" />
+                </div>
+                <h3 className="mt-5 text-xl font-semibold text-text-primary">{item.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+              </article>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* CTA部分 */}
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl p-8 border border-purple-500/20 text-center">
-            <h2 className="text-2xl font-bold text-text-primary mb-4">
-              探索更多AI工具
-            </h2>
-            <p className="text-text-secondary mb-6 max-w-xl mx-auto">
-              除了AI绘画工具，我们还整理了AI写作、AI编程、AI视频等各类人工智能工具，
-              帮助你全面提升工作效率。
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <div className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 text-center shadow-[0_28px_70px_rgba(0,0,0,0.25)]">
+            <h2 className="text-3xl font-semibold text-text-primary">如果这一页还不够，就继续往工具库里走</h2>
+            <p className="mt-4 text-base leading-8 text-text-secondary">
+              你可以继续查看图像工具详情页，也可以回到工具库按价格、分类和任务进一步筛选。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link
-                href="/"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-purple-500 text-white font-medium rounded-xl hover:bg-purple-600 transition-colors"
+                href="/tools?category=image"
+                className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
               >
-                <Sparkles className="w-5 h-5" />
-                返回首页
-              </Link>
-              <Link
-                href="/tools"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-purple-500 text-purple-600 font-medium rounded-xl hover:bg-purple-500 hover:text-white transition-colors"
-              >
-                <ImageIcon className="w-5 h-5" />
-                浏览全部工具
+                查看图像工具库
+                <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border-light text-text-secondary font-medium rounded-xl hover:border-purple-500 hover:text-purple-600 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
               >
-                查看更多文章
+                回到专题内容中心
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

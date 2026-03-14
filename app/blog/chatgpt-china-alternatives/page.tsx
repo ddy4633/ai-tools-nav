@@ -1,405 +1,415 @@
 import { Metadata } from 'next';
-import { Calendar, Clock, ArrowLeft, CheckCircle, XCircle, ExternalLink, Star, Shield, Globe, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
-import { toolsData } from '@/lib/content/tools-data';
+import {
+  ArrowRight,
+  CheckCircle2,
+  Code2,
+  FileText,
+  Globe,
+  MessageCircle,
+  Search,
+  Shield,
+  Sparkles,
+  Star,
+  XCircle,
+} from 'lucide-react';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import ToolLogo from '@/components/ui/ToolLogo';
+import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'ChatGPT国内替代 - 国内能用的AI对话工具推荐 | AI工具导航',
-  description: 'ChatGPT国内无法使用？推荐文心一言、讯飞星火、通义千问、智谱清言、Kimi等国内可用的AI对话工具，详细对比优缺点，帮你找到最适合的ChatGPT替代方案。',
-  keywords: ['ChatGPT国内替代', 'ChatGPT替代方案', '国内AI工具', '文心一言', '讯飞星火', '通义千问', '智谱清言', 'Kimi', 'AI对话工具'],
+  title: 'ChatGPT 国内替代方案 - 2026 谁更适合中文工作流',
+  description: '别再只问 ChatGPT 能不能用。用一页看懂 DeepSeek、Qwen 2.5-Max、Kimi k1.5 各自适合什么工作流，以及谁更值得先试。',
+  keywords: ['ChatGPT 国内替代', '国内 AI 对话工具', 'DeepSeek', 'Qwen 2.5-Max', 'Kimi', '中文 AI'],
   alternates: {
-    canonical: 'https://ai.poph163.com/blog/chatgpt-china-alternatives',
+    canonical: buildSiteUrl('/blog/chatgpt-china-alternatives'),
   },
   openGraph: {
-    title: 'ChatGPT国内替代 - 国内能用的AI对话工具推荐',
-    description: '国内可用的AI对话工具全面对比，帮你找到最适合的ChatGPT替代方案',
-    url: 'https://ai.poph163.com/blog/chatgpt-china-alternatives',
+    title: 'ChatGPT 国内替代方案 - 2026 谁更适合中文工作流',
+    description: '先看你的任务类型，再决定该用哪个国内替代工具。',
+    url: buildSiteUrl('/blog/chatgpt-china-alternatives'),
     type: 'article',
-    publishedTime: '2024-03-20T08:00:00+08:00',
+    publishedTime: '2026-03-12',
   },
 };
 
-const indexedToolIds = new Set(toolsData.map((tool) => tool.id));
+const publishDate = '2026-03-12';
+const readTime = '11 分钟';
 
-function getToolDetailHref(id: string, name: string) {
-  if (indexedToolIds.has(id)) {
-    return `/tools/${id}`;
-  }
-
-  return `/tools?search=${encodeURIComponent(name)}`;
-}
-
-// 工具对比数据
-const toolsComparison = [
+const quickDecisions = [
   {
-    id: 'wenxin-yiyan',
-    name: '文心一言',
-    company: '百度',
-    externalUrl: 'https://yiyan.baidu.com',
-    pros: ['中文理解能力强', '与百度搜索深度整合', '支持多模态生成', 'API接口完善'],
-    cons: ['创意写作能力一般', '代码能力较弱', '部分回答过于官方'],
-    bestFor: '搜索问答、内容创作、日常对话',
-    rating: 4.5,
+    title: '想先找到中文主力入口',
+    description: '先试 DeepSeek，最快的价值不是“完全替代”，而是让你先把 AI 工作流跑起来。',
   },
   {
-    id: 'xinghuo',
-    name: '讯飞星火',
-    company: '科大讯飞',
-    externalUrl: 'https://xinghuo.xfyun.cn',
-    pros: ['语音识别能力强', '数学逻辑优秀', 'PPT生成实用', '教育场景覆盖广'],
-    cons: ['界面相对传统', '创意生成一般', '部分功能需付费'],
-    bestFor: '语音交互、办公辅助、教育学习',
-    rating: 4.3,
+    title: '想兼顾代码和企业场景',
+    description: 'Qwen 2.5-Max 更适合技术、文档和偏企业协作的任务。',
   },
   {
-    id: 'tongyi-qianwen',
-    name: '通义千问',
-    company: '阿里巴巴',
-    externalUrl: 'https://tongyi.aliyun.com',
-    pros: ['代码能力强', '与阿里生态整合', '文档理解优秀', '开源模型可选'],
-    cons: ['中文文学性一般', '复杂推理有局限', '部分响应较慢'],
-    bestFor: '编程辅助、文档处理、企业应用',
-    rating: 4.4,
-  },
-  {
-    id: 'zhipu-qingyan',
-    name: '智谱清言',
-    company: '智谱AI',
-    externalUrl: 'https://chatglm.cn',
-    pros: ['学术研究能力强', '长文本处理优秀', '开源生态活跃', '专业术语准确'],
-    cons: ['日常对话偏正式', '产品功能相对简单', '知名度较低'],
-    bestFor: '学术研究、长文档分析、专业咨询',
-    rating: 4.2,
-  },
-  {
-    id: 'kimi',
-    name: 'Kimi',
-    company: '月之暗面',
-    externalUrl: 'https://kimi.moonshot.cn',
-    pros: ['超长上下文支持', '文件处理能力突出', '阅读总结能力强', '界面简洁现代'],
-    cons: ['联网搜索功能有限', '多模态支持较弱', '新功能迭代较慢'],
-    bestFor: '长文档阅读、资料整理、内容总结',
-    rating: 4.4,
+    title: '想处理长文档和资料',
+    description: 'Kimi k1.5 更像一个资料整理器，适合把长文本工作先接过去。',
   },
 ];
 
-// 使用建议场景
+const whyItMatters = [
+  {
+    title: '不是只看能不能打开',
+    icon: Globe,
+    description: '真正影响体验的，是它能不能顺手放进你当前的工作流，而不是只看访问条件。',
+  },
+  {
+    title: '中文语境差异很真实',
+    icon: MessageCircle,
+    description: '会议纪要、内容提纲、文档问答和中文表达，会直接决定你是不是愿意长期留下来。',
+  },
+  {
+    title: '安全感来自可控流程',
+    icon: Shield,
+    description: '企业和团队常常更在意流程稳定、工具衔接和风险可控，而不是单次炫技表现。',
+  },
+];
+
+const alternatives = [
+  {
+    id: 'deepseek',
+    name: 'DeepSeek',
+    company: '深度求索',
+    standout: '中文推理和低成本试错的第一站',
+    description: '更适合作为国内用户的主力起点，尤其是中文问答、推理拆解和代码解释。',
+    pros: ['中文任务顺手', '适合快速建立 AI 使用习惯', '推理和代码场景更务实'],
+    cons: ['不是所有创意场景都更强', '生态成熟度不如国际头部产品'],
+    bestFor: '中文问答、代码解释、低成本试错、轻量办公',
+  },
+  {
+    id: 'qwen25max',
+    name: 'Qwen 2.5-Max',
+    company: '阿里通义',
+    standout: '代码、文档和企业感更强的选择',
+    description: '如果你需要更偏技术、偏文档和偏系统化的工作流，Qwen 往往更容易接住。',
+    pros: ['中文理解和代码能力更均衡', '适合文档与业务场景', '更像企业工具底座'],
+    cons: ['对普通用户来说判断成本更高', '创意表达不一定是它的强项'],
+    bestFor: '代码辅助、企业文档、业务分析、复杂资料处理',
+  },
+  {
+    id: 'kimi-k15',
+    name: 'Kimi k1.5',
+    company: '月之暗面',
+    standout: '长文档和资料整理最容易立刻见效',
+    description: '当你要处理长资料、长上下文问答和总结归纳时，它比很多通用对话工具更像生产力工具。',
+    pros: ['适合长文和多资料整理', '界面和使用方式门槛低', '做信息提炼更省时间'],
+    cons: ['如果你主要做代码和复杂推理，不一定是第一选择', '更适合作为专项工具使用'],
+    bestFor: '论文和报告阅读、资料总结、长文档问答、内容整理',
+  },
+].map((tool) => ({
+  ...tool,
+  ...getToolCardData(tool),
+}));
+
 const useCases = [
   {
-    title: '日常办公',
-    description: '推荐讯飞星火或通义千问，办公辅助功能完善，支持PPT生成和文档处理。',
-    icon: '📊',
+    title: '中文问答和内容起稿',
+    icon: MessageCircle,
+    recommendation: '先从 DeepSeek 开始',
+    description: '更容易拿到可执行的第一版，适合把空白启动时间压到最短。',
   },
   {
-    title: '编程开发',
-    description: '通义千问代码能力最强，文心一言和Kimi在代码解释方面表现也不错。',
-    icon: '💻',
+    title: '编程和业务文档',
+    icon: Code2,
+    recommendation: '优先看 Qwen 2.5-Max',
+    description: '如果你既做技术又做文档，它更适合承担中间那段“解释和梳理”的工作。',
   },
   {
-    title: '内容创作',
-    description: '文心一言中文写作能力较强，Kimi在长篇内容整理方面有独到之处。',
-    icon: '✍️',
+    title: '长资料阅读与总结',
+    icon: FileText,
+    recommendation: '优先看 Kimi k1.5',
+    description: '适合接住论文、报告、访谈整理和多份材料的交叉阅读。',
   },
   {
-    title: '学术研究',
-    description: '智谱清言和Kimi擅长处理长文本和学术资料，适合论文阅读和资料整理。',
-    icon: '📚',
+    title: '搜索驱动的问题',
+    icon: Search,
+    recommendation: '先看任务再决定工具',
+    description: '如果你更依赖实时搜索和外部信息，替代方案要和搜索型工作流一起考虑，而不是只换模型。',
+  },
+];
+
+const comparisonRows = [
+  {
+    need: '想先把中文工作流跑起来',
+    pick: 'DeepSeek',
+    why: '更容易直接上手，也更适合高频中文任务的第一轮落地。',
   },
   {
-    title: '语音交互',
-    description: '讯飞星火语音识别和合成能力领先，适合需要语音输入输出的场景。',
-    icon: '🎙️',
+    need: '想做代码、文档和偏企业协作',
+    pick: 'Qwen 2.5-Max',
+    why: '更均衡，适合技术与业务混合场景，不容易只停留在聊天工具层面。',
+  },
+  {
+    need: '想处理超长资料和复杂文档',
+    pick: 'Kimi k1.5',
+    why: '长文和资料消化的效率提升最容易被直接感知。',
+  },
+  {
+    need: '想要更成熟的国际生态和更多外围能力',
+    pick: '把 ChatGPT 留作第二工具',
+    why: '国内替代适合承担主力场景，但不是每条链路都必须一刀切替换。',
   },
 ];
 
 export default function ChatGPTAlternativesPage() {
   return (
     <div className="min-h-screen bg-bg-primary">
-      {/* Breadcrumb */}
-      <div className="border-b border-border-light">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-2 text-sm text-text-muted">
-            <Link href="/" className="hover:text-accent-warm transition-colors">首页</Link>
-            <span>/</span>
-            <Link href="/blog" className="hover:text-accent-warm transition-colors">博客</Link>
-            <span>/</span>
-            <span className="text-text-secondary">ChatGPT国内替代</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border-light">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-warm/5 via-transparent to-accent-cool/5" />
-        <div className="container mx-auto px-4 py-16 sm:py-20 relative">
-          <div className="max-w-4xl mx-auto">
-            <Link 
-              href="/blog" 
-              className="inline-flex items-center gap-2 text-text-muted hover:text-accent-warm transition-colors mb-6"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              返回博客
-            </Link>
-            
-            <div className="flex items-center gap-4 mb-6">
-              <span className="px-3 py-1 bg-accent-warm/10 text-accent-warm rounded-full text-sm font-medium">
-                工具推荐
-              </span>
-              <span className="flex items-center gap-1 text-text-muted text-sm">
-                <Calendar className="w-4 h-4" />
-                2024-03-20
-              </span>
-              <span className="flex items-center gap-1 text-text-muted text-sm">
-                <Clock className="w-4 h-4" />
-                10 分钟阅读
-              </span>
+      <PageHero
+        eyebrow="替代方案专题"
+        title="ChatGPT 国内替代方案"
+        highlight="先看你的任务类型，再决定该把谁放进主力工作流。"
+        description="这页不再堆“国内能用的 AI 名单”，而是直接回答更重要的问题：你到底想解决什么任务，以及哪个工具最适合先承担那段工作流。"
+        metrics={[
+          {
+            value: `${alternatives.length} 个优先选择`,
+            label: '这页先聚焦的替代工具',
+            hint: '不求全，只先解决最常见的三类需求。',
+          },
+          {
+            value: '中文 / 代码 / 长文档',
+            label: '核心判断维度',
+            hint: '比按品牌选，更接近真实决策。',
+          },
+          {
+            value: '对比 + 场景 + 下一步动作',
+            label: '页面结构',
+            hint: '帮助你从判断直接走向试用。',
+          },
+        ]}
+        actions={[
+          { href: '/tools?category=chatbot', label: '查看全部对话工具', tone: 'secondary' },
+          { href: '/tools', label: '进入工具库继续筛选', tone: 'primary' },
+        ]}
+        aside={
+          <div>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              先看结论
             </div>
-
-            <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">
-              ChatGPT国内替代方案
-            </h1>
-            
-            <p className="text-xl text-text-secondary leading-relaxed">
-              ChatGPT在国内无法直接访问？别担心！本文为您详细介绍国内可用的AI对话工具，
-              包括文心一言、讯飞星火、通义千问、智谱清言、Kimi等，帮助您找到最适合的替代方案。
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          {/* 为什么需要替代 */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center text-accent-warm text-lg">1</span>
-              为什么需要ChatGPT替代方案？
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center mb-4">
-                  <Globe className="w-6 h-6 text-red-600" />
+            <div className="mt-5 space-y-3">
+              {quickDecisions.map((item) => (
+                <div key={item.title} className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <p className="text-sm font-medium text-text-primary">{item.title}</p>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
                 </div>
-                <h3 className="font-bold text-text-primary mb-2">网络限制</h3>
-                <p className="text-text-secondary text-sm">
-                  ChatGPT官网在国内无法直接访问，需要特殊网络环境，给普通用户带来不便。
-                </p>
-              </div>
-              
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-                  <MessageCircle className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="font-bold text-text-primary mb-2">语言优化</h3>
-                <p className="text-text-secondary text-sm">
-                  国内AI工具针对中文场景深度优化，在中文理解和生成方面表现更出色。
-                </p>
-              </div>
-              
-              <div className="bg-surface-card rounded-xl p-6 border border-border-light">
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4">
-                  <Shield className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-text-primary mb-2">合规安全</h3>
-                <p className="text-text-secondary text-sm">
-                  国内工具符合本地法规要求，数据存储在境内，更适合企业级应用。
-                </p>
-              </div>
+              ))}
             </div>
-          </section>
+          </div>
+        }
+      >
+        <div className="flex flex-wrap gap-2 text-sm text-text-muted">
+          {[`更新于 ${publishDate}`, readTime, '适合中文工作流选型'].map((item) => (
+            <span key={item} className="rounded-full border border-white/10 bg-black/10 px-3 py-1.5">
+              {item}
+            </span>
+          ))}
+        </div>
+      </PageHero>
 
-          {/* 工具对比 */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center text-accent-warm text-lg">2</span>
-              主流国内AI工具对比
-            </h2>
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="判断前提"
+          title="为什么这页不只回答“能不能用”"
+          description="真正的替代，不是把名字换掉，而是找到更适合中文团队和国内用户的任务承接方式。"
+        />
 
-            <div className="space-y-6">
-              {toolsComparison.map((tool) => (
-                <div key={tool.name} className="bg-surface-card rounded-xl border border-border-light overflow-hidden hover:border-accent-warm/30 transition-all">
-                  <div className="p-6">
-                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-warm to-accent-cool flex items-center justify-center text-white font-bold text-lg">
-                          {tool.name[0]}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-text-primary">{tool.name}</h3>
-                          <p className="text-text-muted text-sm">{tool.company}</p>
-                          <div className="flex items-center gap-1 mt-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`w-4 h-4 ${i < Math.floor(tool.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-text-muted'}`} 
-                              />
-                            ))}
-                            <span className="text-text-muted text-sm ml-1">{tool.rating}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Link
-                          href={getToolDetailHref(tool.id, tool.name)}
-                          className="px-4 py-2 bg-accent-warm/10 text-accent-warm rounded-lg text-sm font-medium hover:bg-accent-warm/20 transition-colors"
-                        >
-                          查看详情
-                        </Link>
-                        <a
-                          href={tool.externalUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 bg-surface-base text-text-secondary rounded-lg text-sm font-medium hover:bg-surface-hover transition-colors flex items-center gap-1"
-                        >
-                          访问官网
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-                    </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {whyItMatters.map((item) => (
+            <article key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                <item.icon className="h-5 w-5 text-accent-cyan" />
+              </div>
+              <h2 className="mt-5 text-xl font-semibold text-text-primary">{item.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                      <div>
-                        <h4 className="font-semibold text-text-primary mb-3 flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          优点
-                        </h4>
-                        <ul className="space-y-2">
-                          {tool.pros.map((pro, i) => (
-                            <li key={i} className="text-text-secondary text-sm flex items-start gap-2">
-                              <span className="text-green-500 mt-1">•</span>
-                              {pro}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-text-primary mb-3 flex items-center gap-2">
-                          <XCircle className="w-4 h-4 text-red-500" />
-                          缺点
-                        </h4>
-                        <ul className="space-y-2">
-                          {tool.cons.map((con, i) => (
-                            <li key={i} className="text-text-secondary text-sm flex items-start gap-2">
-                              <span className="text-red-500 mt-1">•</span>
-                              {con}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="优先推荐"
+            title="更值得先试的国内替代工具"
+            description="先从这三类典型工作流切入，比一口气同时装五六个工具更容易形成长期使用习惯。"
+          />
 
-                    <div className="mt-6 pt-4 border-t border-border-light">
-                      <p className="text-text-secondary text-sm">
-                        <span className="font-semibold text-text-primary">适用场景：</span>
-                        {tool.bestFor}
-                      </p>
+          <div className="mt-10 grid gap-4">
+            {alternatives.map((tool) => (
+              <article key={tool.id} className="rounded-[30px] border border-white/10 bg-white/5 p-6 transition hover:border-white/16">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="flex items-start gap-4">
+                    <ToolLogo
+                      name={tool.name}
+                      icon={tool.icon}
+                      size={56}
+                      wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/20"
+                      imageClassName="h-10 w-10"
+                      textClassName="text-lg text-text-primary"
+                    />
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h2 className="text-2xl font-semibold text-text-primary">{tool.name}</h2>
+                        <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1 text-xs text-text-secondary">
+                          {tool.company}
+                        </span>
+                      </div>
+                      <p className="mt-3 text-sm text-accent-cyan">{tool.standout}</p>
+                      <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">{tool.description}</p>
                     </div>
                   </div>
+
+                  <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-primary">
+                    <Star className="h-4 w-4 text-accent-yellow fill-accent-yellow" />
+                    推荐优先试用
+                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          {/* 使用建议 */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center text-accent-warm text-lg">3</span>
-              不同场景的使用建议
-            </h2>
+                <div className="mt-5 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                    <div className="flex items-center gap-2 text-sm text-text-primary">
+                      <CheckCircle2 className="h-4 w-4 text-accent-cyan" />
+                      更适合它的地方
+                    </div>
+                    <ul className="mt-3 space-y-2 text-sm text-text-secondary">
+                      {tool.pros.map((item) => (
+                        <li key={item}>+ {item}</li>
+                      ))}
+                    </ul>
+                  </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {useCases.map((useCase) => (
-                <div key={useCase.title} className="bg-surface-card rounded-xl p-6 border border-border-light hover:border-accent-warm/30 transition-all">
-                  <div className="text-3xl mb-4">{useCase.icon}</div>
-                  <h3 className="font-bold text-text-primary mb-2">{useCase.title}</h3>
-                  <p className="text-text-secondary text-sm">{useCase.description}</p>
+                  <div className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                    <div className="flex items-center gap-2 text-sm text-text-primary">
+                      <XCircle className="h-4 w-4 text-accent-pink" />
+                      先知道这些限制
+                    </div>
+                    <ul className="mt-3 space-y-2 text-sm text-text-secondary">
+                      {tool.cons.map((item) => (
+                        <li key={item}>- {item}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          {/* 总结 */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center text-accent-warm text-lg">4</span>
-              总结与建议
-            </h2>
-            
-            <div className="bg-gradient-to-br from-accent-warm/5 to-accent-cool/5 rounded-xl p-8 border border-accent-warm/20">
-              <p className="text-text-secondary leading-relaxed mb-6">
-                虽然ChatGPT在国际上处于领先地位，但国内AI对话工具在中文场景下已经具备了很强的竞争力。
-                选择哪款工具，主要取决于您的具体需求：
-              </p>
-              
-              <ul className="space-y-3 text-text-secondary mb-6">
-                <li className="flex items-start gap-3">
-                  <span className="text-accent-warm font-bold">•</span>
-                  <span><strong className="text-text-primary">追求综合体验</strong> - 文心一言功能全面，与搜索结合紧密</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent-warm font-bold">•</span>
-                  <span><strong className="text-text-primary">办公效率优先</strong> - 讯飞星火的办公辅助功能最实用</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent-warm font-bold">•</span>
-                  <span><strong className="text-text-primary">编程开发场景</strong> - 通义千问的代码能力值得信赖</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent-warm font-bold">•</span>
-                  <span><strong className="text-text-primary">长文档处理</strong> - Kimi的上下文长度优势明显</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-accent-warm font-bold">•</span>
-                  <span><strong className="text-text-primary">学术研究</strong> - 智谱清言在专业性方面表现出色</span>
-                </li>
-              </ul>
+                <div className="mt-5 rounded-[22px] border border-white/8 bg-black/10 p-4 text-sm leading-7 text-text-secondary">
+                  <strong className="text-text-primary">更适合：</strong>
+                  {tool.bestFor}
+                </div>
 
-              <p className="text-text-secondary leading-relaxed">
-                建议您根据自己的主要使用场景，选择1-2款工具进行深度体验。
-                大多数工具都提供免费版本，可以充分测试后再决定是否使用付费功能。
-              </p>
-            </div>
-          </section>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <ToolPrimaryCta
+                    tool={tool}
+                    placement="blog_chatgpt_alternatives_primary_cta"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                  />
+                  <Link
+                    href={getToolDetailHref(tool.id, tool.name)}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                  >
+                    查看详情
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          {/* CTA */}
-          <section className="text-center">
-            <h3 className="text-xl font-bold text-text-primary mb-4">探索更多AI工具</h3>
-            <p className="text-text-secondary mb-6">
-              访问我们的<Link href="/tools" className="text-accent-warm hover:underline">AI工具库</Link>，发现更多优质AI工具
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="按场景选"
+            title="不是选最强，而是选最顺手"
+            description="如果你已经知道自己最常做什么，这一段会比任何榜单都更快帮你排除选项。"
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                  <item.icon className="h-5 w-5 text-accent-yellow" />
+                </div>
+                <h2 className="mt-5 text-lg font-semibold text-text-primary">{item.title}</h2>
+                <p className="mt-3 text-sm text-accent-cyan">{item.recommendation}</p>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="替代逻辑"
+            title="什么时候可以直接替，什么时候适合并行用"
+            description="更现实的做法通常不是一刀切，而是让不同工具接住不同任务。"
+          />
+
+          <div className="mt-10 overflow-x-auto rounded-[30px] border border-white/10 bg-white/5">
+            <table className="w-full min-w-[840px]">
+              <thead>
+                <tr className="border-b border-white/8 bg-black/10">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">你的需求</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">更推荐先试</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-text-primary">原因</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((row, index) => (
+                  <tr key={row.need} className={index % 2 === 1 ? 'bg-black/10' : ''}>
+                    <td className="px-6 py-4 text-sm font-medium text-text-primary">{row.need}</td>
+                    <td className="px-6 py-4 text-sm text-text-secondary">{row.pick}</td>
+                    <td className="px-6 py-4 text-sm leading-7 text-text-secondary">{row.why}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <div className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 text-center shadow-[0_28px_70px_rgba(0,0,0,0.25)]">
+            <h2 className="text-3xl font-semibold text-text-primary">下一步不是继续收藏，而是马上试一个真实任务</h2>
+            <p className="mt-4 text-base leading-8 text-text-secondary">
+              如果你已经知道自己更偏中文问答、代码文档还是长资料处理，就直接从对应工具开始试，再回到工具库扩大筛选范围。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link
-                href="/"
-                className="px-8 py-3 bg-accent-warm text-white rounded-xl hover:bg-accent-warm-hover transition-colors font-medium"
+                href="/tools?category=chatbot"
+                className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
               >
-                浏览首页推荐
+                继续看对话工具
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/blog/deepseek-guide"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+              >
+                读 DeepSeek 教程
+                <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/blog"
-                className="px-8 py-3 bg-surface-card border border-border-medium text-text-primary rounded-xl hover:border-accent-warm hover:text-accent-warm transition-all font-medium"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
               >
-                阅读更多文章
+                回到专题中心
+                <ArrowRight className="h-4 w-4" />
               </Link>
-            </div>
-          </section>
-
-          {/* Tags */}
-          <div className="mt-12 pt-8 border-t border-border-light">
-            <div className="flex flex-wrap gap-2">
-              {['ChatGPT替代', '国内AI工具', '文心一言', '讯飞星火', '通义千问', '智谱清言', 'Kimi', 'AI对话'].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 bg-surface-base text-text-secondary rounded-lg text-sm hover:bg-accent-warm/10 hover:text-accent-warm cursor-pointer transition-all"
-                >
-                  #{tag}
-                </span>
-              ))}
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
