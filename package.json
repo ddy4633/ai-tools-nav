@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
+    "audit:site": "playwright test tests/browser/site-audit.spec.ts --browser=chromium --reporter=line",
     "db:types": "supabase gen types typescript --project-id $PROJECT_ID --schema public > types/supabase.ts"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "eslint": "^9.39.3",
     "eslint-config-next": "^16.1.6"
   }

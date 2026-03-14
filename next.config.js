@@ -1,7 +1,10 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
   distDir: '.next',
+  outputFileTracingRoot: path.resolve(__dirname),
   images: {
     unoptimized: true,
   },

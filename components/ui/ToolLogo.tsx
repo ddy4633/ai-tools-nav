@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ToolLogoProps {
   name: string;
@@ -22,19 +25,23 @@ export default function ToolLogo({
   priority = false,
 }: ToolLogoProps) {
   const safeAlt = alt ?? `${name} logo`;
+  const [failedIcon, setFailedIcon] = useState<string | null>(null);
+  const hasError = !icon || failedIcon === icon;
 
   return (
     <div
       className={`flex items-center justify-center overflow-hidden ${wrapperClassName}`.trim()}
       aria-label={safeAlt}
     >
-      {icon ? (
+      {!hasError && icon ? (
         <Image
           src={icon}
           alt={safeAlt}
           width={size}
           height={size}
-          priority={priority}
+          unoptimized
+          loading={priority ? 'eager' : 'lazy'}
+          onError={() => setFailedIcon(icon)}
           className={`object-contain ${imageClassName}`.trim()}
         />
       ) : (

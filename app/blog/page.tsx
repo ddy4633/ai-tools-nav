@@ -1,337 +1,267 @@
 import { Metadata } from 'next';
-import { Calendar, Clock, ArrowRight, Tag, BookOpen, TrendingUp, Sparkles } from 'lucide-react';
 import Link from 'next/link';
+import { ArrowRight, Search, Sparkles, TrendingUp } from 'lucide-react';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import NewsletterSection from '@/components/home/NewsletterSection';
+import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'AI 工具博客 - 最新资讯与使用技巧',
-  description: '探索 AI 工具的最新动态、使用技巧和行业洞察。发现如何更好地利用 AI 提升工作效率。',
+  description: '围绕 AI 工具推荐、替代方案、使用教程和高意图内容的专题内容中心。',
   keywords: ['AI 博客', 'AI工具教程', '人工智能资讯', 'AI使用技巧'],
+  alternates: {
+    canonical: buildSiteUrl('/blog'),
+  },
 };
 
-// 模拟博客文章数据
+const featuredPost = {
+  href: '/blog/top-ai-tools-2026',
+  title: '2026 年最值得关注的 10 个 AI 工具',
+  excerpt: '从大模型、AI 编程到视频生成和 Agent，这篇文章更适合做年度入口和热点分发。',
+  category: '年度榜单',
+  date: '2026-03-03',
+  readTime: '12 分钟',
+};
+
+const editorialClusters = [
+  {
+    title: '替代方案',
+    description: '抓住“ChatGPT 国内替代”“谁能替代 Midjourney”这类高意图搜索。',
+  },
+  {
+    title: '对比与推荐',
+    description: '用榜单、清单和横向对比承接“该选哪个”的决策需求。',
+  },
+  {
+    title: '使用教程',
+    description: '把复杂产品讲清楚，顺手完成工具详情页和联盟链接导流。',
+  },
+];
+
 const blogPosts = [
   {
-    id: 'top-ai-tools-2026',
-    title: '2026年最值得关注的10个AI工具 - 从Grok 3到Manus',
-    excerpt: '盘点2026年最热门的AI工具：Grok 3、Qwen 2.5-Max、Kimi k1.5、Windsurf、Bolt.new、Kling AI等，深度解析它们的特点和适用场景。',
+    href: '/blog/top-ai-tools-2026',
+    title: '2026 年最值得关注的 10 个 AI 工具',
+    excerpt: '大模型、AI 编程、视频生成和 Agent 的年度入口文章。',
     category: '工具推荐',
     date: '2026-03-03',
     readTime: '12 分钟',
-    tags: ['AI工具', '2026趋势', 'Grok 3', 'Manus', 'Kling AI'],
-    featured: true,
-    slug: 'top-ai-tools-2026',
+    tags: ['年度榜单', 'AI 工具', '趋势'],
   },
   {
-    id: 1,
-    title: '2024 年最值得关注的 10 个 AI 工具',
-    excerpt: '从 ChatGPT 到 Midjourney，盘点今年最热门的 AI 工具及其应用场景，帮助你快速了解 AI 工具生态。',
-    category: '工具推荐',
-    date: '2024-03-15',
-    readTime: '8 分钟',
-    tags: ['AI工具', '效率', '推荐'],
-    featured: false,
-  },
-  {
-    id: 'deepseek-guide',
-    title: 'DeepSeek使用教程 - 国产AI大模型DeepSeek怎么用',
-    excerpt: 'DeepSeek使用教程详解：DeepSeek是什么？如何注册使用DeepSeek？DeepSeek vs ChatGPT对比分析，DeepSeek优缺点及使用技巧。',
+    href: '/blog/deepseek-guide',
+    title: 'DeepSeek 使用教程：从注册到高质量提问',
+    excerpt: '一篇兼顾入门和场景实践的国产大模型教程页。',
     category: '使用教程',
-    date: '2024-02-28',
+    date: '2026-03-10',
     readTime: '15 分钟',
-    tags: ['DeepSeek', '国产AI', 'AI大模型'],
-    featured: false,
-    slug: 'deepseek-guide',
+    tags: ['DeepSeek', '教程', '国产 AI'],
   },
   {
-    id: 2,
-    title: 'ChatGPT 进阶使用技巧：从入门到精通',
-    excerpt: '掌握提示词工程、角色设定、上下文管理等高级技巧，让你的 ChatGPT 使用效率提升 10 倍。',
-    category: '使用教程',
-    date: '2024-03-12',
-    readTime: '12 分钟',
-    tags: ['ChatGPT', '提示词', '教程'],
-    featured: false,
-  },
-  {
-    id: 3,
-    title: 'AI 绘画工具对比：Midjourney vs Stable Diffusion vs DALL-E',
-    excerpt: '深入对比三大主流 AI 绘画工具的优劣势，帮你选择最适合自己的创作工具。',
-    category: '工具对比',
-    date: '2024-03-08',
+    href: '/blog/chatgpt-china-alternatives',
+    title: 'ChatGPT 国内替代方案：谁更适合中文工作流',
+    excerpt: '适合截获“国内能用吗”“有没有替代”这类高转化搜索。',
+    category: '替代方案',
+    date: '2026-03-12',
     readTime: '10 分钟',
-    tags: ['AI绘画', 'Midjourney', '对比'],
-    featured: false,
+    tags: ['替代方案', '中文 AI', '对比'],
   },
   {
-    id: 4,
-    title: '如何用 AI 工具提升编程效率',
-    excerpt: 'GitHub Copilot、CodeWhisperer、Tabnine 等 AI 编程助手的使用心得和最佳实践。',
-    category: '开发工具',
-    date: '2024-03-05',
-    readTime: '6 分钟',
-    tags: ['编程', 'Copilot', '效率'],
-    featured: false,
+    href: '/blog/ai-writing-tools-free',
+    title: '免费 AI 写作工具推荐：适合内容和营销团队的选择',
+    excerpt: '更偏实战，适合承接内容生产和营销增长需求。',
+    category: '工具推荐',
+    date: '2026-03-08',
+    readTime: '11 分钟',
+    tags: ['AI 写作', '免费工具', '内容营销'],
   },
   {
-    id: 5,
-    title: 'AI 写作工具实测：Notion AI、Jasper、Copy.ai',
-    excerpt: '三款主流 AI 写作工具的深度测评，包括功能对比、价格分析和适用场景建议。',
-    category: '工具对比',
-    date: '2024-03-01',
-    readTime: '9 分钟',
-    tags: ['写作', 'Notion', '测评'],
-    featured: false,
+    href: '/blog/ai-art-generators',
+    title: 'AI 绘画网站推荐：从免费试用到专业出图',
+    excerpt: '适合拦截做图、海报、社媒素材和视觉提案相关需求。',
+    category: '工具推荐',
+    date: '2026-03-07',
+    readTime: '11 分钟',
+    tags: ['AI 绘画', '视觉创作', '设计'],
   },
-  {
-    id: 6,
-    title: 'AI 工具在内容创作中的 7 种应用方式',
-    excerpt: '从文案撰写到视频剪辑，探索 AI 如何全方位助力内容创作者提升生产力。',
-    category: '使用教程',
-    date: '2024-02-28',
-    readTime: '7 分钟',
-    tags: ['内容创作', '视频', '文案'],
-    featured: false,
-  },
-];
-
-const categories = [
-  { name: '全部', count: 24 },
-  { name: '工具推荐', count: 8 },
-  { name: '使用教程', count: 6 },
-  { name: '工具对比', count: 4 },
-  { name: '开发工具', count: 3 },
-  { name: '行业资讯', count: 3 },
 ];
 
 export default function BlogPage() {
-  const featuredPost = blogPosts.find(post => post.featured);
-  const regularPosts = blogPosts.filter(post => !post.featured);
-
   return (
     <div className="min-h-screen bg-bg-primary">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border-light">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-warm/5 via-transparent to-accent-cool/5" />
-        <div className="container mx-auto px-4 py-16 sm:py-20 relative">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-warm/10 rounded-full text-accent-warm text-sm font-medium mb-6">
-              <BookOpen className="w-4 h-4" />
-              AI 工具博客
+      <PageHero
+        eyebrow="专题内容中心"
+        title="内容不是附属品。"
+        highlight="它本身就是流量入口和转化入口。"
+        description="博客页承担的不是“发几篇文章”，而是构建高意图搜索词、榜单分发和专题合作的内容中台。它应该让用户一眼看懂：这里有什么、为什么值得点、点进去之后能做什么。"
+        metrics={[
+          {
+            value: `${blogPosts.length}`,
+            label: '当前重点专题',
+            hint: '先做高意图内容，再逐步扩展长尾矩阵。',
+          },
+          {
+            value: '推荐 / 替代 / 教程',
+            label: '主打内容结构',
+            hint: '最适合承接搜索流量，也最适合商业合作。',
+          },
+          {
+            value: '可导向详情页',
+            label: '站内互链方向',
+            hint: '专题页负责把用户继续送往工具库、详情页和合作入口。',
+          },
+        ]}
+        actions={[
+          { href: '/tools', label: '先去工具库', tone: 'secondary' },
+          { href: '/advertise', label: '做专题合作', tone: 'primary' },
+        ]}
+        aside={
+          <div>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <Search className="h-4 w-4 text-accent-cyan" />
+              内容页的三种作用
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">
-              探索 AI 的<span className="text-accent-warm">无限可能</span>
-            </h1>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              最新 AI 工具资讯、深度使用教程和行业洞察，帮助你更好地利用人工智能提升效率
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Featured Post */}
-            {featuredPost && (
-              <div className="mb-10">
-                <div className="flex items-center gap-2 text-accent-warm mb-4">
-                  <Sparkles className="w-5 h-5" />
-                  <span className="font-semibold">精选文章</span>
+            <div className="mt-5 space-y-3">
+              {editorialClusters.map((cluster) => (
+                <div key={cluster.title} className="rounded-[22px] border border-white/8 bg-black/10 p-4">
+                  <p className="text-sm font-medium text-text-primary">{cluster.title}</p>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">{cluster.description}</p>
                 </div>
-                <article className="group bg-surface-card rounded-2xl overflow-hidden border border-border-light hover:border-accent-warm/50 transition-all shadow-sm hover:shadow-lg">
-                  <div className="p-8">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="px-3 py-1 bg-accent-warm/10 text-accent-warm rounded-full text-sm font-medium">
-                        {featuredPost.category}
-                      </span>
-                      <span className="flex items-center gap-1 text-text-muted text-sm">
-                        <Calendar className="w-4 h-4" />
-                        {featuredPost.date}
-                      </span>
-                      <span className="flex items-center gap-1 text-text-muted text-sm">
-                        <Clock className="w-4 h-4" />
-                        {featuredPost.readTime}
-                      </span>
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text-primary mb-4 group-hover:text-accent-warm transition-colors">
-                      {featuredPost.title}
-                    </h2>
-                    <p className="text-text-secondary text-lg mb-6 leading-relaxed">
-                      {featuredPost.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-2">
-                        {featuredPost.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-3 py-1 bg-surface-base text-text-secondary rounded-full text-sm"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                      <button className="flex items-center gap-2 text-accent-warm font-medium hover:text-accent-warm-hover transition-colors">
-                        阅读全文
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            )}
-
-            {/* Regular Posts Grid */}
-            <div className="flex items-center gap-2 mb-6">
-              <TrendingUp className="w-5 h-5 text-text-secondary" />
-              <h2 className="text-xl font-bold text-text-primary">最新文章</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {regularPosts.map((post) => (
-                post.slug ? (
-                  <Link href={`/blog/${post.slug}`} key={post.id}>
-                    <article className="group bg-surface-card rounded-xl overflow-hidden border border-border-light hover:border-accent-warm/30 transition-all hover:shadow-md h-full">
-                      <div className="p-6">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="px-2 py-1 bg-surface-base text-text-secondary rounded-md text-xs font-medium">
-                            {post.category}
-                          </span>
-                          <span className="text-text-muted text-xs">
-                            {post.date}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-accent-warm transition-colors line-clamp-2">
-                          {post.title}
-                        </h3>
-                        <p className="text-text-secondary text-sm mb-4 line-clamp-2">
-                          {post.excerpt}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex gap-1">
-                            {post.tags.slice(0, 2).map((tag) => (
-                              <span key={tag} className="text-xs text-text-muted">
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                          <span className="flex items-center gap-1 text-text-muted text-xs">
-                            <Clock className="w-3 h-3" />
-                            {post.readTime}
-                          </span>
-                        </div>
-                      </div>
-                    </article>
-                  </Link>
-                ) : (
-                  <article
-                    key={post.id}
-                    className="group bg-surface-card rounded-xl overflow-hidden border border-border-light hover:border-accent-warm/30 transition-all hover:shadow-md"
-                  >
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2 py-1 bg-surface-base text-text-secondary rounded-md text-xs font-medium">
-                          {post.category}
-                        </span>
-                        <span className="text-text-muted text-xs">
-                          {post.date}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-bold text-text-primary mb-3 group-hover:text-accent-warm transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-text-secondary text-sm mb-4 line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-1">
-                          {post.tags.slice(0, 2).map((tag) => (
-                            <span key={tag} className="text-xs text-text-muted">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                        <span className="flex items-center gap-1 text-text-muted text-xs">
-                          <Clock className="w-3 h-3" />
-                          {post.readTime}
-                        </span>
-                      </div>
-                    </div>
-                  </article>
-                )
               ))}
             </div>
-
-            {/* Load More */}
-            <div className="text-center mt-10">
-              <button className="px-8 py-3 bg-surface-card border border-border-medium rounded-xl text-text-primary hover:border-accent-warm hover:text-accent-warm transition-all font-medium">
-                加载更多文章
-              </button>
-            </div>
           </div>
+        }
+      />
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            {/* Categories */}
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light mb-6">
-              <h3 className="font-bold text-text-primary mb-4 flex items-center gap-2">
-                <Tag className="w-4 h-4" />
-                文章分类
-              </h3>
-              <div className="space-y-2">
-                {categories.map((cat, index) => (
-                  <button
-                    key={cat.name}
-                    className={`w-full flex items-center justify-between px-4 py-2.5 rounded-lg transition-all ${
-                      index === 0
-                        ? 'bg-accent-warm/10 text-accent-warm font-medium'
-                        : 'hover:bg-surface-base text-text-secondary'
-                    }`}
-                  >
-                    <span>{cat.name}</span>
-                    <span className={`text-sm ${index === 0 ? 'text-accent-warm' : 'text-text-muted'}`}>
-                      {cat.count}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_22rem]">
+          <Link
+            href={featuredPost.href}
+            className="group rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 shadow-[0_28px_70px_rgba(0,0,0,0.25)] transition hover:border-white/16"
+          >
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              本周最适合做首页联动的一篇
+            </div>
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-text-muted">
+              <span>{featuredPost.category}</span>
+              <span>{featuredPost.date}</span>
+              <span>{featuredPost.readTime}</span>
+            </div>
+            <h2 className="mt-5 text-4xl font-semibold text-text-primary transition group-hover:text-accent-cyan">
+              {featuredPost.title}
+            </h2>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-text-secondary">{featuredPost.excerpt}</p>
+            <span className="mt-8 inline-flex items-center gap-2 text-sm text-text-primary">
+              阅读专题
+              <ArrowRight className="h-4 w-4 text-accent-cyan" />
+            </span>
+          </Link>
+
+          <aside className="rounded-[32px] border border-white/10 bg-white/5 p-6">
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <TrendingUp className="h-4 w-4 text-accent-yellow" />
+              这一栏应该承接商业价值
+            </div>
+            <div className="mt-5 space-y-3">
+              {[
+                '替代方案页适合挂联盟链接和详情页互链。',
+                '榜单页适合做品牌曝光和热点传播。',
+                '教程页适合做用户信任和二跳留存。',
+              ].map((item) => (
+                <div key={item} className="rounded-[22px] border border-white/8 bg-black/10 px-4 py-3 text-sm text-text-secondary">
+                  {item}
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/advertise"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+            >
+              了解专题合作
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </aside>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Editorial Grid"
+            title="高意图专题内容"
+            description="这些页面优先服务搜索和转化，所以结构上更强调推荐、对比、替代和继续行动。"
+          />
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {blogPosts.map((post) => (
+              <Link
+                key={post.href}
+                href={post.href}
+                className="group rounded-[28px] border border-white/10 bg-white/5 p-5 transition hover:border-white/16 hover:bg-white/[0.07]"
+              >
+                <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
+                  <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1">{post.category}</span>
+                  <span>{post.date}</span>
+                  <span>{post.readTime}</span>
+                </div>
+                <h2 className="mt-4 text-2xl font-semibold text-text-primary transition group-hover:text-accent-cyan">
+                  {post.title}
+                </h2>
+                <p className="mt-4 text-sm leading-7 text-text-secondary">{post.excerpt}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
+                    >
+                      {tag}
                     </span>
-                  </button>
-                ))}
-              </div>
-            </div>
+                  ))}
+                </div>
+                <span className="mt-6 inline-flex items-center gap-2 text-sm text-text-primary">
+                  打开文章
+                  <ArrowRight className="h-4 w-4 text-accent-cyan" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* Newsletter */}
-            <div className="bg-gradient-to-br from-accent-warm/10 to-accent-cool/10 rounded-xl p-6 border border-accent-warm/20">
-              <h3 className="font-bold text-text-primary mb-2">订阅更新</h3>
-              <p className="text-text-secondary text-sm mb-4">
-                每周精选 AI 工具资讯，直达邮箱
-              </p>
-              <div className="space-y-3">
-                <input
-                  type="email"
-                  placeholder="输入邮箱地址"
-                  className="w-full px-4 py-2.5 bg-white border border-border-medium rounded-lg text-text-primary focus:outline-none focus:border-accent-warm text-sm"
-                />
-                <button className="w-full py-2.5 bg-accent-warm text-white rounded-lg hover:bg-accent-warm-hover transition-colors text-sm font-medium">
-                  立即订阅
-                </button>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="rounded-[32px] border border-white/10 bg-white/5 p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Content Partner</p>
+                <h2 className="mt-2 text-2xl font-semibold text-text-primary">想借专题内容拿搜索流量或品牌曝光？</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">
+                  你可以做年度榜单共创、分类专题合作、替代方案页联动，或者直接通过详情页和榜单页组合承接流量。
+                </p>
               </div>
-            </div>
-
-            {/* Popular Tags */}
-            <div className="bg-surface-card rounded-xl p-6 border border-border-light mt-6">
-              <h3 className="font-bold text-text-primary mb-4">热门标签</h3>
-              <div className="flex flex-wrap gap-2">
-                {['AI工具', 'ChatGPT', '效率', '教程', 'Midjourney', '编程', '写作', '设计'].map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1.5 bg-surface-base text-text-secondary rounded-lg text-sm hover:bg-accent-warm/10 hover:text-accent-warm cursor-pointer transition-all"
-                  >
-                    {tag}
-                  </span>
-                ))}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/advertise"
+                  className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                >
+                  查看合作方式
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/submit"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                >
+                  提交你的产品
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <NewsletterSection />
     </div>
   );
 }

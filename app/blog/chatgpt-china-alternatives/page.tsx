@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Calendar, Clock, ArrowLeft, CheckCircle, XCircle, ExternalLink, Star, Shield, Globe, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
+import { toolsData } from '@/lib/content/tools-data';
 
 export const metadata: Metadata = {
   title: 'ChatGPT国内替代 - 国内能用的AI对话工具推荐 | AI工具导航',
@@ -18,12 +19,22 @@ export const metadata: Metadata = {
   },
 };
 
+const indexedToolIds = new Set(toolsData.map((tool) => tool.id));
+
+function getToolDetailHref(id: string, name: string) {
+  if (indexedToolIds.has(id)) {
+    return `/tools/${id}`;
+  }
+
+  return `/tools?search=${encodeURIComponent(name)}`;
+}
+
 // 工具对比数据
 const toolsComparison = [
   {
+    id: 'wenxin-yiyan',
     name: '文心一言',
     company: '百度',
-    url: '/tools/wenxin-yiyan',
     externalUrl: 'https://yiyan.baidu.com',
     pros: ['中文理解能力强', '与百度搜索深度整合', '支持多模态生成', 'API接口完善'],
     cons: ['创意写作能力一般', '代码能力较弱', '部分回答过于官方'],
@@ -31,9 +42,9 @@ const toolsComparison = [
     rating: 4.5,
   },
   {
+    id: 'xinghuo',
     name: '讯飞星火',
     company: '科大讯飞',
-    url: '/tools/xinghuo',
     externalUrl: 'https://xinghuo.xfyun.cn',
     pros: ['语音识别能力强', '数学逻辑优秀', 'PPT生成实用', '教育场景覆盖广'],
     cons: ['界面相对传统', '创意生成一般', '部分功能需付费'],
@@ -41,9 +52,9 @@ const toolsComparison = [
     rating: 4.3,
   },
   {
+    id: 'tongyi-qianwen',
     name: '通义千问',
     company: '阿里巴巴',
-    url: '/tools/tongyi-qianwen',
     externalUrl: 'https://tongyi.aliyun.com',
     pros: ['代码能力强', '与阿里生态整合', '文档理解优秀', '开源模型可选'],
     cons: ['中文文学性一般', '复杂推理有局限', '部分响应较慢'],
@@ -51,9 +62,9 @@ const toolsComparison = [
     rating: 4.4,
   },
   {
+    id: 'zhipu-qingyan',
     name: '智谱清言',
     company: '智谱AI',
-    url: '/tools/zhipu-qingyan',
     externalUrl: 'https://chatglm.cn',
     pros: ['学术研究能力强', '长文本处理优秀', '开源生态活跃', '专业术语准确'],
     cons: ['日常对话偏正式', '产品功能相对简单', '知名度较低'],
@@ -61,9 +72,9 @@ const toolsComparison = [
     rating: 4.2,
   },
   {
+    id: 'kimi',
     name: 'Kimi',
     company: '月之暗面',
-    url: '/tools/kimi',
     externalUrl: 'https://kimi.moonshot.cn',
     pros: ['超长上下文支持', '文件处理能力突出', '阅读总结能力强', '界面简洁现代'],
     cons: ['联网搜索功能有限', '多模态支持较弱', '新功能迭代较慢'],
@@ -231,7 +242,7 @@ export default function ChatGPTAlternativesPage() {
                       </div>
                       <div className="flex gap-2">
                         <Link
-                          href={tool.url}
+                          href={getToolDetailHref(tool.id, tool.name)}
                           className="px-4 py-2 bg-accent-warm/10 text-accent-warm rounded-lg text-sm font-medium hover:bg-accent-warm/20 transition-colors"
                         >
                           查看详情

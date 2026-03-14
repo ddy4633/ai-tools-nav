@@ -56,6 +56,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     {
+      url: buildSiteUrl('/advertise'),
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
       url: buildSiteUrl('/submit'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -89,25 +95,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPages: MetadataRoute.Sitemap = [
     {
       url: buildSiteUrl('/blog/deepseek-guide'),
-      lastModified: new Date('2024-02-28'),
+      lastModified: new Date('2026-03-10'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: buildSiteUrl('/blog/ai-art-generators'),
-      lastModified: new Date('2024-03-01'),
+      lastModified: new Date('2026-03-07'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: buildSiteUrl('/blog/ai-writing-tools-free'),
-      lastModified: new Date('2024-03-05'),
+      lastModified: new Date('2026-03-08'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: buildSiteUrl('/blog/chatgpt-china-alternatives'),
-      lastModified: new Date('2024-03-08'),
+      lastModified: new Date('2026-03-12'),
       changeFrequency: 'monthly',
       priority: 0.6,
     },

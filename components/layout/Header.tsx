@@ -10,6 +10,8 @@ const navItems = [
   { name: '工具库', href: '/tools' },
   { name: '分类浏览', href: '/categories' },
   { name: '热门榜单', href: '/trending' },
+  { name: '专题内容', href: '/blog' },
+  { name: '商务合作', href: '/advertise' },
   { name: '提交工具', href: '/submit' },
 ];
 
@@ -53,11 +55,11 @@ export default function Header() {
             <CommandPalette />
 
             <Link
-              href="/submit"
+              href="/advertise"
               className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary md:inline-flex"
             >
               <Sparkles className="h-4 w-4 text-accent-yellow" />
-              推荐新工具
+              商务合作
             </Link>
 
             <button

@@ -34,3 +34,6 @@ scan_*.sh
 quick_scan.sh
 deep_scan.sh
 final_scan.sh
+test-results/
+playwright-report/
+research/site-audit/

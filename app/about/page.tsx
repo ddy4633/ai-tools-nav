@@ -1,243 +1,257 @@
 import { Metadata } from 'next';
-import { Users, Target, Award, Mail, Globe, Shield } from 'lucide-react';
 import Link from 'next/link';
+import { ArrowRight, Compass, Mail, ShieldCheck, Target } from 'lucide-react';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import {
+  audienceProfiles,
+  commercialPackages,
+  contentPillars,
+  editorialPrinciples,
+  growthChannels,
+} from '@/lib/content/growth-content';
+import { buildMailtoLink, buildSiteUrl, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '关于我们 - AI工具导航 | 发现最好用的AI工具',
-  description: '了解AI工具导航团队的使命和愿景。我们致力于发现和推荐真正好用的AI工具，帮助用户提升工作效率。',
+  description: '了解 AI工具导航 的编辑原则、商业透明度和增长策略。我们致力于把 AI 工具站做成有判断力的流量入口。',
   keywords: ['关于我们', 'AI工具导航', 'AI工具推荐', '团队介绍', 'AI工具平台'],
   alternates: {
-    canonical: 'https://ai.poph163.com/about',
+    canonical: buildSiteUrl('/about'),
   },
   openGraph: {
     title: '关于我们 - AI工具导航',
-    description: '了解AI工具导航团队的使命和愿景。我们致力于发现和推荐真正好用的AI工具。',
+    description: '了解 AI工具导航 的编辑原则、商业透明度和增长策略。',
     type: 'website',
+    url: buildSiteUrl('/about'),
   },
 };
-
-// 团队数据
-const teamMembers = [
-  {
-    name: '小明',
-    role: '主编',
-    bio: 'AI工具重度使用者，每天测试3-5个新工具，专注于AI聊天和效率工具领域',
-    avatar: 'M',
-    color: 'bg-accent-warm',
-  },
-  {
-    name: '阿强',
-    role: '技术编辑',
-    bio: '前产品经理，专注效率工具和工作流优化，擅长AI编程和开发工具评测',
-    avatar: 'Q',
-    color: 'bg-accent-cool',
-  },
-  {
-    name: 'Lisa',
-    role: '创意总监',
-    bio: '设计师出身，对AI图像和视频工具有独到见解，负责视觉设计和内容策划',
-    avatar: 'L',
-    color: 'bg-purple-500',
-  },
-];
-
-// 核心价值观
-const values = [
-  {
-    icon: Target,
-    title: '精挑细选',
-    description: '不追求数量，每个工具都经过实际使用验证，确保推荐质量',
-  },
-  {
-    icon: Shield,
-    title: '独立客观',
-    description: '不接受付费推广，保持独立和客观，只为用户推荐真正好用的工具',
-  },
-  {
-    icon: Award,
-    title: '专业评测',
-    description: '每个工具都进行深度评测，从功能、价格、易用性等多维度分析',
-  },
-  {
-    icon: Globe,
-    title: '全球视野',
-    description: '关注全球AI工具发展动态，第一时间为用户带来最新的工具资讯',
-  },
-];
-
-// 数据统计
-const stats = [
-  { value: '20+', label: '精选工具' },
-  { value: '10+', label: '分类目录' },
-  { value: '内测中', label: '用户规模' },
-  { value: '持续优化', label: '体验迭代' },
-];
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-bg-primary">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden border-b border-border-light">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-warm/5 via-transparent to-accent-cool/5" />
-        <div className="container mx-auto px-4 py-16 sm:py-24 relative">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-warm/10 rounded-full text-accent-warm text-sm font-medium mb-6">
-              <Users className="w-4 h-4" />
-              关于我们
+      <PageHero
+        eyebrow="关于 AI工具导航"
+        title="我们不想做"
+        highlight="又一个把工具名字塞满页面的站。"
+        description="这个项目的目标，是把 AI 工具导航做成一层真正有判断力的筛选器。对用户来说，它应该帮你缩短试错时间；对 AI 团队来说，它应该是一条能带来流量、点击和线索的增长路径。"
+        metrics={[
+          {
+            value: '策展优先',
+            label: '信息组织原则',
+            hint: '不是先比数量，而是先比有没有清晰判断。',
+          },
+          {
+            value: '商业透明',
+            label: '合作展示原则',
+            hint: '赞助、合作链接和编辑推荐必须分开展示。',
+          },
+          {
+            value: '场景驱动',
+            label: '页面设计逻辑',
+            hint: '首页、榜单、专题、详情页都围绕任务与转化设计。',
+          },
+          {
+            value: '长期增长',
+            label: '项目目标',
+            hint: '一切都服务于更稳定的流量和更清楚的赚钱路径。',
+          },
+        ]}
+        actions={[
+          { href: '/tools', label: '去工具库继续看', tone: 'secondary' },
+          { href: '/advertise', label: '查看商务合作', tone: 'primary' },
+          { href: '/submit', label: '提交你的产品', tone: 'ghost' },
+        ]}
+        aside={
+          <div>
+            <div className="flex items-center gap-2 text-sm text-text-secondary">
+              <ShieldCheck className="h-4 w-4 text-accent-cyan" />
+              我们最重视的三件事
             </div>
-            
-            <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">
-              发现<span className="text-accent-warm">最好用</span>的AI工具
-            </h1>
-            
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
-              AI工具导航是一个专注于发现和推荐优质AI工具的平台。
-              我们不追求收录所有工具，只推荐真正好用的，每个工具都经过实际使用验证。
-            </p>
+            <div className="mt-5 space-y-3">
+              {[
+                '用户能不能在 3 分钟内缩小选择范围。',
+                '页面是否明确告诉用户“为什么推荐、适合谁、不适合谁”。',
+                '商业化位是否清楚披露，不靠模糊带货损耗信任。',
+              ].map((item) => (
+                <div key={item} className="rounded-[22px] border border-white/8 bg-black/10 px-4 py-3 text-sm text-text-secondary">
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        }
+      />
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center p-6 bg-surface-card rounded-2xl border border-border-light"
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="Demand Lens"
+          title="我们服务的不是“所有人”，而是这三类最容易形成价值的人"
+          description="需求分析的核心不是做大而全，而是知道哪个页面该服务谁、该让他点向哪里。"
+        />
+
+        <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          {audienceProfiles.map((profile) => (
+            <article
+              key={profile.title}
+              className="rounded-[30px] border border-white/10 bg-white/5 p-6 transition hover:border-white/16"
             >
-              <div className="text-3xl sm:text-4xl font-bold text-accent-warm mb-2">{stat.value}</div>
-              <div className="text-text-secondary text-sm">{stat.label}</div>
-            </div>
+              <h2 className="text-2xl font-semibold text-text-primary">{profile.title}</h2>
+              <p className="mt-4 text-sm leading-7 text-text-secondary">{profile.summary}</p>
+              <p className="mt-4 rounded-[22px] border border-white/8 bg-black/10 px-4 py-4 text-sm leading-7 text-text-muted">
+                {profile.value}
+              </p>
+            </article>
           ))}
         </div>
+      </section>
 
-        {/* Mission Section */}
-        <div className="max-w-4xl mx-auto mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-primary mb-4">我们的使命</h2>
-            <p className="text-text-secondary text-lg">让每个人都能找到适合自己的AI工具，提升工作和生活效率</p>
-          </div>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Editorial Rule"
+            title="文案和内容的底层原则"
+            description="好文案不是堆形容词，而是把判断、场景、风险和行动路径说清楚。"
+          />
 
-          <div className="prose prose-lg max-w-none text-text-secondary leading-relaxed bg-surface-card rounded-2xl p-8 border border-border-light">
-            <p className="mb-6">
-              在AI工具爆发式增长的今天，每天都有数十款新的AI产品问世。面对海量的选择，
-              用户往往感到困惑：哪个工具真正好用？哪个适合我的需求？哪个性价比最高？
-            </p>
-            
-            <p className="mb-6">
-              <strong className="text-text-primary">AI工具导航</strong>应运而生。我们的团队由AI工具重度使用者组成，
-              每天测试和评测各类AI工具，从ChatGPT、Claude等AI聊天工具，到Midjourney、Stable Diffusion等AI绘画工具，
-              再到GitHub Copilot、Cursor等AI编程工具，我们都有深入的使用体验。
-            </p>
-            
-            <p>
-              我们的目标不是成为最大的AI工具收录平台，而是成为<strong className="text-text-primary">最值得信赖</strong>的推荐平台。
-              每一个收录的工具，我们都亲自测试；每一篇评测文章，我们都用心撰写。
-              我们相信，只有真正好用的工具，才值得被推荐。
-            </p>
-          </div>
-        </div>
-
-        {/* Values Section */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-primary mb-4">我们的原则</h2>
-            <p className="text-text-secondary">坚持独立、客观、专业的评测标准</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {values.map((value) => (
-              <div
-                key={value.title}
-                className="flex items-start gap-4 p-6 bg-surface-card rounded-xl border border-border-light hover:border-accent-warm/30 transition-colors"
-              >
-                <div className="w-12 h-12 rounded-xl bg-accent-warm/10 flex items-center justify-center flex-shrink-0"
-                >
-                  <value.icon className="w-6 h-6 text-accent-warm" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-text-primary mb-2">{value.title}</h3>
-                  <p className="text-text-secondary">{value.description}</p>
-                </div>
-              </div>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {editorialPrinciples.map((principle) => (
+              <article key={principle.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <h2 className="text-lg font-semibold text-text-primary">{principle.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{principle.description}</p>
+              </article>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Team Section */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-primary mb-4">核心团队</h2>
-            <p className="text-text-secondary">一群热爱AI工具的极客</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {teamMembers.map((member) => (
-              <div
-                key={member.name}
-                className="text-center p-6 bg-surface-card rounded-2xl border border-border-light hover:border-accent-warm/30 transition-all"
-              >
-                <div className={`w-20 h-20 rounded-full ${member.color} flex items-center justify-center mx-auto mb-4`}
-                >
-                  <span className="text-2xl font-bold text-white">{member.avatar}</span>
-                </div>
-                <h3 className="text-xl font-bold text-text-primary mb-1">{member.name}</h3>
-                <p className="text-accent-warm text-sm font-medium mb-3">{member.role}</p>
-                <p className="text-text-secondary text-sm">{member.bio}</p>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div>
+              <SectionHeading
+                eyebrow="Content Engine"
+                title="内容架构要服务流量，不只是服务完整性"
+                description="我们把站内页面拆成不同职责，让它们一起形成增长漏斗，而不是各自孤立。"
+              />
+              <div className="mt-8 space-y-4">
+                {contentPillars.map((pillar) => (
+                  <div key={pillar.title} className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+                    <div className="flex items-center gap-2 text-text-primary">
+                      <Target className="h-4 w-4 text-accent-yellow" />
+                      <h3 className="text-lg font-semibold">{pillar.title}</h3>
+                    </div>
+                    <p className="mt-3 text-sm leading-7 text-text-secondary">{pillar.detail}</p>
+                  </div>
+                ))}
               </div>
+            </div>
+
+            <div>
+              <SectionHeading
+                eyebrow="Growth Loop"
+                title="推广策略不是独立模块，而是页面设计的一部分"
+                description="页面、内容和分发应该串在一起，这样 SEO、社区传播和商业合作才不会彼此割裂。"
+              />
+              <div className="mt-8 space-y-4">
+                {growthChannels.map((channel) => (
+                  <div key={channel.title} className="rounded-[26px] border border-white/10 bg-white/5 p-5">
+                    <div className="flex items-center gap-2 text-text-primary">
+                      <Compass className="h-4 w-4 text-accent-cyan" />
+                      <h3 className="text-lg font-semibold">{channel.title}</h3>
+                    </div>
+                    <p className="mt-3 text-sm leading-7 text-text-secondary">{channel.summary}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Monetization"
+            title="收费方案已经拆成可执行的几条线"
+            description="暂时不接订阅付费，但联盟链接、付费收录、分类置顶、首页赞助、专题合作和咨询服务都可以开始接。"
+          />
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {commercialPackages.slice(0, 6).map((pkg) => (
+              <article key={pkg.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <h2 className="text-xl font-semibold text-text-primary">{pkg.title}</h2>
+                  <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary">
+                    {pkg.budget}
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-7 text-text-secondary">{pkg.summary}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {pkg.deliverables.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </article>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Contact Section */}
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-primary mb-4">联系我们</h2>
-            <p className="text-text-secondary">有任何建议或想推荐工具？欢迎联系我们</p>
-          </div>
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 shadow-[0_28px_70px_rgba(0,0,0,0.25)]">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center">
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Contact</p>
+                <h2 className="mt-2 text-3xl font-semibold text-text-primary">如果你认同这种做法，我们就可以一起把它做大</h2>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-text-secondary">
+                  无论你是想找工具、提交产品，还是购买首页或分类流量，我们都更欢迎长期合作而不是一次性曝光。
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link
+                    href="/advertise"
+                    className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                  >
+                    查看商务合作
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/submit"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                  >
+                    提交工具
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
 
-          <div className="bg-surface-card rounded-2xl p-8 border border-border-light">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <a
-                href="mailto:hello@poph163.com"
-                className="flex items-center gap-4 p-4 rounded-xl border border-border-light hover:border-accent-warm/50 transition-colors group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-accent-warm/10 flex items-center justify-center group-hover:bg-accent-warm/20 transition-colors"
+              <div className="rounded-[28px] border border-white/10 bg-black/12 p-5">
+                <div className="flex items-center gap-2 text-sm text-text-secondary">
+                  <Mail className="h-4 w-4 text-accent-cyan" />
+                  联系方式
+                </div>
+                <p className="mt-4 text-2xl font-semibold text-text-primary">{siteConfig.contactEmail}</p>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">
+                  你可以直接写邮件说明产品、预算、目标页面和排期，我们会按合作场景给出建议。
+                </p>
+                <a
+                  href={buildMailtoLink()}
+                  className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-primary transition hover:border-white/16"
                 >
-                  <Mail className="w-6 h-6 text-accent-warm" />
-                </div>
-                <div>
-                  <p className="text-sm text-text-muted mb-1">邮箱</p>
-                  <p className="text-text-primary font-medium">hello@poph163.com</p>
-                </div>
-              </a>
-
-              <Link
-                href="/submit"
-                className="flex items-center gap-4 p-4 rounded-xl border border-border-light hover:border-accent-cool/50 transition-colors group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-accent-cool/10 flex items-center justify-center group-hover:bg-accent-cool/20 transition-colors"
-                >
-                  <Globe className="w-6 h-6 text-accent-cool" />
-                </div>
-                <div>
-                  <p className="text-sm text-text-muted mb-1">提交工具</p>
-                  <p className="text-text-primary font-medium">推荐新工具</p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-8 pt-8 border-t border-border-light">
-              <p className="text-center text-text-secondary text-sm">
-                我们欢迎各种形式的合作，包括工具评测、内容合作、广告投放等。
-                <br />
-                请在邮件中详细说明您的需求和合作意向。
-              </p>
+                  发邮件给我们
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

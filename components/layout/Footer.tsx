@@ -9,6 +9,8 @@ const navLinks = [
   { name: '全部工具', href: '/tools' },
   { name: '分类浏览', href: '/categories' },
   { name: '热门榜单', href: '/trending' },
+  { name: '专题内容', href: '/blog' },
+  { name: '商务合作', href: '/advertise' },
   { name: '关于我们', href: '/about' },
   { name: '提交工具', href: '/submit' },
 ];
@@ -49,7 +51,7 @@ export default function Footer() {
 
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary">
               <Sparkles className="h-4 w-4 text-accent-yellow" />
-              首页已升级为编辑策展风格
+              站点已升级为“策展 + 转化”双引擎结构
             </div>
           </div>
 
@@ -87,7 +89,7 @@ export default function Footer() {
               </div>
 
               <p className="mt-5 text-sm leading-7 text-text-secondary">
-                如果你发现更值得收录的产品，或者希望合作展示，可以通过上面的方式联系。
+                如果你发现更值得收录的产品，或者希望购买首页、分类页、榜单页和专题页曝光，可以通过上面的方式联系。
               </p>
             </div>
           </div>

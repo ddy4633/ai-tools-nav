@@ -1,8 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { getToolById, getAllTools } from '@/lib/supabase';
+import { ArrowLeft, ArrowRight, ExternalLink, Sparkles, Star } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { getAllTools, getToolById } from '@/lib/supabase';
 import { RatingDisplay } from '@/components/ui/star-rating';
 import { RatingForm } from '@/components/rating-form';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
@@ -18,37 +19,33 @@ interface ToolPageProps {
   params: Promise<{ id: string }>;
 }
 
-// 生成静态参数
 export async function generateStaticParams() {
   const tools = await getAllTools();
-  return tools.map((tool) => ({
-    id: tool.id,
-  }));
+  return tools.map((tool) => ({ id: tool.id }));
 }
 
-// 动态生成元数据
 export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
   const { id } = await params;
   const tool = await getToolById(id);
-  
+
   if (!tool) {
     return {
-      title: '工具未找到 - 好工具',
+      title: '工具未找到 - AI工具导航',
       description: '抱歉，您查找的工具不存在或已被移除。',
     };
   }
-  
+
   const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
 
   return {
-    title: `${tool.name} - ${tool.category}AI工具`,
-    description: `${tool.description}。了解更多关于${tool.name}的功能、定价和用户评价。`,
-    keywords: [tool.name, tool.category, 'AI工具', '人工智能', '工具评测'],
+    title: `${tool.name} 评测、价格与替代方案`,
+    description: `${tool.description}。查看 ${tool.name} 的推荐理由、价格、优缺点、替代工具和访问入口。`,
+    keywords: [tool.name, tool.category, 'AI工具评测', '价格', '替代方案'],
     alternates: {
       canonical: toolUrl,
     },
     openGraph: {
-      title: `${tool.name} - ${tool.category}`,
+      title: `${tool.name} - ${tool.category} 工具评测`,
       description: tool.description,
       url: toolUrl,
       type: 'article',
@@ -56,23 +53,20 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   };
 }
 
+const pricingLabels = {
+  free: { text: '免费', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
+  paid: { text: '付费', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
+  freemium: { text: '部分免费', className: 'bg-white/6 text-text-secondary border-white/12' },
+};
+
 export default async function ToolPage({ params }: ToolPageProps) {
   const { id } = await params;
-  const [tool, allTools] = await Promise.all([
-    getToolById(id),
-    getAllTools(),
-  ]);
+  const [tool, allTools] = await Promise.all([getToolById(id), getAllTools()]);
 
   if (!tool) {
     notFound();
   }
-  
-  const pricingLabels = {
-    free: { text: '免费', className: 'bg-accent-cyan/10 text-accent-cyan' },
-    paid: { text: '付费', className: 'bg-accent-pink/10 text-accent-pink' },
-    freemium: { text: '部分免费', className: 'bg-text-muted/10 text-text-muted' },
-  };
-  
+
   const pricingType: keyof typeof pricingLabels = tool.pricing_type ?? tool.pricingType ?? 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
   const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
@@ -100,14 +94,15 @@ export default async function ToolPage({ params }: ToolPageProps) {
       ratingCount,
     };
   }
-  
+
   return (
     <div className="min-h-screen bg-bg-primary">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="max-w-5xl mx-auto px-6 py-12">
+
+      <div className="mx-auto max-w-7xl px-6 py-8">
         <Breadcrumb
           items={[
             breadcrumbPresets.tools,
@@ -115,134 +110,183 @@ export default async function ToolPage({ params }: ToolPageProps) {
             { label: tool.name },
           ]}
         />
-        {/* 返回链接 */}
+
         <Link
           href="/tools"
-          className="inline-flex items-center gap-2 text-text-secondary hover:text-accent-cyan transition-colors mb-8"
+          className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
         >
-          <ArrowLeft className="w-4 h-4" />
-          返回工具列表
+          <ArrowLeft className="h-4 w-4" />
+          返回工具库
         </Link>
-        
-        {/* 工具信息卡片 */}
-        <div className="bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-start gap-4">
-              <ToolLogo
-                name={tool.name}
-                icon={tool.icon}
-                size={40}
-                priority
-                wrapperClassName="w-16 h-16 rounded-xl bg-bg-primary border border-border-subtle"
-                imageClassName="w-10 h-10"
-                textClassName="text-2xl text-accent-cyan"
-              />
-              <div>
-                <h1 className="text-3xl font-bold text-text-primary mb-2">{tool.name}</h1>
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <span className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${pricing.className}`}>
-                    {pricing.text}
-                  </span>
-                  <span className="text-sm text-text-secondary bg-bg-secondary px-3 py-1 rounded-lg border border-border-subtle">
-                    {tool.category}
-                  </span>
-                  <SponsorBadge tool={tool} />
+      </div>
+
+      <section className="border-b border-white/8">
+        <div className="mx-auto max-w-7xl px-6 pb-16 pt-4">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.12fr)_22rem]">
+            <article className="rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] p-8 shadow-[0_28px_70px_rgba(0,0,0,0.25)]">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className={`rounded-full border px-3 py-1 text-sm ${pricing.className}`}>{pricing.text}</span>
+                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary">
+                  {tool.category}
+                </span>
+                <SponsorBadge tool={tool} />
+              </div>
+
+              <div className="mt-6 flex items-start gap-5">
+                <ToolLogo
+                  name={tool.name}
+                  icon={tool.icon}
+                  size={44}
+                  priority
+                  wrapperClassName="h-20 w-20 rounded-[26px] border border-white/10 bg-black/10"
+                  imageClassName="h-11 w-11"
+                  textClassName="text-3xl text-accent-cyan"
+                />
+                <div className="min-w-0">
+                  <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">{tool.name}</h1>
+                  <p className="mt-4 max-w-3xl text-base leading-8 text-text-secondary">{tool.description}</p>
+                  <div className="mt-4">
+                    <RatingDisplay averageRating={averageRating} ratingCount={ratingCount} size="md" />
+                  </div>
                 </div>
-                {/* 评分显示 */}
-                <RatingDisplay 
-                  averageRating={averageRating} 
-                  ratingCount={ratingCount}
-                  size="md"
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <MetricCard
+                  value={tool.priceRange || pricing.text}
+                  label="价格与门槛"
+                  hint="判断是不是适合第一轮试用。"
+                />
+                <MetricCard
+                  value={tool.editorRating ? tool.editorRating.toFixed(1) : '待补充'}
+                  label="编辑分"
+                  hint="越高代表越值得先点开官网。"
+                />
+                <MetricCard
+                  value={tool.alternatives?.length ? `${tool.alternatives.length}` : '0'}
+                  label="替代工具"
+                  hint="不一定非它不可，替代关系也要看。"
+                />
+                <MetricCard
+                  value={tool.difficulty ? `${tool.difficulty}/5` : '1/5'}
+                  label="上手难度"
+                  hint="越低越适合作为第一轮试用入口。"
                 />
               </div>
-            </div>
-          </div>
-          
-          <p className="text-text-secondary text-lg mb-8 leading-relaxed">
-            {tool.description}
-          </p>
 
-          {tool.priceRange && (
-            <div className="mb-8 text-sm text-text-secondary">
-              <span className="font-medium text-text-primary">价格区间：</span>
-              {tool.priceRange}
-            </div>
-          )}
-          
-          {/* 操作按钮 */}
-          <div className="flex flex-wrap gap-4">
-            <ToolPrimaryCta
-              tool={tool}
-              placement="tool_detail_primary_cta"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-purple text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
-            />
-            
-            {tool.repo_url && (
-              <TrackedExternalLink
-                href={tool.repo_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                trackingPayload={{
-                  placement: 'tool_detail_repo_cta',
-                  toolId: tool.id,
-                  toolName: tool.name,
-                  targetUrl: tool.repo_url,
-                  isAffiliate: false,
-                }}
-                className="inline-flex items-center gap-2 px-6 py-3 border border-border-subtle text-text-secondary font-medium rounded-xl hover:border-accent-cyan hover:text-accent-cyan transition-colors"
-              >
-                查看源码
-              </TrackedExternalLink>
-            )}
-            
-            <Link
-              href="/tools"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-border-subtle text-text-secondary font-medium rounded-xl hover:border-accent-cyan hover:text-accent-cyan transition-colors"
-            >
-              查看其他工具
-            </Link>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <ToolPrimaryCta
+                  tool={tool}
+                  placement="tool_detail_primary_cta"
+                  affiliateLabel="访问合作链接"
+                  websiteLabel="访问官网"
+                  className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-5 py-3 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                />
+
+                {tool.repo_url ? (
+                  <TrackedExternalLink
+                    href={tool.repo_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    trackingPayload={{
+                      placement: 'tool_detail_repo_cta',
+                      toolId: tool.id,
+                      toolName: tool.name,
+                      targetUrl: tool.repo_url,
+                      isAffiliate: false,
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm text-text-secondary transition hover:text-text-primary"
+                  >
+                    查看源码
+                    <ExternalLink className="h-4 w-4" />
+                  </TrackedExternalLink>
+                ) : null}
+
+                <Link
+                  href={`/tools?category=${tool.categorySlug || tool.category}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm text-text-secondary transition hover:text-text-primary"
+                >
+                  查看同类工具
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </article>
+
+            <aside className="space-y-4">
+              <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
+                <div className="flex items-center gap-2 text-sm text-text-secondary">
+                  <Sparkles className="h-4 w-4 text-accent-yellow" />
+                  3 分钟判断法
+                </div>
+                <div className="mt-5 space-y-3">
+                  {buildDecisionBullets(tool).map((item) => (
+                    <div key={item} className="rounded-[22px] border border-white/8 bg-black/10 px-4 py-3 text-sm text-text-secondary">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
+                <div className="flex items-center gap-2 text-sm text-text-secondary">
+                  <Star className="h-4 w-4 text-accent-cyan" />
+                  如果你是产品团队
+                </div>
+                <p className="mt-4 text-sm leading-7 text-text-secondary">
+                  想让你的工具也获得这种详情页和站内流量入口，可以直接从提交页进入免费收录、加急评估或赞助合作。
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link
+                    href="/submit"
+                    className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                  >
+                    提交你的工具
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href="/advertise"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                  >
+                    商务合作
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
-        
-        {tool.reason && (
-          <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
-            <h2 className="text-2xl font-bold text-text-primary mb-4">推荐理由</h2>
-            <p className="text-text-secondary leading-relaxed">{tool.reason}</p>
-          </div>
-        )}
+      </section>
 
-        {tool.fullReview && (
-          <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
-            <h2 className="text-2xl font-bold text-text-primary mb-4">详细评测</h2>
-            <div className="space-y-4 text-text-secondary leading-relaxed">
-              {tool.fullReview
-                .split(/\n\s*\n/)
-                .map((paragraph, index) => (
-                  <p key={index}>{paragraph.trim()}</p>
-                ))}
-            </div>
-          </div>
-        )}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          {tool.reason ? (
+            <ContentCard title="推荐理由">
+              <p className="text-sm leading-8 text-text-secondary">{tool.reason}</p>
+            </ContentCard>
+          ) : null}
 
-        {(tool.features?.length || tool.pros?.length || tool.cons?.length) && (
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {tool.features?.length ? (
-              <div className="bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
-                <h3 className="text-xl font-bold text-text-primary mb-4">核心功能</h3>
-                <ul className="space-y-2 text-text-secondary">
-                  {tool.features.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            {(tool.pros?.length || tool.cons?.length) && (
-              <div className="bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
-                <h3 className="text-xl font-bold text-text-primary mb-4">优缺点</h3>
+          {(tool.features?.length || tool.pros?.length || tool.cons?.length) ? (
+            <ContentCard title="上手前最该看的点">
+              {tool.features?.length ? (
+                <div>
+                  <p className="text-sm font-medium text-text-primary">核心功能</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {tool.features.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
                 {tool.pros?.length ? (
-                  <div className="mb-4">
-                    <p className="text-sm font-medium text-text-primary mb-2">优点</p>
-                    <ul className="space-y-1 text-text-secondary">
+                  <div className="rounded-[24px] border border-white/8 bg-black/10 p-4">
+                    <p className="text-sm font-medium text-text-primary">优点</p>
+                    <ul className="mt-3 space-y-2 text-sm text-text-secondary">
                       {tool.pros.map((item) => (
                         <li key={`pro-${item}`}>+ {item}</li>
                       ))}
@@ -250,9 +294,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   </div>
                 ) : null}
                 {tool.cons?.length ? (
-                  <div>
-                    <p className="text-sm font-medium text-text-primary mb-2">不足</p>
-                    <ul className="space-y-1 text-text-secondary">
+                  <div className="rounded-[24px] border border-white/8 bg-black/10 p-4">
+                    <p className="text-sm font-medium text-text-primary">不足</p>
+                    <ul className="mt-3 space-y-2 text-sm text-text-secondary">
                       {tool.cons.map((item) => (
                         <li key={`con-${item}`}>- {item}</li>
                       ))}
@@ -260,109 +304,144 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   </div>
                 ) : null}
               </div>
-            )}
+            </ContentCard>
+          ) : null}
+        </div>
+
+        {tool.fullReview ? (
+          <div className="mt-6">
+            <ContentCard title="详细评测">
+              <div className="space-y-4 text-sm leading-8 text-text-secondary">
+                {tool.fullReview
+                  .split(/\n\s*\n/)
+                  .map((paragraph, index) => (
+                    <p key={index}>{paragraph.trim()}</p>
+                  ))}
+              </div>
+            </ContentCard>
           </div>
-        )}
+        ) : null}
 
         {tool.reviewSources?.length ? (
-          <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
-            <h3 className="text-xl font-bold text-text-primary mb-4">站外评价摘要</h3>
-            <div className="space-y-4">
-              {tool.reviewSources.map((source) => (
-                <div
-                  key={`${source.source}-${source.url}`}
-                  className="rounded-xl border border-border-subtle bg-bg-primary p-4"
-                >
-                  <div className="flex items-center justify-between gap-4 mb-2">
-                    <p className="text-sm font-semibold text-text-primary">{source.source}</p>
-                    <a
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-accent-cyan hover:opacity-80 transition-opacity"
-                    >
-                      查看来源
-                    </a>
+          <div className="mt-6">
+            <ContentCard title="站外评价摘要">
+              <div className="space-y-4">
+                {tool.reviewSources.map((source) => (
+                  <div
+                    key={`${source.source}-${source.url}`}
+                    className="rounded-[24px] border border-white/8 bg-black/10 p-4"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-sm font-semibold text-text-primary">{source.source}</p>
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-accent-cyan transition hover:opacity-80"
+                      >
+                        查看来源
+                      </a>
+                    </div>
+                    <p className="mt-3 text-sm leading-7 text-text-secondary">{source.summary}</p>
                   </div>
-                  <p className="text-sm text-text-secondary leading-6">{source.summary}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ContentCard>
           </div>
         ) : null}
 
         {tool.alternatives?.length ? (
-          <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
-            <h3 className="text-xl font-bold text-text-primary mb-4">替代工具</h3>
-            <div className="flex flex-wrap gap-2">
-              {tool.alternatives.map((alt) => (
-                <span
-                  key={alt}
-                  className="px-3 py-1 text-sm rounded-full bg-bg-secondary text-text-secondary"
-                >
-                  {alt}
-                </span>
-              ))}
-            </div>
+          <div className="mt-6">
+            <ContentCard title="替代工具">
+              <div className="flex flex-wrap gap-2">
+                {tool.alternatives.map((alt) => (
+                  <span
+                    key={alt}
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary"
+                  >
+                    {alt}
+                  </span>
+                ))}
+              </div>
+            </ContentCard>
           </div>
         ) : null}
 
         {relatedTools.length ? (
-          <div className="mt-8 bg-bg-card rounded-2xl p-6 shadow-card border border-border-card">
-            <div className="flex items-center justify-between mb-4 gap-4">
-              <div>
-                <h3 className="text-xl font-bold text-text-primary">同类推荐</h3>
-                <p className="text-sm text-text-secondary mt-1">继续探索同分类下的相关工具</p>
-              </div>
-              <Link
-                href={`/tools?category=${tool.categorySlug || tool.category}`}
-                className="text-sm text-accent-cyan hover:opacity-80 transition-opacity"
-              >
-                查看全部
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {relatedTools.map((relatedTool) => (
+          <div className="mt-6">
+            <ContentCard title="同类推荐">
+              <div className="grid gap-4 md:grid-cols-3">
+                {relatedTools.map((relatedTool) => (
                   <Link
                     key={relatedTool.id}
                     href={`/tools/${relatedTool.id}`}
-                    className="rounded-xl border border-border-subtle bg-bg-primary p-4 hover:border-accent-cyan/40 transition-colors"
+                    className="rounded-[24px] border border-white/8 bg-black/10 p-4 transition hover:border-white/16"
                   >
                     <div className="flex items-start gap-3">
                       <ToolLogo
                         name={relatedTool.name}
                         icon={relatedTool.icon}
                         size={24}
-                        wrapperClassName="w-10 h-10 rounded-lg bg-bg-secondary border border-border-subtle shrink-0"
-                        imageClassName="w-6 h-6"
+                        wrapperClassName="h-11 w-11 rounded-2xl border border-white/10 bg-black/10 shrink-0"
+                        imageClassName="h-6 w-6"
                         textClassName="text-sm text-accent-cyan"
                       />
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-text-primary truncate">{relatedTool.name}</p>
-                        <p className="text-xs text-text-secondary line-clamp-2 mt-1">{relatedTool.description}</p>
+                        <p className="truncate text-sm font-semibold text-text-primary">{relatedTool.name}</p>
+                        <p className="mt-2 line-clamp-3 text-xs leading-6 text-text-secondary">{relatedTool.description}</p>
                       </div>
                     </div>
                   </Link>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ContentCard>
           </div>
         ) : null}
 
-        {/* 评分区域 */}
-        <div className="mt-8 bg-bg-card rounded-2xl p-8 shadow-card border border-border-card">
-          <h2 className="text-2xl font-bold text-text-primary mb-6">用户评价</h2>
-          <RatingForm toolId={tool.id} />
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
+          <ContentCard title="用户评价">
+            <RatingForm toolId={tool.id} />
+          </ContentCard>
+
+          <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
+            <p className="text-sm font-medium text-text-primary">行动提示</p>
+            <p className="mt-3 text-sm leading-7 text-text-secondary">
+              {hasPrimaryCta
+                ? '如果你准备继续试用，这一页已经给出最快的入口；再犹豫时，先看看替代工具和同类推荐。'
+                : '当前还没有可点击的官网或合作链接，建议先看同类推荐或返回工具库继续筛选。'}
+            </p>
+          </div>
         </div>
-        
-        {/* 提示 */}
-        <div className="mt-8 p-4 bg-accent-cyan/5 border border-accent-cyan/20 rounded-xl">
-          <p className="text-sm text-text-secondary">
-            {hasPrimaryCta
-              ? '💡 提示：如已配置合作链接，主按钮会优先跳转到合作链接；否则跳转到工具官网。'
-              : '💡 提示：当前工具暂未配置外部访问链接，可后续补充官网或合作链接。'}
-          </p>
-        </div>
-      </div>
+      </section>
     </div>
   );
+}
+
+function MetricCard({ value, label, hint }: { value: string; label: string; hint: string }) {
+  return (
+    <div className="rounded-[26px] border border-white/10 bg-black/10 p-4">
+      <p className="text-xl font-semibold text-text-primary">{value}</p>
+      <p className="mt-2 text-sm text-text-secondary">{label}</p>
+      <p className="mt-2 text-xs leading-6 text-text-muted">{hint}</p>
+    </div>
+  );
+}
+
+function ContentCard({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="rounded-[32px] border border-white/10 bg-white/5 p-6">
+      <h2 className="text-2xl font-semibold text-text-primary">{title}</h2>
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
+
+function buildDecisionBullets(tool: Tool) {
+  return [
+    `如果你最在意的是 ${tool.category} 场景下的效率提升，这个工具值得先点开。`,
+    tool.priceRange ? `价格层面：${tool.priceRange}。先判断是否符合你的试用门槛。` : '如果还没准备花钱，建议先看它是否有免费层。',
+    tool.alternatives?.length
+      ? `替代关系：它常和 ${tool.alternatives.slice(0, 2).join('、')} 放在一起比较。`
+      : '如果详情页还不能说服你，记得看同类推荐和替代工具。',
+  ];
 }

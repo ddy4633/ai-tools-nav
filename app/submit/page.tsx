@@ -1,12 +1,15 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { CheckCircle2, Clock3, Megaphone } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock3, Megaphone } from 'lucide-react';
 import SubmitForm from './SubmitForm';
+import PageHero from '@/components/ui/PageHero';
+import SectionHeading from '@/components/ui/SectionHeading';
+import { commercialPackages, partnershipSteps } from '@/lib/content/growth-content';
 import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '提交工具 - 推荐好用的 AI 工具 | 好工具',
-  description: '发现了好用的 AI 工具？提交给我们，让更多人知道它。我们欢迎各种优质的 AI 工具推荐，包括 AI 写作、AI 绘画、编程开发、AI 对话、视频创作等各类工具。',
+  description: '提交你的 AI 工具，支持免费收录、加急评估和赞助合作。适合新品发布、分类曝光和专题内容联动。',
   keywords: ['提交工具', '推荐工具', 'AI工具推荐', '工具提交', 'AI工具收录', 'AI工具导航', '人工智能工具分享'],
   alternates: {
     canonical: buildSiteUrl('/submit'),
@@ -19,65 +22,49 @@ export const metadata: Metadata = {
   },
 };
 
-function Breadcrumb() {
-  return (
-    <nav aria-label="breadcrumb" className="max-w-2xl mx-auto px-4 sm:px-6 pt-6">
-      <ol itemScope itemType="https://schema.org/BreadcrumbList" className="flex items-center gap-2 text-sm text-text-muted">
-        <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-          <Link itemProp="item" href="/" className="hover:text-accent-warm transition-colors">
-            <span itemProp="name">首页</span>
-          </Link>
-          <meta itemProp="position" content="1" />
-        </li>
-        <li className="text-border-medium">&gt;</li>
-        <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-          <span itemProp="name" className="text-text-secondary">提交工具</span>
-          <meta itemProp="item" content="/submit" />
-          <meta itemProp="position" content="2" />
-        </li>
-      </ol>
-    </nav>
-  );
-}
-
 function CommercialPlans() {
   const plans = [
     {
       icon: CheckCircle2,
       title: '免费收录',
-      desc: '适合自然推荐，进入常规审核队列。',
-      meta: '1-3 个工作日',
+      desc: '适合自然推荐，先进入常规审核队列。',
+      meta: '标准审核',
     },
     {
       icon: Clock3,
       title: '加急评估',
-      desc: '适合活动排期、产品发布周、想更快拿到审核反馈。',
-      meta: '商务咨询',
+      desc: '适合活动排期、产品发布周、需要更快拿到反馈的团队。',
+      meta: '48 小时优先处理',
     },
     {
       icon: Megaphone,
-      title: '赞助置顶',
-      desc: '适合首页、分类页或专题页曝光，支持合作链接导流。',
-      meta: '商务咨询',
+      title: '赞助合作',
+      desc: '适合首页、分类页、榜单页和专题页的组合曝光。',
+      meta: '支持商务咨询',
     },
   ];
 
   return (
-    <section className="max-w-4xl mx-auto px-4 sm:px-6 mt-6 mb-12">
-      <div className="grid md:grid-cols-3 gap-4">
+    <section className="mx-auto max-w-7xl px-6 py-16">
+      <SectionHeading
+        eyebrow="Plan Entry"
+        title="先选合作路径，再决定要不要加预算"
+        description="免费收录是内容入口，加急和赞助是时间与曝光入口。它们服务的是不同阶段的增长目标。"
+      />
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
         {plans.map((plan) => {
           const Icon = plan.icon;
           return (
-            <div key={plan.title} className="bg-surface-card rounded-2xl p-5 border border-border-light">
-              <div className="w-10 h-10 rounded-xl bg-accent-warm/10 text-accent-warm flex items-center justify-center mb-4">
-                <Icon className="w-5 h-5" />
+            <article key={plan.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/10">
+                <Icon className="h-5 w-5 text-accent-cyan" />
               </div>
-              <h2 className="text-lg font-semibold text-text-primary mb-2">{plan.title}</h2>
-              <p className="text-sm text-text-secondary mb-3">{plan.desc}</p>
-              <span className="inline-flex px-2.5 py-1 rounded-full text-xs bg-accent-warm/10 text-accent-warm">
+              <h2 className="mt-5 text-xl font-semibold text-text-primary">{plan.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">{plan.desc}</p>
+              <span className="mt-4 inline-flex rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary">
                 {plan.meta}
               </span>
-            </div>
+            </article>
           );
         })}
       </div>
@@ -85,36 +72,65 @@ function CommercialPlans() {
   );
 }
 
+function PackageOverview() {
+  return (
+    <section className="border-t border-white/8">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="Package Ladder"
+          title="这页要承接“免费推荐”到“商业合作”的完整漏斗"
+          description="所以我们把收费方案拆成逐层递进的阶梯，先让用户敢提交，再让客户能看清升级路径。"
+        />
+
+        <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {commercialPackages.map((pkg) => (
+            <article key={pkg.title} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-xl font-semibold text-text-primary">{pkg.title}</h2>
+                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary">
+                  {pkg.budget}
+                </span>
+              </div>
+              <p className="mt-4 text-sm leading-7 text-text-secondary">{pkg.summary}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {pkg.deliverables.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function SubmissionGuide() {
   return (
-    <section className="max-w-2xl mx-auto px-4 sm:px-6 mt-16 mb-12">
-      <div className="bg-surface-card rounded-2xl p-6 sm:p-8 border border-border-light">
-        <h2 className="text-xl font-semibold text-text-primary mb-4 flex items-center gap-2">
-          <span className="w-6 h-6 bg-accent-warm/10 text-accent-warm rounded-full flex items-center justify-center text-sm">?</span>
-          提交指南
-        </h2>
-        <div className="space-y-4 text-text-secondary">
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-accent-warm/10 text-accent-warm rounded-full flex items-center justify-center text-sm font-medium">1</span>
-            <div>
-              <h3 className="font-medium text-text-primary mb-1">什么样的工具会被收录？</h3>
-              <p className="text-sm">我们收录真正实用的 AI 工具，包括但不限于：AI 写作、AI 绘画、编程助手、AI 对话、视频创作、音频处理等类别。工具需要有一定的用户基础和实际使用价值。</p>
+    <section className="border-t border-white/8">
+      <div className="mx-auto max-w-4xl px-6 py-16">
+        <SectionHeading
+          eyebrow="How It Works"
+          title="提交之后会发生什么"
+          description="把流程说清楚，能显著提高提交率，也能减少后续沟通成本。"
+          align="center"
+        />
+        <div className="mt-10 space-y-4">
+          {partnershipSteps.map((step, index) => (
+            <div key={step} className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <div className="flex items-start gap-4">
+                <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/10 text-sm font-semibold text-text-primary">
+                  {index + 1}
+                </span>
+                <p className="text-sm leading-7 text-text-secondary">{step}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-accent-warm/10 text-accent-warm rounded-full flex items-center justify-center text-sm font-medium">2</span>
-            <div>
-              <h3 className="font-medium text-text-primary mb-1">审核和商务反馈需要多久？</h3>
-              <p className="text-sm">免费收录通常会在 1-3 个工作日内完成审核；加急评估和赞助置顶会优先由商务邮箱跟进，适合活动排期或投放合作。</p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <span className="flex-shrink-0 w-6 h-6 bg-accent-warm/10 text-accent-warm rounded-full flex items-center justify-center text-sm font-medium">3</span>
-            <div>
-              <h3 className="font-medium text-text-primary mb-1">收费工具可以提交吗？</h3>
-              <p className="text-sm">可以。我们欢迎免费和付费工具，只要它对用户有价值。若希望获得更快收录或前台曝光，可以直接选择商务方案并留下预算信息。</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -123,27 +139,35 @@ function SubmissionGuide() {
 
 function RelatedLinks() {
   const links = [
-    { href: '/tools', label: '浏览全部工具', desc: '探索我们收录的 AI 工具' },
-    { href: '/blog', label: '阅读博客', desc: '了解 AI 工具使用技巧' },
-    { href: '/about', label: '关于我们', desc: '了解好工具的使命' },
+    { href: '/advertise', label: '商务合作方案', desc: '了解首页、分类页、榜单和专题位' },
+    { href: '/tools', label: '浏览全部工具', desc: '看看当前站内工具库长什么样' },
+    { href: '/blog', label: '阅读专题内容', desc: '了解我们如何写高意图内容页' },
   ];
 
   return (
-    <section className="max-w-2xl mx-auto px-4 sm:px-6 mb-16">
-      <h2 className="text-lg font-semibold text-text-primary mb-4">您可能还想了解</h2>
-      <div className="grid sm:grid-cols-3 gap-4">
-        {links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="p-4 bg-surface-card rounded-xl border border-border-light hover:border-accent-warm/50 hover:shadow-md transition-all group"
-          >
-            <h3 className="font-medium text-text-primary group-hover:text-accent-warm transition-colors mb-1">
-              {link.label}
-            </h3>
-            <p className="text-sm text-text-muted">{link.desc}</p>
-          </a>
-        ))}
+    <section className="border-t border-white/8">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="Next Step"
+          title="你可能还想继续看这几个入口"
+          align="center"
+        />
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-[28px] border border-white/10 bg-white/5 p-5 transition hover:border-white/16 hover:bg-white/[0.07]"
+            >
+              <h3 className="text-xl font-semibold text-text-primary">{link.label}</h3>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">{link.desc}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm text-text-primary">
+                继续查看
+                <ArrowRight className="h-4 w-4 text-accent-cyan" />
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -151,10 +175,47 @@ function RelatedLinks() {
 
 export default function SubmitPage() {
   return (
-    <main className="min-h-screen bg-surface-base">
-      <Breadcrumb />
+    <main className="min-h-screen bg-bg-primary">
+      <PageHero
+        eyebrow="提交工具 / 商务合作"
+        title="这不是一个普通的提交表单。"
+        highlight="它应该是你的增长入口。"
+        description="如果你只是想被收录，可以走免费提交；如果你希望在发布窗口拿到更快审核、更多曝光或更高意图流量，就应该直接从这里进入商业合作路径。"
+        metrics={[
+          {
+            value: '免费收录',
+            label: '适合内容入库',
+            hint: '先进入标准审核队列，适合自然推荐。',
+          },
+          {
+            value: '加急评估',
+            label: '适合发布窗口',
+            hint: '适合新品上线、营销活动和内容冷启动。',
+          },
+          {
+            value: '赞助合作',
+            label: '适合买流量',
+            hint: '首页、分类页、榜单页和专题页都可组合。',
+          },
+        ]}
+        actions={[
+          { href: '/advertise', label: '先看合作方案', tone: 'primary' },
+          { href: '/tools', label: '先看站内现状', tone: 'secondary' },
+        ]}
+        aside={
+          <div>
+            <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Why This Page Exists</p>
+            <h2 className="mt-3 text-2xl font-semibold text-text-primary">把“提交入口”和“收费路径”放在同一页说清楚</h2>
+            <p className="mt-4 text-sm leading-7 text-text-secondary">
+              这样既不会让自然推荐的用户被价格吓走，也不会让真正有预算的团队找不到升级入口。
+            </p>
+          </div>
+        }
+      />
+
       <SubmitForm />
       <CommercialPlans />
+      <PackageOverview />
       <SubmissionGuide />
       <RelatedLinks />
     </main>

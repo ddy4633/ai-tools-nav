@@ -125,6 +125,30 @@ body::before {
   -webkit-backdrop-filter: blur(18px);
 }
 
+.bg-surface-card {
+  background-color: var(--bg-card);
+}
+
+.bg-surface-base {
+  background-color: var(--bg-primary);
+}
+
+.bg-surface-hover {
+  background-color: var(--bg-hover);
+}
+
+.hover\:bg-surface-hover:hover {
+  background-color: var(--bg-hover);
+}
+
+.hover\:bg-surface-base:hover {
+  background-color: var(--bg-primary);
+}
+
+.bg-surface-base\/30 {
+  background-color: color-mix(in srgb, var(--bg-primary) 30%, transparent);
+}
+
 .shadow-soft {
   box-shadow: 0 8px 38px rgba(0, 0, 0, 0.22);
 }
