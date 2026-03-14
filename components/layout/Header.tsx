@@ -1,101 +1,99 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, X, Terminal } from 'lucide-react';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Compass, Menu, Sparkles, X } from 'lucide-react';
 import { CommandPalette } from '@/components/search/CommandPalette';
+
+const navItems = [
+  { name: '工具库', href: '/tools' },
+  { name: '分类浏览', href: '/categories' },
+  { name: '热门榜单', href: '/trending' },
+  { name: '提交工具', href: '/submit' },
+];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { name: 'TOOLS', href: '/tools' },
-    { name: 'CATEGORIES', href: '/categories' },
-    { name: 'ABOUT', href: '/about' },
-  ];
-
   return (
-    <header className="sticky top-0 z-40 glass border-b border-border-subtle">
-      {/* 霓虹下划线装饰 */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-cyan/50 to-transparent" />
-      
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo - 霓虹效果 */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <Terminal className="w-5 h-5 text-accent-cyan group-hover:text-accent-pink transition-colors" />
-            <span className="text-xl font-mono font-bold text-text-primary">
-              <span className="text-accent-cyan">&gt;</span>_TOOLS
-            </span>
-            <span className="text-xs font-mono text-accent-cyan/70 border border-accent-cyan/30 px-1.5 py-0.5 rounded">
-              v2.0
-            </span>
+    <header className="sticky top-0 z-40 border-b border-white/8 glass">
+      <div className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(125,226,212,0.32),transparent)]" />
+
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex h-18 items-center justify-between gap-4">
+          <Link href="/" className="flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/6 shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
+              <Compass className="h-5 w-5 text-accent-cyan" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="truncate text-base font-semibold text-text-primary md:text-lg">AI工具导航</span>
+                <span className="hidden rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-text-muted sm:inline-flex">
+                  精选策展
+                </span>
+              </div>
+              <p className="hidden text-xs text-text-muted md:block">先给判断，再给工具链接</p>
+            </div>
           </Link>
-          
-          {/* 桌面导航 - 发光悬停 */}
-          <nav className="hidden md:flex items-center gap-8">
+
+          <nav className="hidden items-center gap-7 md:flex">
             {navItems.map((item) => (
-              <Link 
+              <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-mono text-text-secondary hover:text-accent-cyan transition-colors relative group"
+                className="text-sm text-text-secondary transition hover:text-text-primary"
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-cyan group-hover:w-full transition-all duration-300" />
               </Link>
             ))}
           </nav>
-          
-          {/* 右侧操作 */}
-          <div className="flex items-center gap-4">
-            {/* Command Palette 搜索按钮 */}
+
+          <div className="flex items-center gap-3">
             <CommandPalette />
-            
-            <button 
-              className="md:hidden p-2 text-text-secondary hover:text-accent-cyan transition-colors"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "关闭菜单" : "打开菜单"}
+
+            <Link
+              href="/submit"
+              className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary md:inline-flex"
+            >
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              推荐新工具
+            </Link>
+
+            <button
+              type="button"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-text-secondary transition hover:text-text-primary md:hidden"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              aria-label={mobileMenuOpen ? '关闭菜单' : '打开菜单'}
               aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
-        
-        {/* 移动端菜单 */}
+
         <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.nav 
+          {mobileMenuOpen ? (
+            <motion.nav
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden py-4 border-t border-border-subtle overflow-hidden"
+              className="overflow-hidden border-t border-white/8 pb-4 md:hidden"
             >
-              <ul className="space-y-2">
-                {navItems.map((item, index) => (
-                  <motion.li
+              <div className="space-y-2 pt-4">
+                {navItems.map((item) => (
+                  <Link
                     key={item.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    href={item.href}
+                    className="block rounded-2xl border border-white/8 bg-white/5 px-4 py-3 text-sm text-text-secondary transition hover:text-text-primary"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    <Link 
-                      href={item.href} 
-                      className="block text-text-secondary hover:text-accent-cyan py-2 font-mono transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <span className="text-accent-cyan">$</span> {item.name.toLowerCase()}
-                    </Link>
-                  </motion.li>
+                    {item.name}
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </motion.nav>
-          )}
+          ) : null}
         </AnimatePresence>
       </div>
     </header>

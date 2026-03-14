@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Check, AlertCircle } from 'lucide-react';
+import { AlertCircle, Check, Mail, Send, Sparkles } from 'lucide-react';
 import { subscribeToNewsletterApi, validateEmail } from '@/lib/newsletter/client';
 
 export default function NewsletterSection() {
@@ -10,19 +10,19 @@ export default function NewsletterSection() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail) {
       setStatus('error');
-      setMessage('Please enter your email.');
+      setMessage('请输入邮箱地址。');
       return;
     }
 
     if (!validateEmail(trimmedEmail)) {
       setStatus('error');
-      setMessage('Please enter a valid email address.');
+      setMessage('请输入有效的邮箱地址。');
       return;
     }
 
@@ -38,94 +38,111 @@ export default function NewsletterSection() {
 
       if (!result.success) {
         setStatus('error');
-        setMessage(result.message || 'Subscription failed.');
+        setMessage(result.message || '订阅失败，请稍后再试。');
         return;
       }
 
       setStatus('success');
-      setMessage(result.message || 'Successfully subscribed!');
+      setMessage(result.message || '订阅成功，后续更新会发到你的邮箱。');
       setEmail('');
     } catch {
       setStatus('error');
-      setMessage('Subscription failed. Please try again later.');
+      setMessage('订阅失败，请稍后再试。');
     }
   };
 
   return (
-    <section className="py-20 bg-bg-secondary relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-yellow/30 to-transparent" />
-      
-      <div className="max-w-4xl mx-auto px-6 text-center">
+    <section className="relative border-t border-white/8">
+      <div className="mx-auto max-w-7xl px-6 py-20">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04))] px-6 py-8 shadow-[0_28px_70px_rgba(0,0,0,0.25)] md:px-10 md:py-10"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-accent-yellow/10 border border-accent-yellow/30 rounded-full mb-6">
-            <span className="w-2 h-2 bg-accent-yellow rounded-full animate-pulse" />
-            <span className="text-sm font-mono text-accent-yellow">NEWSLETTER</span>
-          </div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.18),transparent_38%),radial-gradient(circle_at_88%_12%,rgba(240,154,121,0.16),transparent_28%)]" />
 
-          <h2 className="text-3xl md:text-4xl font-mono font-bold text-text-primary mb-4">
-            STAY IN THE
-            <span className="text-gradient-cyber"> LOOP</span>
-          </h2>
-          
-          <p className="text-text-secondary text-lg mb-8 max-w-2xl mx-auto font-mono">
-            Weekly digest of the best tools, directly to your inbox.
-            <br />
-            <span className="text-accent-cyan">1,000+</span> developers already subscribed.
-          </p>
+          <div className="relative grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,0.85fr)] lg:items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-secondary">
+                <Sparkles className="h-4 w-4 text-accent-yellow" />
+                首页更新周报
+              </div>
 
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-accent-cyan/20 to-accent-purple/20 rounded-xl blur opacity-0 hover:opacity-100 transition-opacity" />
-              
-              <div className="relative flex items-center bg-bg-card border border-border-glow rounded-xl overflow-hidden focus-within:border-accent-cyan/50 focus-within:shadow-glow-cyan transition-all">
-                <span className="pl-4 text-accent-cyan font-mono">@</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="flex-1 px-4 py-4 bg-transparent text-text-primary font-mono placeholder:text-text-muted focus:outline-none"
-                  disabled={status === 'loading'}
-                />
-                <button 
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="px-4 py-2 m-2 bg-accent-cyan/10 border border-accent-cyan/50 rounded-lg text-accent-cyan hover:bg-accent-cyan/20 transition-colors disabled:opacity-50"
-                >
-                  {status === 'loading' ? (
-                    <span className="animate-pulse">...</span>
-                  ) : status === 'success' ? (
-                    <Check className="w-5 h-5" />
-                  ) : (
-                    <Send className="w-5 h-5" />
-                  )}
-                </button>
+              <h2 className="mt-5 font-display text-4xl leading-tight text-text-primary md:text-5xl">
+                每周一次，把值得关注的
+                <span className="block text-gradient-cyber">AI 工具变化发给你。</span>
+              </h2>
+
+              <p className="mt-5 max-w-2xl text-base leading-8 text-text-secondary">
+                我们不会给你“资讯堆砌”，只会发真正值得你打开的更新：新工具上线、热度突然飙升、老工具能力大变动，以及编辑部本周结论。
+              </p>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[
+                  '每周一封，控制信息密度',
+                  '重点写清楚为什么值得看',
+                  '随时退订，不做骚扰',
+                ].map((item) => (
+                  <div key={item} className="rounded-[20px] border border-white/8 bg-black/10 px-4 py-4 text-sm text-text-secondary">
+                    {item}
+                  </div>
+                ))}
               </div>
             </div>
-            
-            {status !== 'idle' && status !== 'loading' && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`mt-4 flex items-center justify-center gap-2 font-mono ${status === 'success' ? 'text-accent-cyan' : 'text-red-400'}`}
-              >
-                {status === 'success' ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-                <span>{message}</span>
-              </motion.div>
-            )}
-          </form>
 
-          <div className="mt-8 flex items-center justify-center gap-8 text-sm font-mono text-text-muted">
-            {['Weekly Updates', 'No Spam', 'Unsubscribe Anytime'].map((item) => (
-              <div key={item} className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-accent-cyan rounded-full"></span>
-                {item}
+            <div className="rounded-[28px] border border-white/10 bg-black/12 p-5">
+              <div className="flex items-center gap-2 text-sm text-text-secondary">
+                <Mail className="h-4 w-4 text-accent-cyan" />
+                订阅后你会收到首页策展周报
               </div>
-            ))}
+
+              <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+                <label className="block">
+                  <span className="mb-2 block text-sm text-text-muted">邮箱地址</span>
+                  <div className="flex flex-col gap-3 rounded-[24px] border border-white/10 bg-white/6 p-3 sm:flex-row sm:items-center">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="you@example.com"
+                      className="min-w-0 flex-1 rounded-[18px] bg-black/10 px-4 py-3 text-base text-text-primary outline-none placeholder:text-text-muted"
+                      disabled={status === 'loading'}
+                    />
+                    <button
+                      type="submit"
+                      disabled={status === 'loading'}
+                      className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] border border-accent-cyan/35 bg-accent-cyan/12 px-5 text-sm font-semibold text-text-primary transition hover:bg-accent-cyan/18 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {status === 'loading' ? (
+                        '提交中'
+                      ) : (
+                        <>
+                          订阅周报
+                          <Send className="h-4 w-4" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </label>
+
+                {status !== 'idle' && status !== 'loading' ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex items-center gap-2 rounded-[18px] border px-4 py-3 text-sm ${
+                      status === 'success'
+                        ? 'border-accent-cyan/25 bg-accent-cyan/10 text-text-primary'
+                        : 'border-red-400/20 bg-red-400/10 text-red-100'
+                    }`}
+                  >
+                    {status === 'success' ? <Check className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+                    <span>{message}</span>
+                  </motion.div>
+                ) : null}
+              </form>
+            </div>
           </div>
         </motion.div>
       </div>

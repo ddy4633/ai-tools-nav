@@ -1,40 +1,9 @@
-import dynamic from 'next/dynamic';
-import Hero from '@/components/home/Hero';
-import { getTrendingTools, getAllTools, getCategories } from '@/lib/supabase';
+import type { Metadata } from 'next';
+import HomeShowcase from '@/components/home/HomeShowcase';
 import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data';
 import { getSponsoredToolsFromList } from '@/lib/monetization/sponsored';
-import type { Metadata } from 'next';
-
-import { Tool, Category, TrendingTool } from '@/types/tool';
-import {
-  FeaturedToolsSkeleton,
-  TrendingToolsSkeleton,
-  CategoriesSkeleton,
-  EditorPicksSkeleton,
-  NewsletterSkeleton,
-} from '@/components/ui/Skeleton';
-
-const TrendingTools = dynamic(() => import('@/components/home/TrendingTools'), {
-  loading: () => <TrendingToolsSkeleton />,
-});
-const FeaturedTools = dynamic(() => import('@/components/home/FeaturedTools'), {
-  loading: () => <FeaturedToolsSkeleton />,
-});
-const EditorPicks = dynamic(() => import('@/components/home/EditorPicks'), {
-  loading: () => <EditorPicksSkeleton />,
-});
-const Categories = dynamic(() => import('@/components/home/Categories'), {
-  loading: () => <CategoriesSkeleton />,
-});
-const NewsletterSection = dynamic(() => import('@/components/home/NewsletterSection'), {
-  loading: () => <NewsletterSkeleton />,
-});
-const LogoWall = dynamic(() => import('@/components/home/LogoWall'), {
-  loading: () => <div className="h-32 bg-bg-secondary/50 animate-pulse" />,
-});
-const SponsoredTools = dynamic(() => import('@/components/home/SponsoredTools'), {
-  loading: () => <div className="h-44 bg-bg-secondary/40 animate-pulse" />,
-});
+import { getAllTools, getCategories, getTrendingTools } from '@/lib/supabase';
+import type { Category, Tool, TrendingTool } from '@/types/tool';
 
 export const revalidate = 3600;
 
@@ -62,33 +31,35 @@ export default async function Home() {
 
   try {
     const [trendingResult, toolsResult, categoriesResult] = await Promise.all([
-      getTrendingTools(5),
+      getTrendingTools(6),
       getAllTools(),
       getCategories(),
     ]);
+
     trending = (trendingResult || []) as TrendingTool[];
     allTools = (toolsResult || []) as Tool[];
     categories = (categoriesResult || []) as Category[];
   } catch {
-    // 静默处理错误，使用备用数据
+    // 静默降级到本地数据
   }
 
   const displayCategories = categories.length > 0 ? categories : categoriesData;
   const displayAllTools = allTools.length > 0 ? allTools : toolsData;
+  const displayFeaturedTools = displayAllTools
+    .filter((tool) => tool.is_featured ?? tool.isFeatured)
+    .slice(0, 8);
+  const featuredTools =
+    displayFeaturedTools.length > 0 ? displayFeaturedTools : displayAllTools.slice(0, 8);
   const displaySponsoredTools = getSponsoredToolsFromList(displayAllTools, 3);
-  const displayFeaturedTools = displayAllTools.filter((tool) => tool.is_featured ?? tool.isFeatured).slice(0, 8);
-  const featuredTools = displayFeaturedTools.length > 0 ? displayFeaturedTools : displayAllTools.slice(0, 8);
 
   return (
-    <>
-      <Hero />
-      <SponsoredTools tools={displaySponsoredTools} />
-      <LogoWall tools={featuredTools} />
-      <EditorPicks picks={editorPicks} />
-      <TrendingTools tools={trending} />
-      <FeaturedTools tools={featuredTools} />
-      <Categories categories={displayCategories} />
-      <NewsletterSection />
-    </>
+    <HomeShowcase
+      allTools={displayAllTools}
+      featuredTools={featuredTools}
+      trendingTools={trending}
+      categories={displayCategories}
+      editorPicks={editorPicks}
+      sponsoredTools={displaySponsoredTools}
+    />
   );
 }

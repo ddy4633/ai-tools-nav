@@ -1,80 +1,101 @@
 'use client';
 
 import Link from 'next/link';
-import { Terminal, Github, Twitter, Mail } from 'lucide-react';
+import { Compass, Github, Mail, Sparkles, Twitter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { buildMailtoLink, siteConfig } from '@/lib/site';
+
+const navLinks = [
+  { name: '全部工具', href: '/tools' },
+  { name: '分类浏览', href: '/categories' },
+  { name: '热门榜单', href: '/trending' },
+  { name: '关于我们', href: '/about' },
+  { name: '提交工具', href: '/submit' },
+];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const links = [
-    { name: 'TOOLS', href: '/tools' },
-    { name: 'CATEGORIES', href: '/categories' },
-    { name: 'ABOUT', href: '/about' },
-    { name: 'SUBMIT', href: '/submit' },
-  ];
-
   const socials = [
-    { name: 'GITHUB', href: siteConfig.githubUrl, icon: Github },
-    siteConfig.xUrl ? { name: 'TWITTER', href: siteConfig.xUrl, icon: Twitter } : null,
-    { name: 'EMAIL', href: buildMailtoLink(), icon: Mail },
+    siteConfig.githubUrl ? { name: 'GitHub', href: siteConfig.githubUrl, icon: Github } : null,
+    siteConfig.xUrl ? { name: 'X', href: siteConfig.xUrl, icon: Twitter } : null,
+    { name: 'Email', href: buildMailtoLink(), icon: Mail },
   ].filter(Boolean) as Array<{ name: string; href: string; icon: typeof Github }>;
 
   return (
-    <footer className="bg-bg-secondary border-t border-border-subtle py-12">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+    <footer className="border-t border-white/8 bg-bg-secondary">
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+          transition={{ duration: 0.5 }}
+          className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
         >
-          {/* 左侧 Logo */}
-          <div className="flex items-center gap-2">
-            <Terminal className="w-5 h-5 text-accent-cyan" />
-            <span className="text-xl font-mono font-bold text-text-primary">
-              <span className="text-accent-cyan">&gt;</span>_TOOLS
-            </span>
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/6">
+                <Compass className="h-5 w-5 text-accent-cyan" />
+              </div>
+              <div>
+                <p className="text-lg font-semibold text-text-primary">AI工具导航</p>
+                <p className="text-sm text-text-muted">先给判断，再给工具链接</p>
+              </div>
+            </div>
+
+            <p className="mt-5 max-w-xl text-sm leading-7 text-text-secondary">
+              这是一个面向中文用户的 AI 工具策展站。我们更关心“哪个工具适合什么场景”，而不是单纯把名字堆满页面。
+            </p>
+
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary">
+              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              首页已升级为编辑策展风格
+            </div>
           </div>
-          
-          {/* 中间导航 */}
-          <nav className="flex flex-wrap items-center gap-6">
-            {links.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-sm font-mono text-text-secondary hover:text-accent-cyan transition-colors"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-          
-          {/* 右侧社交链接 */}
-          <div className="flex items-center gap-4">
-            {socials.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-text-secondary hover:text-accent-cyan transition-colors"
-                aria-label={social.name}
-              >
-                <social.icon className="w-5 h-5" />
-              </a>
-            ))}
+
+          <div className="grid gap-8 sm:grid-cols-2">
+            <div>
+              <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">导航</h3>
+              <div className="mt-4 grid gap-3">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="text-sm text-text-secondary transition hover:text-text-primary"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">联系</h3>
+              <div className="mt-4 flex items-center gap-3">
+                {socials.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary"
+                    aria-label={social.name}
+                  >
+                    <social.icon className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+
+              <p className="mt-5 text-sm leading-7 text-text-secondary">
+                如果你发现更值得收录的产品，或者希望合作展示，可以通过上面的方式联系。
+              </p>
+            </div>
           </div>
         </motion.div>
-        
-        {/* 底部版权 */}
-        <div className="mt-10 pt-8 border-t border-border-subtle">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs font-mono text-text-muted"
-          >
-            <p>© {currentYear} _TOOLS. All systems operational.</p>
-            <p><span className="text-accent-cyan">&lt;</span> Crafted for developers <span className="text-accent-cyan">/&gt;</span></p>
-          </div>
+
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/8 pt-6 text-sm text-text-muted md:flex-row md:items-center md:justify-between">
+          <p>© {currentYear} AI工具导航。保留判断，也保留透明度。</p>
+          <p>Made for people who really want to ship, not just browse.</p>
         </div>
       </div>
     </footer>

@@ -6,6 +6,7 @@ import { Search, ArrowRight } from 'lucide-react';
 import { toolsData } from '@/lib/content/tools-data';
 import { useRouter } from 'next/navigation';
 import type { Tool } from '@/types/tool';
+import ToolLogo from '@/components/ui/ToolLogo';
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -69,11 +70,11 @@ export function CommandPalette() {
       {/* 触发按钮 - 显示在Header中 */}
       <button
         onClick={() => setIsOpen(true)}
-        className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-bg-card border border-border-card rounded-lg text-text-secondary hover:text-text-primary hover:border-accent-cyan/50 transition-all"
+        className="hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary"
       >
         <Search className="w-4 h-4" />
-        <span className="text-sm">搜索</span>
-        <kbd className="ml-2 px-1.5 py-0.5 text-xs bg-bg-secondary rounded border border-border-subtle">
+        <span className="text-sm">搜索工具</span>
+        <kbd className="ml-1 rounded-full border border-white/10 bg-black/10 px-2 py-0.5 text-[11px] text-text-muted">
           ⌘K
         </kbd>
       </button>
@@ -87,7 +88,7 @@ export function CommandPalette() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
             
@@ -97,16 +98,16 @@ export function CommandPalette() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="fixed top-32 left-1/2 -translate-x-1/2 w-full max-w-2xl z-50 px-4"
+              className="fixed left-1/2 top-28 z-50 w-full max-w-2xl -translate-x-1/2 px-4"
               onClick={e => e.stopPropagation()}
             >
-              <div className="bg-bg-card/95 backdrop-blur-xl border border-border-glow rounded-2xl shadow-2xl overflow-hidden">
+              <div className="overflow-hidden rounded-[28px] border border-white/10 bg-bg-card/95 shadow-2xl backdrop-blur-xl">
                 {/* 搜索输入 */}
-                <div className="flex items-center px-6 py-4 border-b border-border-subtle">
+                <div className="flex items-center border-b border-white/8 px-6 py-4">
                   <Search className="w-5 h-5 text-text-muted mr-4" />
                   <input
                     type="text"
-                    placeholder="搜索工具名称、描述或分类..."
+                    placeholder="搜索工具名称、描述、分类或场景..."
                     className="flex-1 bg-transparent text-text-primary text-lg outline-none placeholder:text-text-muted"
                     value={query}
                     onChange={e => {
@@ -116,7 +117,7 @@ export function CommandPalette() {
                     autoFocus
                   />
                   <kbd 
-                    className="px-2 py-1 text-xs bg-bg-secondary rounded border border-border-subtle text-text-muted cursor-pointer hover:text-text-primary transition-colors"
+                    className="cursor-pointer rounded-full border border-white/10 bg-black/10 px-2 py-1 text-xs text-text-muted transition-colors hover:text-text-primary"
                     onClick={() => setIsOpen(false)}
                   >
                     ESC
@@ -143,9 +144,15 @@ export function CommandPalette() {
                           whileTap={{ scale: 0.98 }}
                         >
                           {/* 工具图标 */}
-                          <div className="w-10 h-10 rounded-lg bg-bg-secondary border border-border-card flex items-center justify-center text-lg font-bold text-accent-cyan">
-                            {tool.name.charAt(0)}
-                          </div>
+                          <ToolLogo
+                            name={tool.name}
+                            icon={tool.icon}
+                            size={24}
+                            alt={`${tool.name} logo`}
+                            wrapperClassName="h-10 w-10 rounded-xl border border-white/10 bg-white/5"
+                            imageClassName="h-6 w-6"
+                            textClassName="text-lg text-accent-cyan"
+                          />
                           
                           {/* 工具信息 */}
                           <div className="flex-1 min-w-0">
@@ -153,7 +160,7 @@ export function CommandPalette() {
                               <span className="font-semibold text-text-primary truncate">
                                 {tool.name}
                               </span>
-                              <span className="px-2 py-0.5 text-xs bg-bg-secondary rounded-full text-text-secondary border border-border-subtle">
+                              <span className="rounded-full border border-white/10 bg-black/10 px-2 py-0.5 text-xs text-text-secondary">
                                 {tool.category}
                               </span>
                             </div>
@@ -181,14 +188,14 @@ export function CommandPalette() {
                 </div>
 
                 {/* 底部提示 */}
-                <div className="px-6 py-3 bg-bg-secondary/50 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted">
+                <div className="flex items-center justify-between border-t border-white/8 bg-bg-secondary/50 px-6 py-3 text-xs text-text-muted">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
-                      <kbd className="px-1.5 py-0.5 bg-bg-card rounded border border-border-subtle">↑↓</kbd>
+                      <kbd className="rounded border border-white/10 bg-bg-card px-1.5 py-0.5">↑↓</kbd>
                       <span>导航</span>
                     </span>
                     <span className="flex items-center gap-1">
-                      <kbd className="px-1.5 py-0.5 bg-bg-card rounded border border-border-subtle">↵</kbd>
+                      <kbd className="rounded border border-white/10 bg-bg-card px-1.5 py-0.5">↵</kbd>
                       <span>选择</span>
                     </span>
                   </div>

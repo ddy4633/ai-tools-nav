@@ -34,7 +34,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0a0a0f',
+  themeColor: '#090c12',
 };
 
 export const metadata: Metadata = {
