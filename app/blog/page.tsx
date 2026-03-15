@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Search, Sparkles, TrendingUp } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -22,6 +23,8 @@ const featuredPost = {
   category: '年度榜单',
   date: '2026-03-03',
   readTime: '12 分钟',
+  cover: '/tool-icons/windsurf.png',
+  logos: ['/tool-icons/windsurf.png', '/tool-icons/kling.png', '/tool-icons/deepseek.png'],
 };
 
 const editorialClusters = [
@@ -48,6 +51,8 @@ const blogPosts = [
     date: '2026-03-03',
     readTime: '12 分钟',
     tags: ['年度榜单', 'AI 工具', '趋势'],
+    cover: '/tool-icons/windsurf.png',
+    logos: ['/tool-icons/windsurf.png', '/tool-icons/kling.png'],
   },
   {
     href: '/blog/deepseek-guide',
@@ -57,6 +62,8 @@ const blogPosts = [
     date: '2026-03-10',
     readTime: '15 分钟',
     tags: ['DeepSeek', '教程', '国产 AI'],
+    cover: '/tool-icons/deepseek.png',
+    logos: ['/tool-icons/chatgpt.svg', '/tool-icons/qwen.svg'],
   },
   {
     href: '/blog/chatgpt-china-alternatives',
@@ -66,6 +73,8 @@ const blogPosts = [
     date: '2026-03-12',
     readTime: '10 分钟',
     tags: ['替代方案', '中文 AI', '对比'],
+    cover: '/tool-icons/deepseek.png',
+    logos: ['/tool-icons/qwen.svg', '/tool-icons/kimi.png'],
   },
   {
     href: '/blog/ai-writing-tools-free',
@@ -75,6 +84,8 @@ const blogPosts = [
     date: '2026-03-08',
     readTime: '11 分钟',
     tags: ['AI 写作', '免费工具', '内容营销'],
+    cover: '/tool-icons/chatgpt.svg',
+    logos: ['/tool-icons/claude.svg', '/tool-icons/notion-ai.png'],
   },
   {
     href: '/blog/ai-art-generators',
@@ -84,7 +95,24 @@ const blogPosts = [
     date: '2026-03-07',
     readTime: '11 分钟',
     tags: ['AI 绘画', '视觉创作', '设计'],
+    cover: '/tool-icons/midjourney.png',
+    logos: ['/tool-icons/stable-diffusion.png', '/tool-icons/ideogram.png'],
   },
+];
+
+const visualLogos = [
+  '/tool-icons/deepseek.png',
+  '/tool-icons/chatgpt.svg',
+  '/tool-icons/claude.svg',
+  '/tool-icons/kimi.png',
+  '/tool-icons/qwen.svg',
+  '/tool-icons/windsurf.png',
+  '/tool-icons/v0.png',
+  '/tool-icons/midjourney.png',
+  '/tool-icons/stable-diffusion.png',
+  '/tool-icons/ideogram.png',
+  '/tool-icons/kling.png',
+  '/tool-icons/udio.svg',
 ];
 
 export default function BlogPage() {
@@ -144,6 +172,26 @@ export default function BlogPage() {
               <Sparkles className="h-4 w-4 text-accent-yellow" />
               本周最适合做首页联动的一篇
             </div>
+            <div className="relative mt-6 h-56 overflow-hidden rounded-[28px] border border-white/10 bg-black/20">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.2),transparent_46%),radial-gradient(circle_at_84%_20%,rgba(240,154,121,0.16),transparent_36%)]" />
+              <Image
+                src={featuredPost.cover}
+                alt={featuredPost.title}
+                fill
+                unoptimized
+                className="object-contain p-8 opacity-90"
+              />
+              <div className="absolute bottom-4 right-4 flex gap-2">
+                {featuredPost.logos.map((logo) => (
+                  <span
+                    key={logo}
+                    className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/12 bg-black/25"
+                  >
+                    <Image src={logo} alt="logo" fill unoptimized className="object-contain p-2" />
+                  </span>
+                ))}
+              </div>
+            </div>
             <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-text-muted">
               <span>{featuredPost.category}</span>
               <span>{featuredPost.date}</span>
@@ -200,7 +248,21 @@ export default function BlogPage() {
                 href={post.href}
                 className="group rounded-[28px] border border-white/10 bg-white/5 p-5 transition hover:border-white/16 hover:bg-white/[0.07]"
               >
-                <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
+                <div className="relative h-36 overflow-hidden rounded-[20px] border border-white/10 bg-black/20">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_48%),radial-gradient(circle_at_84%_16%,rgba(240,154,121,0.15),transparent_36%)]" />
+                  <Image src={post.cover} alt={post.title} fill unoptimized className="object-contain p-6 opacity-90" />
+                  <div className="absolute bottom-3 right-3 flex gap-1.5">
+                    {post.logos.map((logo) => (
+                      <span
+                        key={logo}
+                        className="relative h-7 w-7 overflow-hidden rounded-lg border border-white/12 bg-black/25"
+                      >
+                        <Image src={logo} alt="logo" fill unoptimized className="object-contain p-1.5" />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-text-muted">
                   <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1">{post.category}</span>
                   <span>{post.date}</span>
                   <span>{post.readTime}</span>
@@ -224,6 +286,27 @@ export default function BlogPage() {
                   <ArrowRight className="h-4 w-4 text-accent-cyan" />
                 </span>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Visual Wall"
+            title="图像入口墙"
+            description="给大众用户一个“先看图标再点内容”的入口，降低首次浏览门槛。"
+          />
+          <div className="mt-10 grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
+            {visualLogos.map((logo) => (
+              <div
+                key={logo}
+                className="group relative h-20 overflow-hidden rounded-[18px] border border-white/10 bg-black/20"
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_56%),radial-gradient(circle_at_80%_20%,rgba(240,154,121,0.12),transparent_46%)]" />
+                <Image src={logo} alt="工具图标" fill unoptimized className="object-contain p-4 opacity-85 transition group-hover:scale-105 group-hover:opacity-100" />
+              </div>
             ))}
           </div>
         </div>

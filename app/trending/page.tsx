@@ -7,6 +7,7 @@ import {
   GitFork,
   Github,
   Home,
+  Image as ImageIcon,
   Sparkles,
   TrendingUp,
 } from 'lucide-react';
@@ -68,6 +69,7 @@ export default async function TrendingPage() {
       ? Math.round(tools.reduce((sum, tool) => sum + tool.hype_score, 0) / tools.length)
       : 0;
   const explodingCount = tools.filter((tool) => tool.viral_coefficient >= 2).length;
+  const visualGridTools = tools.filter((tool) => Boolean(tool.icon)).slice(0, 18);
 
   return (
     <div className="relative isolate overflow-hidden">
@@ -142,6 +144,48 @@ export default async function TrendingPage() {
           </div>
         </div>
       </section>
+
+      {visualGridTools.length > 0 ? (
+        <section className="relative border-t border-white/8">
+          <div className="mx-auto max-w-7xl px-6 py-14">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Visual Radar</p>
+                <h2 className="mt-2 text-3xl font-semibold text-text-primary">大众用户最先看的图像热度图</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">
+                  不少用户先凭图标识别工具，再决定是否点开详情。这一块直接把热榜工具做成图像矩阵，降低认知门槛。
+                </p>
+              </div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary">
+                <ImageIcon className="h-4 w-4 text-accent-cyan" />
+                {visualGridTools.length} 个热榜图标
+              </span>
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              {visualGridTools.map((tool) => (
+                <Link
+                  key={tool.id}
+                  href={`/tools/${tool.id}`}
+                  className="group rounded-[22px] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.07]"
+                >
+                  <ToolLogo
+                    name={tool.name}
+                    icon={tool.icon}
+                    size={38}
+                    alt={`${tool.name} logo`}
+                    wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/12"
+                    imageClassName="h-10 w-10"
+                    textClassName="text-xl text-accent-cyan"
+                  />
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{tool.name}</p>
+                  <p className="mt-1 text-xs text-text-muted">热度分 {tool.hype_score.toFixed(0)}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {heroTools.length > 0 ? (
         <section className="relative">

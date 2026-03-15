@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Compass,
   FolderOpenDot,
+  Image as ImageIcon,
   Layers3,
   MoveUpRight,
   Search,
@@ -156,6 +157,9 @@ export default function HomeShowcase({
     .sort((left, right) => right.popularity - left.popularity)
     .slice(0, 6);
   const curatedTools = featuredTools.slice(0, 6);
+  const visualWallTools = allTools
+    .filter((tool) => Boolean(tool.icon))
+    .slice(0, 24);
   const featuredEditorPicks = editorPicks.slice(1, 4);
   const liveBoard = trendingTools.slice(0, 4);
   const toolCount = allTools.length;
@@ -663,6 +667,41 @@ export default function HomeShowcase({
           </div>
         </div>
       </section>
+
+      {visualWallTools.length > 0 ? (
+        <section className="relative border-t border-white/8">
+          <div className="mx-auto max-w-7xl px-6 py-20">
+            <SectionHeading
+              eyebrow="图像导航墙"
+              title="给大众用户的第一眼入口：先看图，再看字。"
+              description="很多用户先记住图标和名字，再决定点不点详情。我们把高频工具做成可视化墙，降低首次认知成本。"
+              icon={<ImageIcon className="h-5 w-5 text-accent-cyan" />}
+            />
+
+            <div className="mt-10 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              {visualWallTools.map((tool) => (
+                <Link
+                  key={tool.id}
+                  href={`/tools/${tool.id}`}
+                  className="group rounded-[22px] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.07]"
+                >
+                  <ToolLogo
+                    name={tool.name}
+                    icon={tool.icon}
+                    size={40}
+                    alt={`${tool.name} logo`}
+                    wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/12"
+                    imageClassName="h-10 w-10"
+                    textClassName="text-xl text-accent-cyan"
+                  />
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{tool.name}</p>
+                  <p className="mt-1 truncate text-xs text-text-muted">{tool.category}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="relative">
         <div className="mx-auto max-w-7xl px-6 py-20">
