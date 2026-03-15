@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { Compass, Github, Mail, Sparkles, Twitter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { buildMailtoLink, siteConfig } from '@/lib/site';
+import TrackedLink from '@/components/ui/TrackedLink';
 
 const navLinks = [
   { name: '全部工具', href: '/tools' },
@@ -60,13 +60,14 @@ export default function Footer() {
               <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">导航</h3>
               <div className="mt-4 grid gap-3">
                 {navLinks.map((link) => (
-                  <Link
+                  <TrackedLink
                     key={link.name}
                     href={link.href}
+                    trackingPayload={{ placement: 'footer_nav', source: 'footer' }}
                     className="text-sm text-text-secondary transition hover:text-text-primary"
                   >
                     {link.name}
-                  </Link>
+                  </TrackedLink>
                 ))}
               </div>
             </div>

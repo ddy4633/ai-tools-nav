@@ -1,6 +1,10 @@
 import type { Tool } from '@/types/tool';
 
-export type TrackingEventName = 'outbound_click' | 'newsletter_subscribe' | 'tool_submission';
+export type TrackingEventName =
+  | 'outbound_click'
+  | 'internal_cta_click'
+  | 'newsletter_subscribe'
+  | 'tool_submission';
 
 export interface TrackingEventPayload {
   placement?: string;
@@ -87,6 +91,10 @@ export function trackEvent(name: TrackingEventName, payload: TrackingEventPayloa
 
 export function trackOutboundClick(payload: TrackingEventPayload): void {
   trackEvent('outbound_click', payload);
+}
+
+export function trackInternalCtaClick(payload: TrackingEventPayload): void {
+  trackEvent('internal_cta_click', payload);
 }
 
 export function trackNewsletterSubscribe(payload: TrackingEventPayload): void {

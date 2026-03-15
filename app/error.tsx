@@ -1,82 +1,112 @@
 'use client';
 
 import { useEffect } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import Link from 'next/link';
+import { AlertTriangle, ArrowRight, RefreshCw } from 'lucide-react';
+import TrackedLink from '@/components/ui/TrackedLink';
 
 interface ErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-/**
- * 全局错误边界组件 - 赛博朋克风格
- */
 export default function ErrorBoundary({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // 记录错误到监控系统
     console.error('Error caught by boundary:', error);
   }, [error]);
 
+  const nextSteps = [
+    {
+      href: '/tools',
+      title: '继续看工具库',
+      desc: '按任务和分类继续筛选，不中断你的决策流程。',
+    },
+    {
+      href: '/blog',
+      title: '去专题页获取判断',
+      desc: '从推荐、对比和教程页继续，降低恢复成本。',
+    },
+    {
+      href: '/submit',
+      title: '提交你的产品',
+      desc: '如果你是产品方，仍可直接进入提交和合作入口。',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center px-6">
-      <div className="max-w-lg w-full">
-        {/* 错误图标 */}
-        <div className="flex justify-center mb-8">
-          <div className="relative">
-            <div className="absolute inset-0 bg-accent-pink/20 blur-xl rounded-full animate-pulse" />
-            <div className="relative w-24 h-24 rounded-2xl bg-bg-card border border-border-card flex items-center justify-center">
-              <AlertTriangle className="w-12 h-12 text-accent-pink" />
-            </div>
-          </div>
-        </div>
-
-        {/* 错误信息 */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-4">
-            系统异常
-          </h1>
-          <p className="text-text-secondary mb-4">
-            抱歉，页面加载时遇到了问题
-          </p>
-          <div className="bg-bg-card border border-border-card rounded-lg p-4 text-left">
-            <p className="text-text-muted text-sm font-mono">
-              {error.message || 'Unknown error'}
-            </p>
-            {error.digest && (
-              <p className="text-text-muted text-xs mt-2">
-                Error ID: {error.digest}
+    <main className="min-h-screen bg-bg-primary">
+      <section className="relative overflow-hidden border-b border-white/8">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_34%),radial-gradient(circle_at_78%_12%,rgba(240,154,121,0.14),transparent_28%),radial-gradient(circle_at_52%_42%,rgba(142,162,255,0.08),transparent_42%)]" />
+        <div className="mx-auto max-w-7xl px-6 pb-16 pt-12 md:pb-20 md:pt-16">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_24rem]">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-text-secondary">
+                <span className="h-2 w-2 rounded-full bg-accent-yellow" />
+                页面加载异常
+              </div>
+              <h1 className="mt-6 font-display text-5xl leading-[1.04] tracking-tight text-text-primary md:text-6xl">
+                页面暂时出了点问题。
+                <span className="block text-gradient-cyber">流程别中断，我们给你可恢复入口。</span>
+              </h1>
+              <p className="mt-6 max-w-3xl text-base leading-8 text-text-secondary md:text-lg">
+                这通常是暂时性异常。你可以先重试当前页面，或者走下方的恢复入口继续浏览。
               </p>
-            )}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  onClick={reset}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  重试当前页面
+                </button>
+                <TrackedLink
+                  href="/"
+                  trackingPayload={{ placement: 'error_hero_home', source: 'error_boundary' }}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
+                >
+                  回到首页
+                  <ArrowRight className="h-4 w-4" />
+                </TrackedLink>
+              </div>
+            </div>
+
+            <aside className="rounded-[30px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+              <div className="flex items-center gap-2 text-sm text-text-secondary">
+                <AlertTriangle className="h-4 w-4 text-accent-pink" />
+                错误信息
+              </div>
+              <div className="mt-4 rounded-[22px] border border-white/8 bg-black/10 p-4 text-left">
+                <p className="text-sm leading-7 text-text-secondary">{error.message || 'Unknown error'}</p>
+                {error.digest ? (
+                  <p className="mt-2 text-xs text-text-muted">Error ID: {error.digest}</p>
+                ) : null}
+              </div>
+              <p className="mt-3 text-xs leading-6 text-text-muted">
+                记录这个错误后，可帮助我们后续定位和修复。
+              </p>
+            </aside>
           </div>
         </div>
+      </section>
 
-        {/* 操作按钮 */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={reset}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan rounded-lg hover:bg-accent-cyan/20 transition-all group"
-          >
-            <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
-            重试
-          </button>
-
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-bg-card border border-border-card text-text-primary rounded-lg hover:border-accent-warm/30 hover:text-accent-warm transition-all"
-          >
-            <Home className="w-4 h-4" />
-            返回首页
-          </Link>
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-4 md:grid-cols-3">
+          {nextSteps.map((item) => (
+            <TrackedLink
+              key={item.href}
+              href={item.href}
+              trackingPayload={{ placement: 'error_recovery_grid', source: 'error_boundary' }}
+              className="rounded-[28px] border border-white/10 bg-white/5 p-5 transition hover:border-white/16 hover:bg-white/[0.07]"
+            >
+              <h2 className="text-xl font-semibold text-text-primary">{item.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">{item.desc}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm text-text-primary">
+                进入
+                <ArrowRight className="h-4 w-4 text-accent-cyan" />
+              </span>
+            </TrackedLink>
+          ))}
         </div>
-
-        {/* 装饰线条 */}
-        <div className="mt-12 flex items-center gap-4">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border-card to-transparent" />
-          <span className="text-text-muted text-xs">AI Tools Navigator</span>
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border-card to-transparent" />
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

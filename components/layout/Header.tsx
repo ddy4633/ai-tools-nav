@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Compass, Menu, Sparkles, X } from 'lucide-react';
 import { CommandPalette } from '@/components/search/CommandPalette';
+import TrackedLink from '@/components/ui/TrackedLink';
 
 const navItems = [
   { name: '工具库', href: '/tools' },
@@ -41,26 +42,28 @@ export default function Header() {
 
           <nav className="hidden items-center gap-7 md:flex">
             {navItems.map((item) => (
-              <Link
+              <TrackedLink
                 key={item.name}
                 href={item.href}
+                trackingPayload={{ placement: 'header_nav', source: 'header' }}
                 className="text-sm text-text-secondary transition hover:text-text-primary"
               >
                 {item.name}
-              </Link>
+              </TrackedLink>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
             <CommandPalette />
 
-            <Link
+            <TrackedLink
               href="/advertise"
+              trackingPayload={{ placement: 'header_top_cta', source: 'header' }}
               className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary md:inline-flex"
             >
               <Sparkles className="h-4 w-4 text-accent-yellow" />
               商务合作
-            </Link>
+            </TrackedLink>
 
             <button
               type="button"
@@ -84,14 +87,15 @@ export default function Header() {
             >
               <div className="space-y-2 pt-4">
                 {navItems.map((item) => (
-                  <Link
+                  <TrackedLink
                     key={item.name}
                     href={item.href}
+                    trackingPayload={{ placement: 'header_mobile_nav', source: 'header_mobile' }}
                     className="block rounded-2xl border border-white/8 bg-white/5 px-4 py-3 text-sm text-text-secondary transition hover:text-text-primary"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
-                  </Link>
+                  </TrackedLink>
                 ))}
               </div>
             </motion.nav>
