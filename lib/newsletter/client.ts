@@ -5,6 +5,7 @@ export interface NewsletterSubscribePayload {
   source: string;
   tags?: string[];
   metadata?: Record<string, string>;
+  website2?: string;
 }
 
 interface NewsletterApiResponse {

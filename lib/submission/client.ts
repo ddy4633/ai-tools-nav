@@ -1,7 +1,9 @@
 import { trackToolSubmission } from '@/lib/tracking';
 import type { SubmissionPlan, ToolSubmissionInput } from '@/lib/submission/types';
 
-export type ToolSubmissionPayload = ToolSubmissionInput;
+export type ToolSubmissionPayload = ToolSubmissionInput & {
+  website2?: string;
+};
 
 interface SubmissionApiResponse {
   success: boolean;

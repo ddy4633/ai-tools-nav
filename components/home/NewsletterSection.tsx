@@ -7,6 +7,7 @@ import { subscribeToNewsletterApi, validateEmail } from '@/lib/newsletter/client
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('');
+  const [website2, setWebsite2] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
@@ -34,6 +35,7 @@ export default function NewsletterSection() {
         email: trimmedEmail,
         source: 'home_newsletter',
         tags: ['homepage'],
+        website2,
       });
 
       if (!result.success) {
@@ -99,6 +101,16 @@ export default function NewsletterSection() {
               </div>
 
               <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+                <input
+                  type="text"
+                  name="website2"
+                  value={website2}
+                  onChange={(event) => setWebsite2(event.target.value)}
+                  autoComplete="off"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="hidden"
+                />
                 <label className="block">
                   <span className="mb-2 block text-sm text-text-muted">邮箱地址</span>
                   <div className="flex flex-col gap-3 rounded-[24px] border border-white/10 bg-white/6 p-3 sm:flex-row sm:items-center">

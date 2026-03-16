@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, CheckCircle2, Clock3, Megaphone } from 'lucide-react';
 import SubmitForm from './SubmitForm';
 import PageHero from '@/components/ui/PageHero';
@@ -21,6 +22,21 @@ export const metadata: Metadata = {
     type: 'website',
   },
 };
+
+const submitVisualLogos = [
+  '/tool-icons/chatgpt.svg',
+  '/tool-icons/claude.svg',
+  '/tool-icons/deepseek.png',
+  '/tool-icons/cursor.svg',
+  '/tool-icons/windsurf.png',
+  '/tool-icons/kimi.png',
+  '/tool-icons/qwen.svg',
+  '/tool-icons/midjourney.png',
+  '/tool-icons/sora.png',
+  '/tool-icons/kling.png',
+  '/tool-icons/notion-ai.svg',
+  '/tool-icons/figma-ai.svg',
+];
 
 function CommercialPlans() {
   const plans = [
@@ -137,6 +153,35 @@ function SubmissionGuide() {
   );
 }
 
+function VisualTrustWall() {
+  return (
+    <section className="border-t border-white/8">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <SectionHeading
+          eyebrow="Visual Trust"
+          title="让客户一眼确认：你提交的是主流可识别产品"
+          description="图像化展示可以降低人工审核沟通成本，也更容易让商务团队快速判断投放潜力。"
+        />
+
+        <div className="mt-10 grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
+          {submitVisualLogos.map((logo) => (
+            <div key={logo} className="group relative h-20 overflow-hidden rounded-[18px] border border-white/10 bg-black/15">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_58%),radial-gradient(circle_at_82%_18%,rgba(240,154,121,0.13),transparent_46%)]" />
+              <Image
+                src={logo}
+                alt="平台收录样例图标"
+                fill
+                unoptimized
+                className="object-contain p-4 opacity-90 transition group-hover:scale-105 group-hover:opacity-100"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function RelatedLinks() {
   const links = [
     { href: '/advertise', label: '商务合作方案', desc: '了解首页、分类页、榜单和专题位' },
@@ -217,6 +262,7 @@ export default function SubmitPage() {
       <CommercialPlans />
       <PackageOverview />
       <SubmissionGuide />
+      <VisualTrustWall />
       <RelatedLinks />
     </main>
   );

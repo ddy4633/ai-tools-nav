@@ -15,6 +15,12 @@ const navLinks = [
   { name: '提交工具', href: '/submit' },
 ];
 
+const legalLinks = [
+  { name: '隐私政策', href: '/privacy' },
+  { name: '服务条款', href: '/terms' },
+  { name: '合作披露', href: '/disclosure' },
+];
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -92,6 +98,19 @@ export default function Footer() {
               <p className="mt-5 text-sm leading-7 text-text-secondary">
                 如果你发现更值得收录的产品，或者希望购买首页、分类页、榜单页和专题页曝光，可以通过上面的方式联系。
               </p>
+
+              <div className="mt-5 flex flex-wrap gap-3 text-xs text-text-muted">
+                {legalLinks.map((link) => (
+                  <TrackedLink
+                    key={link.name}
+                    href={link.href}
+                    trackingPayload={{ placement: 'footer_legal', source: 'footer' }}
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 transition hover:text-text-primary"
+                  >
+                    {link.name}
+                  </TrackedLink>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>

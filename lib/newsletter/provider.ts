@@ -1,4 +1,5 @@
 import 'server-only';
+import { isNoopProviderAllowed } from '@/lib/security/request-guard';
 
 export type NewsletterProviderName = 'noop' | 'webhook' | 'buttondown';
 
@@ -121,6 +122,15 @@ async function subscribeByButtondown(input: NewsletterSubscribeInput): Promise<N
 }
 
 async function subscribeByNoop(input: NewsletterSubscribeInput): Promise<NewsletterSubscribeResult> {
+  if (!isNoopProviderAllowed()) {
+    return {
+      ok: false,
+      provider: 'noop',
+      message: '订阅通道未配置完成，请联系站点管理员',
+      status: 503,
+    };
+  }
+
   console.info('[newsletter:no-op]', input);
 
   return {

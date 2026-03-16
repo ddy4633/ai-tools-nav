@@ -1,6 +1,7 @@
 import 'server-only';
 
 import type { ToolSubmissionInput } from '@/lib/submission/types';
+import { isNoopProviderAllowed } from '@/lib/security/request-guard';
 
 export type SubmissionProviderName = 'noop' | 'webhook';
 
@@ -67,6 +68,15 @@ async function submitByWebhook(input: ToolSubmissionInput): Promise<ToolSubmissi
 }
 
 async function submitByNoop(input: ToolSubmissionInput): Promise<ToolSubmissionResult> {
+  if (!isNoopProviderAllowed()) {
+    return {
+      ok: false,
+      provider: 'noop',
+      message: '线索通道未配置完成，请联系站点管理员',
+      status: 503,
+    };
+  }
+
   console.info('[submission:no-op]', {
     ...input,
     submittedAt: new Date().toISOString(),

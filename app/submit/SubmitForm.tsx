@@ -103,6 +103,7 @@ export default function SubmitForm() {
     budgetRange: '',
   });
   const [tagInput, setTagInput] = useState('');
+  const [website2, setWebsite2] = useState('');
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof SubmitFormData, string>> = {};
@@ -182,6 +183,7 @@ export default function SubmitForm() {
     try {
       const result = await submitToolSubmissionApi({
         ...formData,
+        website2,
         name: formData.name.trim(),
         website: formData.website.trim(),
         description: formData.description.trim(),
@@ -278,6 +280,17 @@ export default function SubmitForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="bg-surface-card rounded-2xl p-6 sm:p-8 border border-border-light shadow-lg">
+        <input
+          type="text"
+          name="website2"
+          value={website2}
+          onChange={(event) => setWebsite2(event.target.value)}
+          autoComplete="off"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="hidden"
+        />
+
         <div className="mb-8">
           <label className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
             <Sparkles className="w-4 h-4 text-accent-warm" />
@@ -575,7 +588,15 @@ export default function SubmitForm() {
         )}
 
         <p className="text-xs text-text-muted text-center mt-4 leading-relaxed">
-          提交后会进入站点 API 流程，可接 webhook 或内部 CRM；免费收录走审核，商务方案会优先通过邮箱联系。
+          提交后会进入站点 API 流程，可接 webhook 或内部 CRM；免费收录走审核，商务方案会优先通过邮箱联系。提交即表示你同意
+          {' '}
+          <NextLink href="/privacy" className="text-accent-cyan hover:opacity-85">隐私政策</NextLink>
+          {' '}与{' '}
+          <NextLink href="/terms" className="text-accent-cyan hover:opacity-85">服务条款</NextLink>
+          ，并知悉
+          {' '}
+          <NextLink href="/disclosure" className="text-accent-cyan hover:opacity-85">合作披露</NextLink>
+          。
         </p>
       </form>
     </div>

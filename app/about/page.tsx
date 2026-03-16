@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Compass, Mail, ShieldCheck, Target } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -26,6 +27,21 @@ export const metadata: Metadata = {
     url: buildSiteUrl('/about'),
   },
 };
+
+const aboutVisualLogos = [
+  '/tool-icons/chatgpt.svg',
+  '/tool-icons/claude.svg',
+  '/tool-icons/deepseek.png',
+  '/tool-icons/kimi.png',
+  '/tool-icons/qwen.svg',
+  '/tool-icons/cursor.svg',
+  '/tool-icons/windsurf.png',
+  '/tool-icons/midjourney.png',
+  '/tool-icons/sora.png',
+  '/tool-icons/figma-ai.svg',
+  '/tool-icons/notion.svg',
+  '/tool-icons/perplexity.svg',
+];
 
 export default function AboutPage() {
   return (
@@ -82,6 +98,30 @@ export default function AboutPage() {
           </div>
         }
       />
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Visual Promise"
+            title="我们的判断，不是空口说。"
+            description="先把真实工具放在你眼前，再谈推荐逻辑和商业路径。"
+          />
+          <div className="mt-10 grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
+            {aboutVisualLogos.map((logo) => (
+              <div key={logo} className="group relative h-20 overflow-hidden rounded-[18px] border border-white/10 bg-black/15">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_58%),radial-gradient(circle_at_82%_18%,rgba(240,154,121,0.13),transparent_46%)]" />
+                <Image
+                  src={logo}
+                  alt="工具图标"
+                  fill
+                  unoptimized
+                  className="object-contain p-4 opacity-90 transition group-hover:scale-105 group-hover:opacity-100"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="mx-auto max-w-7xl px-6 py-16">
         <SectionHeading

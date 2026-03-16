@@ -10,6 +10,7 @@ interface NewsletterFormProps {
 
 export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
   const [email, setEmail] = useState('');
+  const [website2, setWebsite2] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
@@ -38,6 +39,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
         email: trimmedEmail,
         source: `newsletter_form_${variant}`,
         tags: ['site-newsletter', variant],
+        website2,
       });
 
       if (!result.success) {
@@ -59,6 +61,16 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
     return (
       <div>
         <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="text"
+            name="website2"
+            value={website2}
+            onChange={(event) => setWebsite2(event.target.value)}
+            autoComplete="off"
+            tabIndex={-1}
+            aria-hidden="true"
+            className="hidden"
+          />
           <input
             type="email"
             value={email}
@@ -86,6 +98,16 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
     return (
       <div>
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">
+          <input
+            type="text"
+            name="website2"
+            value={website2}
+            onChange={(event) => setWebsite2(event.target.value)}
+            autoComplete="off"
+            tabIndex={-1}
+            aria-hidden="true"
+            className="hidden"
+          />
           <div className="flex-1 relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
             <input
@@ -124,6 +146,16 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
+        <input
+          type="text"
+          name="website2"
+          value={website2}
+          onChange={(event) => setWebsite2(event.target.value)}
+          autoComplete="off"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="hidden"
+        />
         <div className="relative">
           <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
           <input

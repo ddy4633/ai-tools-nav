@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, BarChart3, Layers3, Megaphone, Target } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -25,6 +26,21 @@ export const metadata: Metadata = {
     type: 'website',
   },
 };
+
+const adVisualLogos = [
+  '/tool-icons/chatgpt.svg',
+  '/tool-icons/claude.svg',
+  '/tool-icons/deepseek.png',
+  '/tool-icons/cursor.svg',
+  '/tool-icons/windsurf.png',
+  '/tool-icons/perplexity.svg',
+  '/tool-icons/midjourney.png',
+  '/tool-icons/sora.png',
+  '/tool-icons/kling.png',
+  '/tool-icons/figma-ai.svg',
+  '/tool-icons/notion-ai.svg',
+  '/tool-icons/obsidian.svg',
+];
 
 export default function AdvertisePage() {
   return (
@@ -75,6 +91,35 @@ export default function AdvertisePage() {
           </div>
         }
       />
+
+      <section className="mx-auto max-w-7xl px-6 py-12">
+        <div className="rounded-[32px] border border-white/10 bg-white/5 p-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Audience Familiarity</p>
+              <h2 className="mt-2 text-2xl font-semibold text-text-primary">客户买曝光，先看用户是否认得这些入口</h2>
+            </div>
+            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary">
+              12 个高识别度图标
+            </span>
+          </div>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
+            {adVisualLogos.map((logo) => (
+              <div key={logo} className="group relative h-20 overflow-hidden rounded-[18px] border border-white/10 bg-black/15">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_58%),radial-gradient(circle_at_82%_18%,rgba(240,154,121,0.13),transparent_46%)]" />
+                <Image
+                  src={logo}
+                  alt="合作位可覆盖工具图标"
+                  fill
+                  unoptimized
+                  className="object-contain p-4 opacity-90 transition group-hover:scale-105 group-hover:opacity-100"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="mx-auto max-w-7xl px-6 py-16">
         <SectionHeading

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Compass, Layers3, Sparkles } from 'lucide-react';
 import { getCategories } from '@/lib/supabase';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
@@ -104,6 +105,17 @@ export default async function CategoriesPage() {
               href={`/categories/${category.slug}`}
               className="group rounded-[30px] border border-white/10 bg-white/5 p-5 transition hover:border-white/16 hover:bg-white/[0.07]"
             >
+              <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/10 bg-black/12">
+                <Image
+                  src={getCategoryIcon(category.slug)}
+                  alt={`${category.name} 图标`}
+                  width={36}
+                  height={36}
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-semibold text-text-primary transition group-hover:text-accent-cyan">
@@ -180,6 +192,23 @@ function getCategoryDescription(slug: string, name: string) {
   };
 
   return descriptions[slug] ?? `${name} 相关工具的集中入口。`;
+}
+
+function getCategoryIcon(slug: string) {
+  const iconMap: Record<string, string> = {
+    chatbot: '/tool-icons/chatgpt.svg',
+    writing: '/tool-icons/jasper.svg',
+    code: '/tool-icons/cursor.svg',
+    image: '/tool-icons/midjourney.png',
+    video: '/tool-icons/sora.png',
+    audio: '/tool-icons/suno.png',
+    productivity: '/tool-icons/notion.svg',
+    design: '/tool-icons/figma-ai.svg',
+    knowledge: '/tool-icons/obsidian.svg',
+    data: '/tool-icons/julius.ico',
+  };
+
+  return iconMap[slug] ?? '/tool-icons/chatgpt.svg';
 }
 
 function getCategoryCue(slug: string) {
