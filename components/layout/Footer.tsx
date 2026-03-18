@@ -21,6 +21,17 @@ const legalLinks = [
   { name: '合作披露', href: '/disclosure' },
 ];
 
+const creatorToolLinks = [
+  {
+    name: 'ProductoKit 图片工具箱',
+    href: 'https://www.productokit.com/image-kit?utm_source=ai-tools-nav&utm_medium=footer&utm_campaign=creator_toolbox',
+  },
+  {
+    name: 'ProductoKit 文案润色器',
+    href: 'https://www.productokit.com/text-polisher?utm_source=ai-tools-nav&utm_medium=footer&utm_campaign=creator_toolbox',
+  },
+];
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -110,6 +121,23 @@ export default function Footer() {
                     {link.name}
                   </TrackedLink>
                 ))}
+              </div>
+
+              <div className="mt-6">
+                <h4 className="text-xs uppercase tracking-[0.22em] text-text-muted">创作者工具推荐</h4>
+                <div className="mt-3 flex flex-wrap gap-3">
+                  {creatorToolLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-muted transition hover:border-accent-cyan/28 hover:text-text-primary"
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
