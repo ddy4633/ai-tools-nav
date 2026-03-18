@@ -43,6 +43,19 @@ const aboutVisualLogos = [
   '/tool-icons/perplexity.svg',
 ];
 
+const ecosystemTools = [
+  {
+    name: 'ProductoKit 图片工具箱',
+    description: '适合做封面图、社媒图、缩略图的尺寸与质量优化。',
+    href: 'https://www.productokit.com/image-kit?utm_source=ai-tools-nav&utm_medium=about_page&utm_campaign=ecosystem_links',
+  },
+  {
+    name: 'ProductoKit 文案润色器',
+    description: '适合给专题文案、推广描述和落地页文案做快速优化。',
+    href: 'https://www.productokit.com/text-polisher?utm_source=ai-tools-nav&utm_medium=about_page&utm_campaign=ecosystem_links',
+  },
+];
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-bg-primary">
@@ -205,6 +218,33 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Ecosystem"
+            title="我们也在用的创作工具"
+            description="导航站本身也是内容产品，图片处理和文案优化是高频刚需。"
+          />
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            {ecosystemTools.map((tool) => (
+              <article key={tool.name} className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+                <h3 className="text-xl font-semibold text-text-primary">{tool.name}</h3>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{tool.description}</p>
+                <a
+                  href={tool.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-primary transition hover:border-accent-cyan/30"
+                >
+                  查看工具
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              </article>
+            ))}
           </div>
         </div>
       </section>

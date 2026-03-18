@@ -16,6 +16,11 @@ AI Tools Navigator（好工具）是一个专注于发现和评测 AI 工具的�
 - 📱 **响应式设计** - 完美适配桌面和移动端
 - 🚀 **极速加载** - 静态生成 + CDN 加速
 
+## 相关生态工具
+
+- [ProductoKit 图片工具箱](https://www.productokit.com/image-kit?utm_source=ai-tools-nav-readme&utm_medium=github&utm_campaign=ecosystem_links) - 一站式图片裁剪、压缩与尺寸处理
+- [ProductoKit 文案润色器](https://www.productokit.com/text-polisher?utm_source=ai-tools-nav-readme&utm_medium=github&utm_campaign=ecosystem_links) - 面向创作者与运营团队的文本优化工具
+
 ## 技术架构
 
 - **框架**: Next.js 15 + React 19 + TypeScript

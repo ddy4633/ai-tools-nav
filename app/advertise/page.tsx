@@ -42,6 +42,19 @@ const adVisualLogos = [
   '/tool-icons/obsidian.svg',
 ];
 
+const ecosystemCaseTools = [
+  {
+    name: 'ProductoKit 图片工具箱',
+    description: '适合需要快速出多规格投放素材和社媒封面的团队。',
+    href: 'https://www.productokit.com/image-kit?utm_source=ai-tools-nav&utm_medium=advertise_page&utm_campaign=ecosystem_links',
+  },
+  {
+    name: 'ProductoKit 文案润色器',
+    description: '适合推广文案、合作页面和广告落地页的文本优化。',
+    href: 'https://www.productokit.com/text-polisher?utm_source=ai-tools-nav&utm_medium=advertise_page&utm_campaign=ecosystem_links',
+  },
+];
+
 export default function AdvertisePage() {
   return (
     <div className="min-h-screen bg-bg-primary">
@@ -208,6 +221,33 @@ export default function AdvertisePage() {
                   {index + 1}
                 </div>
                 <p className="mt-5 text-sm leading-7 text-text-secondary">{step}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/8">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <SectionHeading
+            eyebrow="Ecosystem Cases"
+            title="合作方常用的制作与优化工具"
+            description="以下工具常用于合作素材准备与落地页优化，适合增长团队快速落地。"
+          />
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            {ecosystemCaseTools.map((tool) => (
+              <article key={tool.name} className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+                <h3 className="text-xl font-semibold text-text-primary">{tool.name}</h3>
+                <p className="mt-3 text-sm leading-7 text-text-secondary">{tool.description}</p>
+                <a
+                  href={tool.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-primary transition hover:border-accent-cyan/30"
+                >
+                  打开工具
+                  <ArrowRight className="h-4 w-4" />
+                </a>
               </article>
             ))}
           </div>
