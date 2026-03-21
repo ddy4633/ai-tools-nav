@@ -4,21 +4,22 @@ import { Compass, Github, Mail, Sparkles, Twitter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { buildMailtoLink, siteConfig } from '@/lib/site';
 import TrackedLink from '@/components/ui/TrackedLink';
+import { brandConfig, globalAudienceBlurb } from '@/lib/brand';
 
 const navLinks = [
-  { name: '全部工具', href: '/tools' },
-  { name: '分类浏览', href: '/categories' },
-  { name: '热门榜单', href: '/trending' },
-  { name: '专题内容', href: '/blog' },
-  { name: '商务合作', href: '/advertise' },
-  { name: '关于我们', href: '/about' },
-  { name: '提交工具', href: '/submit' },
+  { name: 'Tools', href: '/tools' },
+  { name: 'Categories', href: '/categories' },
+  { name: 'Trending', href: '/trending' },
+  { name: 'Editorial', href: '/blog' },
+  { name: 'Advertise', href: '/advertise' },
+  { name: 'About', href: '/about' },
+  { name: 'Submit', href: '/submit' },
 ];
 
 const legalLinks = [
-  { name: '隐私政策', href: '/privacy' },
-  { name: '服务条款', href: '/terms' },
-  { name: '合作披露', href: '/disclosure' },
+  { name: 'Privacy', href: '/privacy' },
+  { name: 'Terms', href: '/terms' },
+  { name: 'Disclosure', href: '/disclosure' },
 ];
 
 const creatorToolLinks = [
@@ -57,24 +58,24 @@ export default function Footer() {
                 <Compass className="h-5 w-5 text-accent-cyan" />
               </div>
               <div>
-                <p className="text-lg font-semibold text-text-primary">AI工具导航</p>
-                <p className="text-sm text-text-muted">先给判断，再给工具链接</p>
+                <p className="text-lg font-semibold text-text-primary">{brandConfig.siteName}</p>
+                <p className="text-sm text-text-muted">{brandConfig.taglines.secondary}</p>
               </div>
             </div>
 
             <p className="mt-5 max-w-xl text-sm leading-7 text-text-secondary">
-              这是一个面向中文用户的 AI 工具策展站。我们更关心“哪个工具适合什么场景”，而不是单纯把名字堆满页面。
+              {globalAudienceBlurb}
             </p>
 
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary">
               <Sparkles className="h-4 w-4 text-accent-yellow" />
-              站点已升级为“策展 + 转化”双引擎结构
+              English-first discovery with multi-market launch intent
             </div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2">
             <div>
-              <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">导航</h3>
+              <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">Navigation</h3>
               <div className="mt-4 grid gap-3">
                 {navLinks.map((link) => (
                   <TrackedLink
@@ -90,7 +91,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">联系</h3>
+              <h3 className="text-sm uppercase tracking-[0.24em] text-text-muted">Connect</h3>
               <div className="mt-4 flex items-center gap-3">
                 {socials.map((social) => (
                   <a
@@ -107,7 +108,7 @@ export default function Footer() {
               </div>
 
               <p className="mt-5 text-sm leading-7 text-text-secondary">
-                如果你发现更值得收录的产品，或者希望购买首页、分类页、榜单页和专题页曝光，可以通过上面的方式联系。
+                Found a launch-worthy product, or want sponsored placement across discovery, category, trending, and editorial surfaces? Reach out here.
               </p>
 
               <div className="mt-5 flex flex-wrap gap-3 text-xs text-text-muted">
@@ -144,7 +145,7 @@ export default function Footer() {
         </motion.div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/8 pt-6 text-sm text-text-muted md:flex-row md:items-center md:justify-between">
-          <p>© {currentYear} AI工具导航。保留判断，也保留透明度。</p>
+          <p>© {currentYear} {brandConfig.siteName}. Keep the signal clear and the disclosures honest.</p>
           <p>Made for people who really want to ship, not just browse.</p>
         </div>
       </div>

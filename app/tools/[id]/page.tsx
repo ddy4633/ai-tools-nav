@@ -14,6 +14,15 @@ import { buildSiteUrl } from '@/lib/site';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import { resolveToolPrimaryUrl } from '@/lib/tracking';
+import {
+  getCategoryLabel,
+  getPricingLabel,
+  getToolCardSummary,
+  getToolDisplayName,
+  getToolHeroSummary,
+  getToolSourceNote,
+  isCjkHeavy,
+} from '@/lib/tool-display';
 
 interface ToolPageProps {
   params: Promise<{ id: string }>;
@@ -30,23 +39,28 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
 
   if (!tool) {
     return {
-      title: '工具未找到 - AI工具导航',
-      description: '抱歉，您查找的工具不存在或已被移除。',
+      title: 'Tool Not Found',
+      description: 'The tool you requested is unavailable or has been removed from the directory.',
     };
   }
 
   const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
+  const displayName = getToolDisplayName(tool.name);
+  const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
+  const keywords = Array.from(
+    new Set([displayName, tool.name, categoryLabel, 'AI tool review', 'pricing', 'alternatives'].filter(Boolean))
+  );
 
   return {
-    title: `${tool.name} 评测、价格与替代方案`,
-    description: `${tool.description}。查看 ${tool.name} 的推荐理由、价格、优缺点、替代工具和访问入口。`,
-    keywords: [tool.name, tool.category, 'AI工具评测', '价格', '替代方案'],
+    title: `${displayName} review, pricing, and alternatives`,
+    description: `${getToolHeroSummary(tool)} Review workflow fit, pricing, alternatives, and direct access links for ${displayName}.`,
+    keywords,
     alternates: {
       canonical: toolUrl,
     },
     openGraph: {
-      title: `${tool.name} - ${tool.category} 工具评测`,
-      description: tool.description,
+      title: `${displayName} - ${categoryLabel} review`,
+      description: getToolHeroSummary(tool),
       url: toolUrl,
       type: 'article',
     },
@@ -54,9 +68,9 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
 }
 
 const pricingLabels = {
-  free: { text: '免费', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
-  paid: { text: '付费', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
-  freemium: { text: '部分免费', className: 'bg-white/6 text-text-secondary border-white/12' },
+  free: { text: 'Free', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
+  paid: { text: 'Paid', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
+  freemium: { text: 'Freemium', className: 'bg-white/6 text-text-secondary border-white/12' },
 };
 
 export default async function ToolPage({ params }: ToolPageProps) {
@@ -69,10 +83,23 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
   const pricingType: keyof typeof pricingLabels = tool.pricing_type ?? tool.pricingType ?? 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
+  const displayName = getToolDisplayName(tool.name);
+  const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
   const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
   const ratingCount = tool.rating_count ?? 0;
   const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
   const hasPrimaryCta = Boolean(resolveToolPrimaryUrl(tool));
+  const visibleFeatures = tool.features?.filter((item) => !isCjkHeavy(item)) ?? [];
+  const visiblePros = tool.pros?.filter((item) => !isCjkHeavy(item)) ?? [];
+  const visibleCons = tool.cons?.filter((item) => !isCjkHeavy(item)) ?? [];
+  const visibleReviewSources =
+    tool.reviewSources?.map((source) => ({
+      ...source,
+      displaySummary: !isCjkHeavy(source.summary)
+        ? source.summary
+        : 'The original source summary is stored in Simplified Chinese. Use the English-first summary on this page before opening the source.',
+    })) ?? [];
+  const displayAlternatives = (tool.alternatives ?? []).map((item) => getToolDisplayName(item));
   const relatedTools = allTools
     .filter((item: Tool) => item.id !== tool.id && item.category === tool.category)
     .slice(0, 3);
@@ -80,12 +107,16 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: tool.name,
-    description: tool.description,
-    applicationCategory: tool.category,
+    name: displayName,
+    description: getToolHeroSummary(tool),
+    applicationCategory: categoryLabel,
     operatingSystem: 'Web',
     url: tool.website || toolUrl,
   };
+
+  if (displayName !== tool.name) {
+    jsonLd.alternateName = tool.name;
+  }
 
   if (averageRating && ratingCount) {
     jsonLd.aggregateRating = {
@@ -106,8 +137,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
         <Breadcrumb
           items={[
             breadcrumbPresets.tools,
-            { label: tool.category, href: `/tools?category=${tool.categorySlug || tool.category}` },
-            { label: tool.name },
+            { label: categoryLabel, href: `/tools?category=${tool.categorySlug || tool.category}` },
+            { label: displayName },
           ]}
         />
 
@@ -116,7 +147,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
           className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
         >
           <ArrowLeft className="h-4 w-4" />
-          返回工具库
+          Back to directory
         </Link>
       </div>
 
@@ -127,14 +158,14 @@ export default async function ToolPage({ params }: ToolPageProps) {
               <div className="flex flex-wrap items-center gap-3">
                 <span className={`rounded-full border px-3 py-1 text-sm ${pricing.className}`}>{pricing.text}</span>
                 <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary">
-                  {tool.category}
+                  {categoryLabel}
                 </span>
                 <SponsorBadge tool={tool} />
               </div>
 
               <div className="mt-6 flex items-start gap-5">
                 <ToolLogo
-                  name={tool.name}
+                  name={displayName}
                   icon={tool.icon}
                   size={44}
                   priority
@@ -143,8 +174,11 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   textClassName="text-3xl text-accent-cyan"
                 />
                 <div className="min-w-0">
-                  <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">{tool.name}</h1>
-                  <p className="mt-4 max-w-3xl text-base leading-8 text-text-secondary">{tool.description}</p>
+                  <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">{displayName}</h1>
+                  <p className="mt-4 max-w-3xl text-base leading-8 text-text-secondary">{getToolHeroSummary(tool)}</p>
+                  {isCjkHeavy(tool.description) ? (
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted">{getToolSourceNote(tool)}</p>
+                  ) : null}
                   <div className="mt-4">
                     <RatingDisplay averageRating={averageRating} ratingCount={ratingCount} size="md" />
                   </div>
@@ -153,24 +187,24 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <MetricCard
-                  value={tool.priceRange || pricing.text}
-                  label="价格与门槛"
-                  hint="判断是不是适合第一轮试用。"
+                  value={tool.priceRange || getPricingLabel(tool.pricing_type ?? tool.pricingType)}
+                  label="Pricing"
+                  hint="Check whether the access tier fits your first test."
                 />
                 <MetricCard
-                  value={tool.editorRating ? tool.editorRating.toFixed(1) : '待补充'}
-                  label="编辑分"
-                  hint="越高代表越值得先点开官网。"
+                  value={tool.editorRating ? tool.editorRating.toFixed(1) : 'TBD'}
+                  label="Editor score"
+                  hint="Higher usually means the product deserves the next click sooner."
                 />
                 <MetricCard
                   value={tool.alternatives?.length ? `${tool.alternatives.length}` : '0'}
-                  label="替代工具"
-                  hint="不一定非它不可，替代关系也要看。"
+                  label="Alternatives"
+                  hint="Strong options should still be judged against close substitutes."
                 />
                 <MetricCard
                   value={tool.difficulty ? `${tool.difficulty}/5` : '1/5'}
-                  label="上手难度"
-                  hint="越低越适合作为第一轮试用入口。"
+                  label="Setup effort"
+                  hint="Lower effort makes the product easier to test first."
                 />
               </div>
 
@@ -178,8 +212,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 <ToolPrimaryCta
                   tool={tool}
                   placement="tool_detail_primary_cta"
-                  affiliateLabel="访问合作链接"
-                  websiteLabel="访问官网"
+                  affiliateLabel="Open partner link"
+                  websiteLabel="Visit site"
                   className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-5 py-3 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                 />
 
@@ -197,7 +231,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                     }}
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm text-text-secondary transition hover:text-text-primary"
                   >
-                    查看源码
+                    View source
                     <ExternalLink className="h-4 w-4" />
                   </TrackedExternalLink>
                 ) : null}
@@ -206,7 +240,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   href={`/tools?category=${tool.categorySlug || tool.category}`}
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm text-text-secondary transition hover:text-text-primary"
                 >
-                  查看同类工具
+                  Browse similar tools
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -216,7 +250,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
               <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
                 <div className="flex items-center gap-2 text-sm text-text-secondary">
                   <Sparkles className="h-4 w-4 text-accent-yellow" />
-                  3 分钟判断法
+                  3-minute decision guide
                 </div>
                 <div className="mt-5 space-y-3">
                   {buildDecisionBullets(tool).map((item) => (
@@ -230,24 +264,24 @@ export default async function ToolPage({ params }: ToolPageProps) {
               <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
                 <div className="flex items-center gap-2 text-sm text-text-secondary">
                   <Star className="h-4 w-4 text-accent-cyan" />
-                  如果你是产品团队
+                  If you run the product
                 </div>
                 <p className="mt-4 text-sm leading-7 text-text-secondary">
-                  想让你的工具也获得这种详情页和站内流量入口，可以直接从提交页进入免费收录、加急评估或赞助合作。
+                  Want this level of product page, traffic intent, and directory visibility for your own tool? Start with the submit flow or paid placement options.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link
                     href="/submit"
                     className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                   >
-                    提交你的工具
+                    Submit your tool
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <Link
                     href="/advertise"
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                   >
-                    商务合作
+                    Promote
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -259,19 +293,19 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          {tool.reason ? (
-            <ContentCard title="推荐理由">
-              <p className="text-sm leading-8 text-text-secondary">{tool.reason}</p>
+          {(tool.reason || tool.description) ? (
+            <ContentCard title="Why this tool is featured">
+              <p className="text-sm leading-8 text-text-secondary">{getToolCardSummary(tool)}</p>
             </ContentCard>
           ) : null}
 
-          {(tool.features?.length || tool.pros?.length || tool.cons?.length) ? (
-            <ContentCard title="上手前最该看的点">
-              {tool.features?.length ? (
+          {(visibleFeatures.length || visiblePros.length || visibleCons.length) ? (
+            <ContentCard title="What to check before you commit">
+              {visibleFeatures.length ? (
                 <div>
-                  <p className="text-sm font-medium text-text-primary">核心功能</p>
+                  <p className="text-sm font-medium text-text-primary">Feature surface</p>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {tool.features.map((item) => (
+                    {visibleFeatures.map((item) => (
                       <span
                         key={item}
                         className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
@@ -283,21 +317,21 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 </div>
               ) : null}
               <div className="mt-5 grid gap-4 md:grid-cols-2">
-                {tool.pros?.length ? (
+                {visiblePros.length ? (
                   <div className="rounded-[24px] border border-white/8 bg-black/10 p-4">
-                    <p className="text-sm font-medium text-text-primary">优点</p>
+                    <p className="text-sm font-medium text-text-primary">Strengths</p>
                     <ul className="mt-3 space-y-2 text-sm text-text-secondary">
-                      {tool.pros.map((item) => (
+                      {visiblePros.map((item) => (
                         <li key={`pro-${item}`}>+ {item}</li>
                       ))}
                     </ul>
                   </div>
                 ) : null}
-                {tool.cons?.length ? (
+                {visibleCons.length ? (
                   <div className="rounded-[24px] border border-white/8 bg-black/10 p-4">
-                    <p className="text-sm font-medium text-text-primary">不足</p>
+                    <p className="text-sm font-medium text-text-primary">Watch-outs</p>
                     <ul className="mt-3 space-y-2 text-sm text-text-secondary">
-                      {tool.cons.map((item) => (
+                      {visibleCons.map((item) => (
                         <li key={`con-${item}`}>- {item}</li>
                       ))}
                     </ul>
@@ -308,9 +342,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
           ) : null}
         </div>
 
-        {tool.fullReview ? (
+        {tool.fullReview && !isCjkHeavy(tool.fullReview) ? (
           <div className="mt-6">
-            <ContentCard title="详细评测">
+            <ContentCard title="Full editorial notes">
               <div className="space-y-4 text-sm leading-8 text-text-secondary">
                 {tool.fullReview
                   .split(/\n\s*\n/)
@@ -322,11 +356,21 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         ) : null}
 
-        {tool.reviewSources?.length ? (
+        {tool.fullReview && isCjkHeavy(tool.fullReview) ? (
           <div className="mt-6">
-            <ContentCard title="站外评价摘要">
+            <ContentCard title="Editorial note">
+              <p className="text-sm leading-8 text-text-secondary">
+                The long-form editorial review is currently stored in Simplified Chinese. The English-first summary above is the recommended version for global browsing.
+              </p>
+            </ContentCard>
+          </div>
+        ) : null}
+
+        {visibleReviewSources.length ? (
+          <div className="mt-6">
+            <ContentCard title="External source notes">
               <div className="space-y-4">
-                {tool.reviewSources.map((source) => (
+                {visibleReviewSources.map((source) => (
                   <div
                     key={`${source.source}-${source.url}`}
                     className="rounded-[24px] border border-white/8 bg-black/10 p-4"
@@ -339,10 +383,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
                         rel="noopener noreferrer"
                         className="text-xs text-accent-cyan transition hover:opacity-80"
                       >
-                        查看来源
+                        View source
                       </a>
                     </div>
-                    <p className="mt-3 text-sm leading-7 text-text-secondary">{source.summary}</p>
+                    <p className="mt-3 text-sm leading-7 text-text-secondary">{source.displaySummary}</p>
                   </div>
                 ))}
               </div>
@@ -350,11 +394,11 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </div>
         ) : null}
 
-        {tool.alternatives?.length ? (
+        {displayAlternatives.length ? (
           <div className="mt-6">
-            <ContentCard title="替代工具">
+            <ContentCard title="Alternatives">
               <div className="flex flex-wrap gap-2">
-                {tool.alternatives.map((alt) => (
+                {displayAlternatives.map((alt) => (
                   <span
                     key={alt}
                     className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary"
@@ -369,7 +413,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
         {relatedTools.length ? (
           <div className="mt-6">
-            <ContentCard title="同类推荐">
+            <ContentCard title="Related picks">
               <div className="grid gap-4 md:grid-cols-3">
                 {relatedTools.map((relatedTool) => (
                   <Link
@@ -379,7 +423,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   >
                     <div className="flex items-start gap-3">
                       <ToolLogo
-                        name={relatedTool.name}
+                        name={getToolDisplayName(relatedTool.name)}
                         icon={relatedTool.icon}
                         size={24}
                         wrapperClassName="h-11 w-11 rounded-2xl border border-white/10 bg-black/10 shrink-0"
@@ -387,8 +431,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
                         textClassName="text-sm text-accent-cyan"
                       />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-text-primary">{relatedTool.name}</p>
-                        <p className="mt-2 line-clamp-3 text-xs leading-6 text-text-secondary">{relatedTool.description}</p>
+                        <p className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(relatedTool.name)}</p>
+                        <p className="mt-2 line-clamp-3 text-xs leading-6 text-text-secondary">{getToolCardSummary(relatedTool)}</p>
                       </div>
                     </div>
                   </Link>
@@ -399,16 +443,16 @@ export default async function ToolPage({ params }: ToolPageProps) {
         ) : null}
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
-          <ContentCard title="用户评价">
+          <ContentCard title="User rating">
             <RatingForm toolId={tool.id} />
           </ContentCard>
 
           <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
-            <p className="text-sm font-medium text-text-primary">行动提示</p>
+            <p className="text-sm font-medium text-text-primary">Next move</p>
             <p className="mt-3 text-sm leading-7 text-text-secondary">
               {hasPrimaryCta
-                ? '如果你准备继续试用，这一页已经给出最快的入口；再犹豫时，先看看替代工具和同类推荐。'
-                : '当前还没有可点击的官网或合作链接，建议先看同类推荐或返回工具库继续筛选。'}
+                ? 'If you want to test the product now, use the primary link first. If you are still unsure, compare alternatives and related picks before you leave.'
+                : 'There is no live website or partner link yet. Use the related picks or return to the directory to keep filtering.'}
             </p>
           </div>
         </div>
@@ -437,11 +481,14 @@ function ContentCard({ title, children }: { title: string; children: ReactNode }
 }
 
 function buildDecisionBullets(tool: Tool) {
+  const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
+  const displayName = getToolDisplayName(tool.name);
+
   return [
-    `如果你最在意的是 ${tool.category} 场景下的效率提升，这个工具值得先点开。`,
-    tool.priceRange ? `价格层面：${tool.priceRange}。先判断是否符合你的试用门槛。` : '如果还没准备花钱，建议先看它是否有免费层。',
+    `If ${displayName} improves the job you do inside ${categoryLabel}, it deserves a first click.`,
+    tool.priceRange ? `Pricing signal: ${tool.priceRange}. Decide whether the access tier fits your first test before you commit time.` : 'If you are not ready to spend yet, check whether the tool offers a free or low-friction entry tier.',
     tool.alternatives?.length
-      ? `替代关系：它常和 ${tool.alternatives.slice(0, 2).join('、')} 放在一起比较。`
-      : '如果详情页还不能说服你，记得看同类推荐和替代工具。',
+      ? `Alternative set: people often compare it with ${tool.alternatives.slice(0, 2).map((item) => getToolDisplayName(item)).join(', ')}.`
+      : 'If this page does not convince you yet, compare related picks before making the final call.',
   ];
 }

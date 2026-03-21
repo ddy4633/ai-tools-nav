@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Search, Filter, ArrowRight } from 'lucide-react';
 import { motion, type Variants } from 'framer-motion';
 import ToolLogo from '@/components/ui/ToolLogo';
+import { getCategoryLabel, getToolDisplayName } from '@/lib/tool-display';
 
 interface Tool {
   id: string;
@@ -23,15 +24,15 @@ interface ToolsListProps {
 
 const pricingLabels = {
   free: { 
-    text: '免费', 
+    text: 'Free', 
     className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' 
   },
   paid: { 
-    text: '付费', 
+    text: 'Paid', 
     className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' 
   },
   freemium: { 
-    text: '部分免费', 
+    text: 'Freemium', 
     className: 'bg-accent-purple/10 text-accent-purple border-accent-purple/30' 
   },
 };
@@ -61,9 +62,11 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
     return tools.filter((tool) => {
       const matchesSearch =
         search === '' ||
+        getToolDisplayName(tool.name).toLowerCase().includes(search.toLowerCase()) ||
         tool.name.toLowerCase().includes(search.toLowerCase()) ||
         tool.description.toLowerCase().includes(search.toLowerCase()) ||
-        tool.category.toLowerCase().includes(search.toLowerCase());
+        tool.category.toLowerCase().includes(search.toLowerCase()) ||
+        getCategoryLabel(tool.category).toLowerCase().includes(search.toLowerCase());
 
       const matchesFilter = filter === 'all' || tool.pricing_type === filter;
 
@@ -83,7 +86,7 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="搜索工具..."
+              placeholder="Search tools..."
               className="w-full pl-10 pr-4 py-3 bg-bg-primary border border-border-subtle rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-cyan/50 focus:shadow-glow-cyan transition-all"
             />
           </div>
@@ -100,7 +103,7 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
                     : 'bg-bg-secondary text-text-secondary border border-border-subtle hover:border-accent-cyan/30 hover:text-accent-cyan'
                 }`}
               >
-                {type === 'all' ? '全部' : pricingLabels[type].text}
+                {type === 'all' ? 'All' : pricingLabels[type].text}
               </button>
             ))}
           </div>
@@ -110,8 +113,8 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
       {/* 结果统计 */}
       <div className="flex items-center justify-between">
         <p className="text-text-secondary font-mono">
-          共 <span className="text-accent-cyan">{filteredTools.length}</span> 个工具
-          {search && ` (搜索 "${search}")`}
+          <span className="text-accent-cyan">{filteredTools.length}</span> tools
+          {search && ` (query: "${search}")`}
         </p>
         {(search || filter !== 'all') && (
           <button
@@ -122,7 +125,7 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
             className="text-sm font-mono text-accent-cyan hover:opacity-80 flex items-center gap-1"
           >
             <Filter className="w-4 h-4" />
-            清除筛选
+            Clear filters
           </button>
         )}
       </div>
@@ -145,8 +148,8 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-secondary flex items-center justify-center">
             <Search className="w-8 h-8 text-text-muted" />
           </div>
-          <p className="text-text-primary text-lg font-mono mb-2">没有找到匹配的工具</p>
-          <p className="text-text-muted text-sm mb-6">试试其他关键词</p>
+          <p className="text-text-primary text-lg font-mono mb-2">No matching tools found</p>
+          <p className="text-text-muted text-sm mb-6">Try another keyword or widen the filters</p>
           <button
             onClick={() => {
               setSearch('');
@@ -154,7 +157,7 @@ export default function ToolsList({ tools, searchQuery = '' }: ToolsListProps) {
             }}
             className="px-6 py-2 bg-accent-cyan/10 border border-accent-cyan/50 text-accent-cyan font-mono rounded-lg hover:bg-accent-cyan/20 transition-colors"
           >
-            清除筛选
+            Clear filters
           </button>
         </div>
       )}
@@ -170,6 +173,7 @@ interface ToolCardProps {
 function ToolCard({ tool, variants }: ToolCardProps) {
   const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
+  const displayName = getToolDisplayName(tool.name);
   
   return (
     <motion.div variants={variants}>
@@ -184,17 +188,17 @@ function ToolCard({ tool, variants }: ToolCardProps) {
           {/* 头部：图标 + 名称 */}
           <div className="flex items-start gap-4 mb-4">
             <ToolLogo
-              name={tool.name}
+              name={displayName}
               icon={tool.icon}
               size={32}
-              alt={`${tool.name} logo`}
+              alt={`${displayName} logo`}
               wrapperClassName="w-12 h-12 rounded-lg bg-bg-primary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all"
               imageClassName="w-8 h-8"
               textClassName="text-xl text-accent-cyan"
             />
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors truncate">
-                {tool.name}
+                {displayName}
               </h3>
               <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded border ${pricing.className}`}>
                 {pricing.text}
@@ -210,7 +214,7 @@ function ToolCard({ tool, variants }: ToolCardProps) {
           {/* 底部分类 */}
           <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
             <span className="text-xs font-mono text-text-muted">
-              {`// ${tool.category}`}
+              {`// ${getCategoryLabel(tool.category)}`}
             </span>
             <span className="text-xs font-mono text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
               [VIEW]

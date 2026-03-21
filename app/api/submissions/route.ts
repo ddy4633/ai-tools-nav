@@ -29,7 +29,7 @@ function resolveSubmissionPlan(value: unknown): SubmissionPlan {
 export async function POST(request: Request) {
   try {
     if (!hasValidOrigin(request)) {
-      return NextResponse.json({ success: false, message: '请求来源不受信任' }, { status: 403 });
+      return NextResponse.json({ success: false, message: 'Untrusted request origin' }, { status: 403 });
     }
 
     const rateLimit = checkRateLimit(request, {
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     });
 
     if (!rateLimit.ok) {
-      return NextResponse.json({ success: false, message: '提交过于频繁，请稍后再试' }, { status: 429 });
+      return NextResponse.json({ success: false, message: 'Too many submission attempts. Please try again later.' }, { status: 429 });
     }
 
     const rawBody = await request.json().catch((): unknown => ({}));
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     if (honeypot) {
       return NextResponse.json({
         success: true,
-        message: '提交成功，已进入审核队列',
+        message: 'Submission accepted and added to the review queue.',
       });
     }
 
@@ -70,51 +70,51 @@ export async function POST(request: Request) {
     };
 
     if (!payload.name || payload.name.length < 2) {
-      return NextResponse.json({ success: false, message: '请输入有效的工具名称' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Enter a valid product name.' }, { status: 400 });
     }
 
     if (payload.name.length > 120) {
-      return NextResponse.json({ success: false, message: '工具名称过长，请控制在 120 字内' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Product name is too long. Keep it under 120 characters.' }, { status: 400 });
     }
 
     if (!payload.website || !isValidUrl(payload.website)) {
-      return NextResponse.json({ success: false, message: '请输入有效的官网链接' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Enter a valid product URL.' }, { status: 400 });
     }
 
     if (payload.website.length > 500) {
-      return NextResponse.json({ success: false, message: '官网链接过长，请精简后重试' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Product URL is too long. Please shorten it and try again.' }, { status: 400 });
     }
 
     if (!payload.description || payload.description.length < 10) {
-      return NextResponse.json({ success: false, message: '请输入至少 10 个字符的工具简介' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Enter a product summary with at least 10 characters.' }, { status: 400 });
     }
 
     if (payload.description.length > 2000) {
-      return NextResponse.json({ success: false, message: '工具简介过长，请控制在 2000 字内' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Product summary is too long. Keep it under 2000 characters.' }, { status: 400 });
     }
 
     if (!payload.category) {
-      return NextResponse.json({ success: false, message: '请选择工具分类' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Choose a product category.' }, { status: 400 });
     }
 
     if (!payload.reason || payload.reason.length < 10) {
-      return NextResponse.json({ success: false, message: '请输入至少 10 个字符的推荐理由' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Enter an editorial note with at least 10 characters.' }, { status: 400 });
     }
 
     if (payload.reason.length > 3000) {
-      return NextResponse.json({ success: false, message: '推荐理由过长，请控制在 3000 字内' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Editorial note is too long. Keep it under 3000 characters.' }, { status: 400 });
     }
 
     if (payload.tags && payload.tags.some((tag) => tag.length > 32)) {
-      return NextResponse.json({ success: false, message: '标签长度不能超过 32 字符' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Tags must be 32 characters or fewer.' }, { status: 400 });
     }
 
     if (!payload.submitterEmail || !isValidEmail(payload.submitterEmail)) {
-      return NextResponse.json({ success: false, message: '请输入有效的联系邮箱' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Enter a valid contact email.' }, { status: 400 });
     }
 
     if (payload.submissionType !== 'free' && !payload.budgetRange) {
-      return NextResponse.json({ success: false, message: '商务收录请补充预算区间' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Choose a budget range for commercial requests.' }, { status: 400 });
     }
 
     const result = await submitToolSubmission(payload);
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: error instanceof Error ? error.message : '提交失败，请稍后重试',
+      message: error instanceof Error ? error.message : 'Submission failed. Please try again later.',
     }, { status: 500 });
   }
 }

@@ -3,9 +3,9 @@ import { getAllTools } from '@/lib/supabase';
 import CategoryToolsPage, { filterToolsByKeywords } from '@/components/categories/CategoryToolsPage';
 
 export const metadata: Metadata = {
-  title: '知识 AI工具 - 最好的知识人工智能工具 | AI工具导航',
-  description: '发现最好的AI知识工具，包括知识库、笔记增强、文档问答、信息检索、知识管理等各类人工智能知识助手。',
-  keywords: ['AI知识', '知识库', '文档问答', '知识管理', '信息检索'],
+  title: 'Research and Knowledge AI Tools - memory, notes, and retrieval',
+  description: 'Discover AI knowledge tools for memory systems, documents, retrieval, note-taking, and research.',
+  keywords: ['AI knowledge tools', 'research AI', 'note AI', 'retrieval AI', 'memory tools'],
 };
 
 export const revalidate = 3600;
@@ -16,15 +16,15 @@ export default async function KnowledgeCategoryPage() {
 
   return (
     <CategoryToolsPage
-      categoryLabel="知识"
-      heading="知识 AI工具"
-      description="包括知识库、笔记增强、文档问答、信息检索等。这些工具适合团队沉淀知识资产并提高检索效率。"
+      categoryLabel="Research & Knowledge"
+      heading="Research and knowledge AI tools"
+      description="Includes memory systems, document tools, retrieval products, and research assistants."
       tools={tools}
-      toolsFilterHref="/tools?category=AI知识"
-      toolsFilterLabel="查看全部知识工具"
+      toolsFilterHref="/tools?category=knowledge"
+      toolsFilterLabel="View all research tools"
       emptyEmoji="📚"
-      emptyTitle="暂无知识工具数据"
-      emptyDescription="请稍后再试或查看其他分类"
+      emptyTitle="No research tools are indexed yet"
+      emptyDescription="Please try again later or explore another category."
     />
   );
 }

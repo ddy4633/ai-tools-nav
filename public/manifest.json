@@ -1,7 +1,7 @@
 {
-  "name": "AI工具导航",
-  "short_name": "AI工具",
-  "description": "发现1000+国内免费最好用的AI工具",
+  "name": "AI Tool Atlas",
+  "short_name": "Tool Atlas",
+  "description": "Curated AI tools and launch feeds for global builders and growth teams",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",

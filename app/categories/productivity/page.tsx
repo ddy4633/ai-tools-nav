@@ -3,9 +3,9 @@ import { getAllTools } from '@/lib/supabase';
 import CategoryToolsPage, { filterToolsByKeywords } from '@/components/categories/CategoryToolsPage';
 
 export const metadata: Metadata = {
-  title: '生产力 AI工具 - 最好的生产力人工智能工具 | AI工具导航',
-  description: '发现最好的AI生产力工具，包括会议总结、任务管理、自动化办公、工作流增强、协同提效等各类人工智能效率助手。',
-  keywords: ['AI生产力', '效率工具', '办公自动化', '任务管理', '工作流'],
+  title: 'AI Productivity Tools - meetings, ops, and workflow compression',
+  description: 'Discover AI productivity tools for meetings, operations, automation, and workflow compression.',
+  keywords: ['AI productivity tools', 'workflow AI', 'meeting assistant AI', 'automation AI', 'ops tools'],
 };
 
 export const revalidate = 3600;
@@ -16,15 +16,15 @@ export default async function ProductivityCategoryPage() {
 
   return (
     <CategoryToolsPage
-      categoryLabel="生产力"
-      heading="生产力 AI工具"
-      description="包括会议总结、自动化办公、工作流增强、协作提效等。这些工具可以帮助团队减少重复劳动，提高日常执行效率。"
+      categoryLabel="Productivity"
+      heading="AI productivity tools"
+      description="Includes meeting assistants, ops tools, automation layers, and workflow-compression products."
       tools={tools}
-      toolsFilterHref="/tools?category=AI生产力"
-      toolsFilterLabel="查看全部生产力工具"
+      toolsFilterHref="/tools?category=productivity"
+      toolsFilterLabel="View all productivity tools"
       emptyEmoji="⚡"
-      emptyTitle="暂无生产力工具数据"
-      emptyDescription="请稍后再试或查看其他分类"
+      emptyTitle="No productivity tools are indexed yet"
+      emptyDescription="Please try again later or explore another category."
     />
   );
 }

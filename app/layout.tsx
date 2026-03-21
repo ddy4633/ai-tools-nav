@@ -7,6 +7,7 @@ import PageTransition from '@/components/transitions/PageTransition';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { buildSiteUrl, siteConfig } from '@/lib/site';
+import { brandConfig, globalAudienceBlurb } from '@/lib/brand';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -40,34 +41,45 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: 'AI工具导航 - 精选好用AI工具 | 国内AI工具推荐',
-    template: '%s | AI工具导航',
+    default: `${brandConfig.siteName} - Curated AI Tools for Global Teams`,
+    template: `%s | ${brandConfig.siteName}`,
   },
-  description: '精选国内外好用的AI工具，涵盖AI写作、AI绘画、AI编程、AI视频等领域，助您提升工作效率。',
-  keywords: ['AI工具', 'AI工具导航', 'AI写作', 'AI绘画', 'AI编程', 'ChatGPT', 'DeepSeek', 'Midjourney', '免费AI工具', '国内AI工具'],
-  authors: [{ name: 'AI工具导航', url: siteConfig.siteUrl }],
-  creator: 'AI工具导航',
-  publisher: 'AI工具导航',
+  description: siteConfig.siteDescription,
+  keywords: [
+    'AI tools',
+    'AI tools directory',
+    'AI launch tracker',
+    'AI coding tools',
+    'AI design tools',
+    'AI video tools',
+    'ChatGPT alternatives',
+    'Cursor alternatives',
+    'global AI tools',
+    'English German Japanese Korean AI tools',
+  ],
+  authors: [{ name: brandConfig.siteName, url: siteConfig.siteUrl }],
+  creator: brandConfig.siteName,
+  publisher: brandConfig.siteName,
   openGraph: {
-    title: 'AI工具导航 - 精选好用AI工具 | 国内AI工具推荐',
-    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
+    title: `${brandConfig.siteName} - Curated AI Tools for Global Teams`,
+    description: siteConfig.ogDescription,
     url: siteConfig.siteUrl,
-    siteName: 'AI工具导航',
-    locale: 'zh_CN',
+    siteName: brandConfig.siteName,
+    locale: brandConfig.locale,
     type: 'website',
     images: [
       {
         url: buildSiteUrl('/og-image.png'),
         width: 1200,
         height: 630,
-        alt: 'AI工具导航 - 发现最好用的AI工具',
+        alt: `${brandConfig.siteName} - Curated AI tools and launch-ready discovery`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI工具导航 - 精选好用AI工具',
-    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
+    title: `${brandConfig.siteName} - Curated AI tools and launch intelligence`,
+    description: brandConfig.shortDescription,
     images: [buildSiteUrl('/og-image.png')],
   },
   robots: {
@@ -106,9 +118,14 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'AI工具导航',
+    name: brandConfig.siteName,
     url: siteConfig.siteUrl,
-    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航',
+    description: siteConfig.siteDescription,
+    inLanguage: ['en', 'de', 'ja', 'ko', 'zh-Hans'],
+    audience: {
+      '@type': 'Audience',
+      audienceType: globalAudienceBlurb,
+    },
     potentialAction: {
       '@type': 'SearchAction',
       target: buildSiteUrl('/tools?search={search_term_string}'),
@@ -117,7 +134,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="zh-CN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang={brandConfig.htmlLang} className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Resource Hints - DNS Prefetch and Preconnect */}
         {supabaseUrl ? <link rel="dns-prefetch" href={supabaseUrl} /> : null}

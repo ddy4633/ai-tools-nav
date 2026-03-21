@@ -13,15 +13,15 @@ import {
 import { buildMailtoLink, buildSiteUrl, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: '商务合作 - AI工具导航流量与曝光方案',
-  description: '查看 AI工具导航 的合作位与收费方案，覆盖首页赞助、分类页置顶、榜单合作、专题内容和企业顾问支持。',
-  keywords: ['商务合作', 'AI工具广告位', 'AI工具推广', '分类置顶', '首页赞助', '专题合作'],
+  title: 'Advertise - Visibility Packages',
+  description: 'Review sponsorship and visibility packages across the homepage, category hubs, rankings, editorial content, and advisory support.',
+  keywords: ['advertise AI product', 'AI sponsorship', 'directory promotion', 'category spotlight', 'editorial sponsorship'],
   alternates: {
     canonical: buildSiteUrl('/advertise'),
   },
   openGraph: {
-    title: '商务合作 - AI工具导航',
-    description: '首页赞助、分类置顶、榜单合作、专题内容与顾问支持一览。',
+    title: 'Advertise | AI Tool Atlas',
+    description: 'Homepage sponsorship, category spotlights, ranking integrations, editorial features, and advisory support.',
     url: buildSiteUrl('/advertise'),
     type: 'website',
   },
@@ -59,42 +59,42 @@ export default function AdvertisePage() {
   return (
     <div className="min-h-screen bg-bg-primary">
       <PageHero
-        eyebrow="商务合作"
-        title="把你的产品放到"
-        highlight="已经在认真筛工具的人面前。"
-        description="我们不卖泛泛的展示量，而是卖更明确的决策节点：首页筛选、分类对比、热门榜单、专题内容和工具详情页，分别服务不同阶段的用户意图。"
+        eyebrow="Commercial Packages"
+        title="Put your product in front of"
+        highlight="people already making tool decisions."
+        description="We do not sell vague impressions. We sell intent-rich decision moments across the homepage, category comparisons, trend rankings, editorial features, and detail pages."
         metrics={[
           {
-            value: '首页 + 分类 + 榜单',
-            label: '核心曝光组合',
-            hint: '适合做品牌抬升、拉新和新品起量。',
+            value: 'Homepage + categories + rankings',
+            label: 'Core visibility bundle',
+            hint: 'Strong for awareness, launch lift, and top-of-funnel growth.',
           },
           {
-            value: '专题内容',
-            label: '长尾流量入口',
-            hint: '适合拦截对比、替代、教程和价格相关搜索。',
+            value: 'Editorial features',
+            label: 'Long-tail traffic layer',
+            hint: 'Best for comparison, alternative, tutorial, and pricing-driven demand.',
           },
           {
-            value: '点击埋点',
-            label: '效果追踪',
-            hint: '合作链接和页面入口都能做点击追踪与后续复盘。',
+            value: 'Tracked clicks',
+            label: 'Measurement model',
+            hint: 'Partner links and page placements can be reviewed through structured click tracking.',
           },
         ]}
         actions={[
-          { href: '/submit', label: '立即提交产品需求', tone: 'primary' },
-          { href: '/tools', label: '先看工具库形态', tone: 'secondary' },
+          { href: '/submit', label: 'Submit a campaign request', tone: 'primary' },
+          { href: '/tools', label: 'Inspect the live directory', tone: 'secondary' },
         ]}
         aside={
           <div>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <Target className="h-4 w-4 text-accent-cyan" />
-              为什么客户会买这里
+              Why teams buy here
             </div>
             <div className="mt-5 space-y-3">
               {[
-                '用户已经在做工具决策，而不是纯浏览资讯。',
-                '不同页面可以分别承接品牌曝光、点击转化和销售线索。',
-                '合作位与编辑位分开，能减少商业化对信任的伤害。',
+                'Visitors are already evaluating tools, not casually browsing news.',
+                'Different page types can separately handle awareness, click conversion, and lead capture.',
+                'Sponsored surfaces stay distinct from editorial ones, which protects trust.',
               ].map((item) => (
                 <div key={item} className="rounded-[22px] border border-white/8 bg-black/10 px-4 py-3 text-sm text-text-secondary">
                   {item}
@@ -110,10 +110,10 @@ export default function AdvertisePage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Audience Familiarity</p>
-              <h2 className="mt-2 text-2xl font-semibold text-text-primary">客户买曝光，先看用户是否认得这些入口</h2>
+              <h2 className="mt-2 text-2xl font-semibold text-text-primary">Visibility works better when visitors already recognize the ecosystem</h2>
             </div>
             <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-text-secondary">
-              12 个高识别度图标
+              12 recognizable brands
             </span>
           </div>
 
@@ -123,7 +123,7 @@ export default function AdvertisePage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_58%),radial-gradient(circle_at_82%_18%,rgba(240,154,121,0.13),transparent_46%)]" />
                 <Image
                   src={logo}
-                  alt="合作位可覆盖工具图标"
+                  alt="Recognizable AI tool logo"
                   fill
                   unoptimized
                   className="object-contain p-4 opacity-90 transition group-hover:scale-105 group-hover:opacity-100"
@@ -137,8 +137,8 @@ export default function AdvertisePage() {
       <section className="mx-auto max-w-7xl px-6 py-16">
         <SectionHeading
           eyebrow="Offer Menu"
-          title="当前可以直接售卖的合作方案"
-          description="为了控制执行复杂度，收费产品先从这几条开始，不接订阅收费，但把流量和线索类方案都铺开。"
+          title="Commercial packages ready to sell now"
+          description="To keep operations tight, the monetization layer starts with a focused menu: no subscriptions yet, but plenty of traffic and lead-generation products."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {commercialPackages.map((pkg) => (
@@ -171,7 +171,7 @@ export default function AdvertisePage() {
             <div>
               <SectionHeading
                 eyebrow="Traffic Slot"
-                title="合作位不是单一广告位，而是按意图拆开的流量层"
+                title="Placements are not one ad slot. They are layers of intent."
               />
               <div className="mt-8 space-y-4">
                 {contentPillars.map((pillar) => (
@@ -189,7 +189,7 @@ export default function AdvertisePage() {
             <div>
               <SectionHeading
                 eyebrow="Promotion Plan"
-                title="推广方案必须跟页面结构一起设计"
+                title="Promotion plans must be designed together with page architecture"
               />
               <div className="mt-8 space-y-4">
                 {growthChannels.map((channel) => (
@@ -211,8 +211,8 @@ export default function AdvertisePage() {
         <div className="mx-auto max-w-7xl px-6 py-16">
           <SectionHeading
             eyebrow="Execution Flow"
-            title="从需求到上线，我们建议这样推进"
-            description="这不是复杂项目管理，而是为了让合作不拖、页面不乱、数据可复盘。"
+            title="From brief to launch, this is the recommended flow"
+            description="This is not heavy process for the sake of process. It keeps launches fast, pages clear, and results reviewable."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {partnershipSteps.map((step, index) => (
@@ -260,23 +260,23 @@ export default function AdvertisePage() {
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Business CTA</p>
-                <h2 className="mt-2 text-3xl font-semibold text-text-primary">准备好买曝光或买线索，就从这里开始</h2>
+                <h2 className="mt-2 text-3xl font-semibold text-text-primary">Ready to buy visibility or qualified demand? Start here.</h2>
                 <p className="mt-4 max-w-3xl text-base leading-8 text-text-secondary">
-                  如果你已经明确目标，可以直接提交合作需求；如果还在判断适合买哪种页面，我们也可以先按产品阶段给建议。
+                  If you already know the goal, submit a campaign request directly. If not, we can recommend the right mix based on your launch stage and budget.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
                     href="/submit"
                     className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                   >
-                    提交合作需求
+                    Submit campaign request
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                   <a
                     href={buildMailtoLink()}
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                   >
-                    写邮件咨询
+                    Email the team
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
@@ -285,11 +285,11 @@ export default function AdvertisePage() {
               <div className="rounded-[28px] border border-white/10 bg-black/12 p-5">
                 <div className="flex items-center gap-2 text-sm text-text-secondary">
                   <BarChart3 className="h-4 w-4 text-accent-yellow" />
-                  联络方式
+                  Contact
                 </div>
                 <p className="mt-4 text-2xl font-semibold text-text-primary">{siteConfig.contactEmail}</p>
                 <p className="mt-3 text-sm leading-7 text-text-secondary">
-                  来信时最好附上：产品链接、目标人群、期望页面、投放周期和预算范围。
+                  Include your product URL, target audience, ideal placements, launch window, and budget range for the fastest reply.
                 </p>
               </div>
             </div>

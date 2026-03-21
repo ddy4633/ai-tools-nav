@@ -1,3 +1,5 @@
+import { brandConfig } from '@/lib/brand';
+
 const DEFAULT_SITE_URL = 'https://ai.poph163.com';
 const DEFAULT_GITHUB_URL = 'https://github.com/ddy4633/ai-tools-nav';
 const DEFAULT_CONTACT_EMAIL = 'hello@poph163.com';
@@ -12,7 +14,11 @@ function normalizeOptionalValue(value?: string) {
 }
 
 export const siteConfig = {
-  siteName: 'AI工具导航',
+  siteName: brandConfig.siteName,
+  legacySiteName: brandConfig.legacyName,
+  shortName: brandConfig.shortName,
+  siteDescription: brandConfig.siteDescription,
+  ogDescription: brandConfig.ogDescription,
   siteUrl: normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL),
   githubUrl: normalizeOptionalValue(process.env.NEXT_PUBLIC_GITHUB_URL) || DEFAULT_GITHUB_URL,
   xUrl: normalizeOptionalValue(process.env.NEXT_PUBLIC_X_URL),

@@ -21,6 +21,7 @@ import NewsletterSection from '@/components/home/NewsletterSection';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import type { Category, EditorPick, Tool, TrendingTool } from '@/types/tool';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
 
 interface HomeShowcaseProps {
   allTools: Tool[];
@@ -40,62 +41,62 @@ interface CategoryAccent {
 
 const categoryAccents: Record<string, CategoryAccent> = {
   chatbot: {
-    summary: '适合做信息检索、深度问答和多轮协作。',
-    cue: '从“提问质量”开始，而不是从模型名开始。',
+    summary: 'Built for research, deep Q&A, and long-thread collaboration.',
+    cue: 'Start with the quality of the task, not the fame of the model.',
     gradient: 'from-[#7de2d4]/24 via-transparent to-[#f0c979]/12',
     ring: 'shadow-[0_18px_50px_rgba(125,226,212,0.12)]',
   },
   code: {
-    summary: '更适合高频编码、重构和自动生成多文件方案。',
-    cue: '优先看上下文理解和执行闭环，而不只是补全速度。',
+    summary: 'Best for high-frequency coding, refactors, and multi-file execution.',
+    cue: 'Prioritize repo understanding and task closure, not just autocomplete speed.',
     gradient: 'from-[#8ea2ff]/22 via-transparent to-[#7de2d4]/10',
     ring: 'shadow-[0_18px_50px_rgba(142,162,255,0.12)]',
   },
   image: {
-    summary: '聚焦出图质量、风格控制和商业可交付性。',
-    cue: '先判断风格上限，再判断出图速度。',
+    summary: 'Focus on image quality, style control, and commercial reliability.',
+    cue: 'Judge the style ceiling before you judge generation speed.',
     gradient: 'from-[#f09a79]/22 via-transparent to-[#f0c979]/10',
     ring: 'shadow-[0_18px_50px_rgba(240,154,121,0.12)]',
   },
   writing: {
-    summary: '适合长文改写、知识整合和营销内容生产。',
-    cue: '写作工具的关键是结构感，不只是会不会续写。',
+    summary: 'Great for rewriting, synthesis, and editorial production.',
+    cue: 'Structure matters more than the ability to continue a sentence.',
     gradient: 'from-[#f0c979]/18 via-transparent to-[#7de2d4]/8',
     ring: 'shadow-[0_18px_50px_rgba(240,201,121,0.12)]',
   },
   productivity: {
-    summary: '偏向自动整理、会议记录和工作流编排。',
-    cue: '效率工具最值钱的是减少切换，而不是新增按钮。',
+    summary: 'Good for meeting capture, automation, and workflow compression.',
+    cue: 'The real value is fewer context switches, not more buttons.',
     gradient: 'from-[#7de2d4]/18 via-transparent to-[#8ea2ff]/10',
     ring: 'shadow-[0_18px_50px_rgba(125,226,212,0.1)]',
   },
   video: {
-    summary: '重点看镜头一致性、节奏控制和生成成本。',
-    cue: '视频类工具先看可重复性，再看惊艳程度。',
+    summary: 'Measure shot consistency, pacing control, and output cost.',
+    cue: 'Repeatability matters before cinematic surprise.',
     gradient: 'from-[#f09a79]/20 via-transparent to-[#8ea2ff]/10',
     ring: 'shadow-[0_18px_50px_rgba(240,154,121,0.1)]',
   },
   audio: {
-    summary: '覆盖配音、转录、音频增强和语音克隆。',
-    cue: '声音类工具要看可用度，不只是“像不像”。',
+    summary: 'Covers voice, transcription, cleanup, and cloning workflows.',
+    cue: 'Audio tools should be usable under pressure, not just technically impressive.',
     gradient: 'from-[#8ea2ff]/18 via-transparent to-[#f0c979]/10',
     ring: 'shadow-[0_18px_50px_rgba(142,162,255,0.1)]',
   },
   design: {
-    summary: '更适合原型、视觉探索和设计提案加速。',
-    cue: '好的设计工具应该帮你更快做判断，而不是制造更多选择。',
+    summary: 'Useful for prototypes, visual exploration, and faster concept loops.',
+    cue: 'The best design tools help you decide faster instead of creating more noise.',
     gradient: 'from-[#7de2d4]/20 via-transparent to-[#f09a79]/10',
     ring: 'shadow-[0_18px_50px_rgba(125,226,212,0.1)]',
   },
   knowledge: {
-    summary: '适合做知识沉淀、收藏管理和信息回顾。',
-    cue: '知识类工具的护城河是可复用，而不是好不好看。',
+    summary: 'Built for knowledge capture, recall, and reusable research.',
+    cue: 'Reusability is the moat, not polish alone.',
     gradient: 'from-[#f0c979]/18 via-transparent to-[#8ea2ff]/8',
     ring: 'shadow-[0_18px_50px_rgba(240,201,121,0.1)]',
   },
   data: {
-    summary: '适合表格分析、商业洞察和快速生成结论。',
-    cue: '数据工具最关键的是解释能力，而不是图表样式。',
+    summary: 'Useful for analysis, business insight, and decision support.',
+    cue: 'Interpretation matters more than chart styling.',
     gradient: 'from-[#8ea2ff]/18 via-transparent to-[#7de2d4]/8',
     ring: 'shadow-[0_18px_50px_rgba(142,162,255,0.1)]',
   },
@@ -148,10 +149,11 @@ export default function HomeShowcase({
 
   const spotlightPick = editorPicks[0];
   const spotlightTool = spotlightPick?.tool ?? featuredTools[0];
+  const spotlightDisplayName = spotlightTool ? getToolDisplayName(spotlightTool.name) : '';
   const heroShowcaseTools = featuredTools.slice(0, 8);
   const spotlightFeatures =
-    spotlightTool?.features?.slice(0, 3) ??
-    spotlightTool?.alternatives?.slice(0, 3) ??
+    spotlightTool?.features?.filter((item) => !isCjkHeavy(item)).slice(0, 3) ??
+    spotlightTool?.alternatives?.map((item) => getToolDisplayName(item)).slice(0, 3) ??
     [];
   const rankedCategories = [...categories]
     .sort((left, right) => right.popularity - left.popularity)
@@ -203,18 +205,19 @@ export default function HomeShowcase({
             <div className="relative">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-text-secondary backdrop-blur">
                 <Sparkles className="h-4 w-4 text-accent-yellow" />
-                <span>2026 策展版首页</span>
-                <span className="text-text-muted">把“找工具”改成“做判断”</span>
+                <span>2026 global launch desk</span>
+                <span className="text-text-muted">Move from browsing tools to making decisions</span>
               </div>
 
               <div className="mt-6 max-w-4xl">
                 <h1 className="font-display text-5xl leading-[1.03] tracking-tight text-text-primary sm:text-6xl lg:text-7xl">
-                  别再一页页试工具了。
-                  <span className="block text-gradient-cyber">我们先替你筛一轮。</span>
+                  Stop trialing tools one tab at a time.
+                  {' '}
+                  <span className="block text-gradient-cyber">We screen the field before you click.</span>
                 </h1>
                 <p className="mt-6 max-w-2xl text-base leading-8 text-text-secondary md:text-lg">
-                  现在真正稀缺的不是 AI 工具，而是判断力。首页重构后，我们按“任务场景、热度变化、编辑观点”
-                  三条线组织内容，让你更快找到能直接上手的产品。
+                  AI tools are not scarce anymore. Decision quality is. The homepage now runs on three signals:
+                  workflow intent, momentum shifts, and editorial judgment across English, German, Japanese, Korean, and selected Chinese contexts.
                 </p>
               </div>
 
@@ -228,7 +231,7 @@ export default function HomeShowcase({
                     type="text"
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="搜索工具、任务场景或产品名"
+                    placeholder="Search tools, workflows, or product names"
                     className="min-w-0 flex-1 bg-transparent text-base text-text-primary outline-none placeholder:text-text-muted"
                   />
                 </div>
@@ -237,13 +240,13 @@ export default function HomeShowcase({
                   disabled={isPending}
                   className="inline-flex h-14 items-center justify-center gap-2 rounded-[22px] border border-accent-cyan/35 bg-accent-cyan/12 px-6 text-sm font-semibold text-text-primary transition hover:bg-accent-cyan/18 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  <span>{isPending ? '正在跳转' : '开始筛选'}</span>
+                  <span>{isPending ? 'Opening…' : 'Start filtering'}</span>
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </form>
 
               <div className="mt-5 flex flex-wrap items-center gap-3">
-                <span className="text-sm text-text-muted">常见入口</span>
+                <span className="text-sm text-text-muted">Fast starts</span>
                 {heroQueries.map((query) => (
                   <button
                     key={query}
@@ -257,10 +260,10 @@ export default function HomeShowcase({
               </div>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <MetricCard value={`${toolCount}+`} label="已收录工具" hint="覆盖主流 AI 产品与长尾新秀" />
-                <MetricCard value={`${categoryCount}`} label="任务分类" hint="从场景而不是功能名出发" />
-                <MetricCard value={`${averageRating.toFixed(1)}`} label="平均编辑分" hint="保留主观判断，但写清原因" />
-                <MetricCard value={`${sponsorCount}`} label="已披露合作位" hint="赞助位独立标识，不混入编辑推荐" />
+                <MetricCard value={`${toolCount}+`} label="Curated tools" hint="Covers breakout leaders and serious long-tail picks." />
+                <MetricCard value={`${categoryCount}`} label="Workflow categories" hint="Organized by use case before feature jargon." />
+                <MetricCard value={`${averageRating.toFixed(1)}`} label="Average editor score" hint="Opinion is allowed here, but the reasoning must be visible." />
+                <MetricCard value={`${sponsorCount}`} label="Disclosed paid slots" hint="Commercial placements stay visually separate from editorial picks." />
               </div>
 
               <div className="mt-10 flex flex-wrap items-center gap-3 text-sm">
@@ -268,19 +271,19 @@ export default function HomeShowcase({
                   href="/tools"
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-text-primary transition hover:border-accent-cyan/30 hover:bg-white/8"
                 >
-                  浏览全部工具
+                  Explore the directory
                   <MoveUpRight className="h-4 w-4 text-accent-cyan" />
                 </Link>
                 <Link
                   href="/trending"
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-text-secondary transition hover:text-text-primary"
                 >
-                  查看本周热榜
+                  See this week’s movers
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <span className="inline-flex items-center gap-2 text-text-muted">
                   <ShieldCheck className="h-4 w-4 text-accent-yellow" />
-                  首页同时呈现编辑推荐与商业展示位
+                  Editorial and paid surfaces are shown separately
                 </span>
               </div>
             </div>
@@ -298,26 +301,26 @@ export default function HomeShowcase({
                     <div className="flex items-center justify-between gap-4">
                       <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-text-secondary">
                         <Star className="h-3.5 w-3.5 text-accent-yellow" />
-                        本周封面
+                        Cover pick
                       </span>
                       <span className="rounded-full border border-white/10 px-3 py-1 text-sm text-text-muted">
-                        编辑分 {spotlightTool.editorRating?.toFixed(1) ?? '4.6'}
+                        Editor score {spotlightTool.editorRating?.toFixed(1) ?? '4.6'}
                       </span>
                     </div>
 
                     <div className="mt-6 flex items-start gap-4">
                       <ToolLogo
-                        name={spotlightTool.name}
+                        name={spotlightDisplayName}
                         icon={spotlightTool.icon}
                         size={40}
-                        alt={`${spotlightTool.name} logo`}
+                        alt={`${spotlightDisplayName} logo`}
                         wrapperClassName="h-16 w-16 rounded-[22px] border border-white/10 bg-black/15"
                         imageClassName="h-10 w-10"
                         textClassName="text-2xl text-accent-cyan"
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-2xl font-semibold text-text-primary">{spotlightTool.name}</h2>
+                          <h2 className="text-2xl font-semibold text-text-primary">{spotlightDisplayName}</h2>
                           <span
                             className={`rounded-full border px-2.5 py-1 text-xs ${
                               pricingTone[spotlightTool.pricing_type || spotlightTool.pricingType || 'freemium']
@@ -327,15 +330,16 @@ export default function HomeShowcase({
                           </span>
                         </div>
                         <p className="mt-2 text-sm leading-7 text-text-secondary">
-                          {spotlightTool.reason || spotlightTool.description}
+                          {getToolCardSummary(spotlightTool)}
                         </p>
                       </div>
                     </div>
 
                     <blockquote className="mt-6 border-l border-accent-cyan/30 pl-4 text-base leading-8 text-text-primary/92">
                       “
-                      {spotlightPick?.comment ||
-                        '首页重构后，我们希望每张卡片都有明确判断，不只是列名字和功能。'}
+                      {spotlightPick?.comment && !isCjkHeavy(spotlightPick.comment)
+                        ? spotlightPick.comment
+                        : 'Every card on the homepage should make a decision easier, not just list another product name.'}
                       ”
                     </blockquote>
 
@@ -356,23 +360,22 @@ export default function HomeShowcase({
                       <ToolPrimaryCta
                         tool={spotlightTool}
                         placement="home_showcase_spotlight_primary_cta"
-                        affiliateLabel="合作链接"
-                        websiteLabel="访问官网"
+                        affiliateLabel="Open partner link"
+                        websiteLabel="Visit site"
                         className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                       />
                       <Link
                         href={`/tools/${spotlightTool.id}`}
                         className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                       >
-                        看完整评测
+                        Read the full review
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </div>
 
                     {spotlightPick ? (
                       <div className="mt-6 border-t border-white/8 pt-4 text-sm text-text-muted">
-                        主编观点来自 <span className="text-text-primary">{spotlightPick.editor.name}</span>
-                        ，用于解释为什么这款工具值得上首页。
+                        Editorial note from <span className="text-text-primary">{spotlightPick.editor.name}</span>, included to explain why this product earned homepage placement.
                       </div>
                     ) : null}
                   </div>
@@ -387,14 +390,14 @@ export default function HomeShowcase({
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-text-muted">热度雷达</p>
-                    <h3 className="mt-2 text-xl font-semibold text-text-primary">今天大家最容易点进去的工具</h3>
+                    <p className="text-xs uppercase tracking-[0.24em] text-text-muted">Momentum radar</p>
+                    <h3 className="mt-2 text-xl font-semibold text-text-primary">The tools most likely to get clicked today</h3>
                   </div>
                   <Link
                     href="/trending"
                     className="inline-flex items-center gap-1 text-sm text-text-secondary transition hover:text-text-primary"
-                  >
-                    全部热榜
+                >
+                    View all trending
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -411,13 +414,13 @@ export default function HomeShowcase({
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="truncate text-sm font-semibold text-text-primary">{tool.name}</span>
+                          <span className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</span>
                           <span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-text-muted">
-                            {tool.category}
+                            {getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}
                           </span>
                         </div>
                         <p className="mt-1 truncate text-sm text-text-secondary">
-                          {tool.one_liner || tool.description}
+                          {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                         </p>
                       </div>
                       <div className="text-right">
@@ -426,7 +429,7 @@ export default function HomeShowcase({
                           {tool.hype_score.toFixed(0)}
                         </div>
                         <div className="text-xs text-text-muted">
-                          {tool.metrics?.github?.stars ? `${formatCompactNumber(tool.metrics.github.stars)} stars` : '热度上升中'}
+                          {tool.metrics?.github?.stars ? `${formatCompactNumber(tool.metrics.github.stars)} stars` : 'Momentum building'}
                         </div>
                       </div>
                     </Link>
@@ -444,11 +447,11 @@ export default function HomeShowcase({
           >
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-text-muted">常被搜索的入口</p>
-                <p className="mt-2 text-sm text-text-secondary">我们把常用工具直接铺出来，首页第一屏就能形成判断。</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-text-muted">Frequently searched starts</p>
+                <p className="mt-2 text-sm text-text-secondary">The first screen should already reduce choice fatigue instead of adding more noise.</p>
               </div>
               <Link href="/tools" className="text-sm text-text-secondary transition hover:text-text-primary">
-                去工具库看全部
+                Open the full directory
               </Link>
             </div>
 
@@ -460,17 +463,17 @@ export default function HomeShowcase({
                   className="group flex items-center gap-3 rounded-[20px] border border-white/8 bg-black/10 px-4 py-3 transition hover:border-accent-cyan/28 hover:bg-white/6"
                 >
                   <ToolLogo
-                    name={tool.name}
+                    name={getToolDisplayName(tool.name)}
                     icon={tool.icon}
                     size={28}
-                    alt={`${tool.name} logo`}
+                    alt={`${getToolDisplayName(tool.name)} logo`}
                     wrapperClassName="h-11 w-11 rounded-2xl border border-white/10 bg-white/5"
                     imageClassName="h-7 w-7"
                     textClassName="text-lg text-accent-cyan"
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-text-primary">{tool.name}</p>
-                    <p className="truncate text-xs text-text-muted">{tool.category}</p>
+                    <p className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                    <p className="truncate text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                   </div>
                 </Link>
               ))}
@@ -482,17 +485,17 @@ export default function HomeShowcase({
       <section className="relative">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <SectionHeading
-            eyebrow="按任务进入"
-            title="不要从工具名开始，从你的工作场景开始。"
-            description="同样是 AI 写作、AI 图像或 AI 编程，不同工具擅长的环节并不一样。新版首页先帮你缩小问题空间。"
+            eyebrow="Enter by workflow"
+            title="Do not start from product names. Start from the job you need done."
+            description="Writing, image, coding, research, and ops tools may sound similar, but they win at different moments in the workflow. This section narrows the field first."
             icon={<Compass className="h-5 w-5 text-accent-cyan" />}
           />
 
           <div className="mt-10 grid auto-rows-[minmax(220px,auto)] gap-4 md:grid-cols-12">
             {rankedCategories.map((category, index) => {
               const accent = categoryAccents[category.slug] ?? {
-                summary: '按使用场景整理工具，降低选择成本。',
-                cue: '先想清楚你要完成什么工作。',
+                summary: 'Organized by workflow so the decision gets smaller, faster.',
+                cue: 'Clarify the job first, then compare products.',
                 gradient: 'from-white/12 via-transparent to-white/4',
                 ring: '',
               };
@@ -509,17 +512,17 @@ export default function HomeShowcase({
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="text-xs uppercase tracking-[0.24em] text-text-muted">Scene {String(index + 1).padStart(2, '0')}</p>
-                        <h3 className="mt-3 text-2xl font-semibold text-text-primary">{category.name}</h3>
+                        <h3 className="mt-3 text-2xl font-semibold text-text-primary">{getCategoryLabel(category.name, category.slug)}</h3>
                       </div>
                       <span className="rounded-full border border-white/12 bg-black/10 px-3 py-1 text-sm text-text-secondary">
-                        {category.count} 款
+                        {category.count} tools
                       </span>
                     </div>
 
                     <p className="mt-5 max-w-lg text-sm leading-7 text-text-secondary">{accent.summary}</p>
 
                     <div className="mt-6 flex items-center gap-3 text-sm text-text-muted">
-                      <span>热度 {category.popularity}%</span>
+                      <span>Momentum {category.popularity}%</span>
                       <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/8">
                         <div className="h-full rounded-full bg-gradient-to-r from-accent-cyan via-accent-yellow to-accent-pink" style={{ width: `${Math.min(category.popularity, 100)}%` }} />
                       </div>
@@ -534,12 +537,12 @@ export default function HomeShowcase({
                             key={tool.id}
                             className="rounded-full border border-white/12 bg-black/12 px-3 py-1 text-xs text-text-secondary"
                           >
-                            {tool.name}
+                            {getToolDisplayName(tool.name)}
                           </span>
                         ))}
                       </div>
                       <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-text-primary">
-                        进入这个分类
+                        Explore this category
                         <ArrowRight className="h-4 w-4 text-accent-cyan transition group-hover:translate-x-0.5" />
                       </div>
                     </div>
@@ -555,9 +558,9 @@ export default function HomeShowcase({
         <div className="mx-auto grid max-w-7xl gap-8 px-6 py-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <div>
             <SectionHeading
-              eyebrow="编辑部速评"
-              title="给判断配上理由，才配叫推荐。"
-              description="这里保留编辑的主观判断，但每条观点都要落到具体场景、优点和适合人群上。"
+              eyebrow="Editorial notes"
+              title="A recommendation only works when the reasoning is visible."
+              description="We keep the editor’s point of view, but every call has to land on fit, upside, and who the tool is actually for."
               icon={<Layers3 className="h-5 w-5 text-accent-yellow" />}
             />
 
@@ -570,25 +573,27 @@ export default function HomeShowcase({
                   <div className="flex flex-col gap-5 md:flex-row md:items-start">
                     <div className="flex min-w-0 flex-1 items-start gap-4">
                       <ToolLogo
-                        name={pick.tool.name}
+                        name={getToolDisplayName(pick.tool.name)}
                         icon={pick.tool.icon}
                         size={30}
-                        alt={`${pick.tool.name} logo`}
+                        alt={`${getToolDisplayName(pick.tool.name)} logo`}
                         wrapperClassName="h-12 w-12 rounded-2xl border border-white/10 bg-white/5"
                         imageClassName="h-8 w-8"
                         textClassName="text-xl text-accent-cyan"
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-lg font-semibold text-text-primary">{pick.tool.name}</h3>
+                          <h3 className="text-lg font-semibold text-text-primary">{getToolDisplayName(pick.tool.name)}</h3>
                           <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs text-text-muted">
-                            第 {index + 2} 位编辑推荐
+                            Editor pick #{index + 2}
                           </span>
                         </div>
                         <p className="mt-2 text-sm leading-7 text-text-secondary">
-                          {pick.tool.reason || pick.tool.description}
+                          {getToolCardSummary(pick.tool)}
                         </p>
-                        <p className="mt-4 text-base leading-8 text-text-primary/92">“{pick.comment}”</p>
+                        <p className="mt-4 text-base leading-8 text-text-primary/92">
+                          “{!isCjkHeavy(pick.comment) ? pick.comment : 'Use this recommendation as a shortcut into the category, not as a blind endorsement.'}”
+                        </p>
                       </div>
                     </div>
 
@@ -600,7 +605,7 @@ export default function HomeShowcase({
                         href={`/tools/${pick.tool.id}`}
                         className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                       >
-                        读评测
+                        Open review
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </div>
@@ -612,12 +617,12 @@ export default function HomeShowcase({
 
           <div className="space-y-4">
             <article className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-6">
-              <p className="text-xs uppercase tracking-[0.24em] text-text-muted">首页原则</p>
-              <h3 className="mt-3 text-2xl font-semibold text-text-primary">我们这次具体改了什么</h3>
+              <p className="text-xs uppercase tracking-[0.24em] text-text-muted">Homepage principles</p>
+              <h3 className="mt-3 text-2xl font-semibold text-text-primary">What changed in this global rebuild</h3>
               <div className="mt-6 space-y-4">
-                <MethodItem title="先给路径，再给卡片" detail="首屏直接给搜索、热榜、主编封面和常用入口，避免用户一上来就被重复模块淹没。" />
-                <MethodItem title="视觉从“模板感”改成“编辑感”" detail="减少同一种霓虹卡片反复堆叠，改成有主次、有留白、有封面感的结构。" />
-                <MethodItem title="中文内容用中文叙事" detail="去掉大量英文终端腔，保留少量技术味标签，但整体变成更适合中文用户的阅读节奏。" />
+                <MethodItem title="Routes before cards" detail="The first screen now offers search, momentum, a cover pick, and fast starts before the card wall appears." />
+                <MethodItem title="Editorial rhythm over template repetition" detail="The layout uses hierarchy, negative space, and cover moments instead of stacking the same neon card pattern forever." />
+                <MethodItem title="Global voice with selective local context" detail="English drives the surface layer, while German, Japanese, Korean, and selected Chinese context only appear when they improve a decision." />
               </div>
             </article>
 
@@ -625,10 +630,10 @@ export default function HomeShowcase({
               <article className="rounded-[30px] border border-[#f0c979]/20 bg-[linear-gradient(180deg,rgba(240,201,121,0.12),rgba(255,255,255,0.02))] p-6">
                 <div className="flex items-center gap-2 text-sm text-accent-yellow">
                   <ShieldCheck className="h-4 w-4" />
-                  合作展示位
+                  Sponsored placement
                 </div>
                 <p className="mt-3 text-base leading-8 text-text-secondary">
-                  商业展示位会单独出现在这里，不混进编辑推荐。页面的“好看”不应该牺牲信任感。
+                  Paid visibility lives in its own lane. A beautiful homepage should never blur the line between editorial judgment and promotion.
                 </p>
                 <div className="mt-5 space-y-3">
                   {sponsoredTools.slice(0, 2).map((tool) => (
@@ -638,16 +643,16 @@ export default function HomeShowcase({
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-text-primary">{tool.name}</p>
+                          <p className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
                           <p className="mt-1 text-sm leading-7 text-text-secondary">
-                            {tool.reason || tool.description}
+                            {getToolCardSummary(tool)}
                           </p>
                         </div>
                         <ToolPrimaryCta
                           tool={tool}
                           placement="home_showcase_sponsored_primary_cta"
-                          affiliateLabel="合作链接"
-                          websiteLabel="访问官网"
+                          affiliateLabel="Open partner link"
+                          websiteLabel="Visit site"
                           className="inline-flex items-center gap-2 rounded-full border border-[#f0c979]/30 px-3 py-1.5 text-xs text-accent-yellow transition hover:bg-[#f0c979]/10"
                         />
                       </div>
@@ -657,10 +662,10 @@ export default function HomeShowcase({
               </article>
             ) : (
               <article className="rounded-[30px] border border-white/10 bg-black/10 p-6">
-                <p className="text-xs uppercase tracking-[0.24em] text-text-muted">透明性</p>
-                <h3 className="mt-3 text-2xl font-semibold text-text-primary">推荐和广告，必须长得不一样</h3>
+                <p className="text-xs uppercase tracking-[0.24em] text-text-muted">Transparency</p>
+                <h3 className="mt-3 text-2xl font-semibold text-text-primary">Recommendations and ads should never look interchangeable</h3>
                 <p className="mt-4 text-base leading-8 text-text-secondary">
-                  如果未来首页出现商业合作位，我们会保持单独区域、单独文案和单独按钮样式，避免和编辑推荐混淆。
+                  As the site sells more placement, the distinction stays explicit: different zones, different copy, and different call-to-action styling.
                 </p>
               </article>
             )}
@@ -672,9 +677,9 @@ export default function HomeShowcase({
         <section className="relative border-t border-white/8">
           <div className="mx-auto max-w-7xl px-6 py-20">
             <SectionHeading
-              eyebrow="图像导航墙"
-              title="给大众用户的第一眼入口：先看图，再看字。"
-              description="很多用户先记住图标和名字，再决定点不点详情。我们把高频工具做成可视化墙，降低首次认知成本。"
+              eyebrow="Visual navigation wall"
+              title="The fastest first impression for mainstream users: icon first, copy second."
+              description="A lot of users recognize logos before they remember positioning. This wall lowers the cognitive cost of the first click."
               icon={<ImageIcon className="h-5 w-5 text-accent-cyan" />}
             />
 
@@ -686,16 +691,16 @@ export default function HomeShowcase({
                   className="group rounded-[22px] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.07]"
                 >
                   <ToolLogo
-                    name={tool.name}
+                    name={getToolDisplayName(tool.name)}
                     icon={tool.icon}
                     size={40}
-                    alt={`${tool.name} logo`}
+                    alt={`${getToolDisplayName(tool.name)} logo`}
                     wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/12"
                     imageClassName="h-10 w-10"
                     textClassName="text-xl text-accent-cyan"
                   />
-                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{tool.name}</p>
-                  <p className="mt-1 truncate text-xs text-text-muted">{tool.category}</p>
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                  <p className="mt-1 truncate text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                 </Link>
               ))}
             </div>
@@ -706,9 +711,9 @@ export default function HomeShowcase({
       <section className="relative">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <SectionHeading
-            eyebrow="值得先装"
-            title="首页最后一层，才是工具卡片。"
-            description="卡片还在，但不再是清一色模板。我们按“值得先试、为什么值得试、适合谁试”来组织每一张。"
+            eyebrow="Worth trying first"
+            title="The card grid belongs at the end of the page, not the beginning."
+            description="The cards still matter, but they now answer a more useful sequence: why try it, who it fits, and whether it deserves the next click."
             icon={<FolderOpenDot className="h-5 w-5 text-accent-pink" />}
           />
 
@@ -731,17 +736,17 @@ export default function HomeShowcase({
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-4">
                       <ToolLogo
-                        name={tool.name}
+                        name={getToolDisplayName(tool.name)}
                         icon={tool.icon}
                         size={32}
-                        alt={`${tool.name} logo`}
+                        alt={`${getToolDisplayName(tool.name)} logo`}
                         wrapperClassName="h-14 w-14 rounded-[22px] border border-white/10 bg-black/12"
                         imageClassName="h-8 w-8"
                         textClassName="text-xl text-accent-cyan"
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="truncate text-xl font-semibold text-text-primary">{tool.name}</h3>
+                          <h3 className="truncate text-xl font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
                           <span
                             className={`rounded-full border px-2.5 py-1 text-xs ${
                               pricingTone[tool.pricing_type || tool.pricingType || 'freemium']
@@ -750,7 +755,7 @@ export default function HomeShowcase({
                             {(tool.pricing_type || tool.pricingType || 'freemium').toUpperCase()}
                           </span>
                         </div>
-                        <p className="mt-2 text-sm text-text-muted">{tool.category}</p>
+                        <p className="mt-2 text-sm text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                       </div>
                     </div>
                     <div className="rounded-full border border-white/10 px-3 py-1 text-sm text-text-muted">
@@ -759,12 +764,15 @@ export default function HomeShowcase({
                   </div>
 
                   <p className={`mt-5 leading-8 text-text-secondary ${index === 0 ? 'text-base' : 'text-sm'}`}>
-                    {tool.reason || tool.description}
+                    {getToolCardSummary(tool)}
                   </p>
 
-                  {tool.features?.length ? (
+                  {tool.features?.filter((feature) => !isCjkHeavy(feature)).length ? (
                     <div className="mt-6 flex flex-wrap gap-2">
-                      {tool.features.slice(0, index === 0 ? 4 : 3).map((feature) => (
+                      {tool.features
+                        .filter((feature) => !isCjkHeavy(feature))
+                        .slice(0, index === 0 ? 4 : 3)
+                        .map((feature) => (
                         <span
                           key={feature}
                           className="rounded-full border border-white/10 bg-black/12 px-3 py-1 text-xs text-text-secondary"
@@ -775,9 +783,12 @@ export default function HomeShowcase({
                     </div>
                   ) : null}
 
-                  {tool.pros?.length ? (
+                  {tool.pros?.filter((item) => !isCjkHeavy(item)).length ? (
                     <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                      {tool.pros.slice(0, 2).map((item) => (
+                      {tool.pros
+                        .filter((item) => !isCjkHeavy(item))
+                        .slice(0, 2)
+                        .map((item) => (
                         <div key={item} className="rounded-[18px] border border-white/8 bg-black/12 px-3 py-3 text-sm text-text-secondary">
                           {item}
                         </div>
@@ -789,15 +800,15 @@ export default function HomeShowcase({
                     <ToolPrimaryCta
                       tool={tool}
                       placement="home_showcase_featured_primary_cta"
-                      affiliateLabel="合作链接"
-                      websiteLabel="访问官网"
+                      affiliateLabel="Open partner link"
+                      websiteLabel="Visit site"
                       className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                     />
                     <Link
                       href={`/tools/${tool.id}`}
                       className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                     >
-                      查看详情
+                      Open review
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
@@ -856,8 +867,8 @@ function MethodItem({ title, detail }: { title: string; detail: string }) {
 }
 
 function formatCompactNumber(value: number) {
-  if (value >= 10000) {
-    return `${(value / 10000).toFixed(1)}w`;
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(1)}m`;
   }
   if (value >= 1000) {
     return `${(value / 1000).toFixed(1)}k`;

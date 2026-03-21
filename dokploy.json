@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "ai-tools-nav",
-    "description": "AI工具导航站 - 发现最好用的AI工具"
+    "description": "AI Tool Atlas - curated AI tools and launch-ready discovery"
   },
   "service": {
     "name": "ai-tools-nav-web",

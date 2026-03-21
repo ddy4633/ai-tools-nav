@@ -3,9 +3,9 @@ import { getAllTools } from '@/lib/supabase';
 import CategoryToolsPage, { filterToolsByKeywords } from '@/components/categories/CategoryToolsPage';
 
 export const metadata: Metadata = {
-  title: '聊天机器人 AI工具 - 最好的聊天机器人人工智能工具 | AI工具导航',
-  description: '发现最好的AI聊天机器人工具，包括AI对话、智能助手、AI客服、聊天机器人等各类人工智能对话工具。',
-  keywords: ['AI聊天', '聊天机器人', 'AI对话', '人工智能聊天', '智能助手'],
+  title: 'AI Chat Tools - assistants, copilots, and conversational workflows',
+  description: 'Discover AI chat tools for research, assistants, customer support, and conversational workflows.',
+  keywords: ['AI chat tools', 'AI assistant', 'conversational AI', 'chatbot tools', 'research assistants'],
 };
 
 export const revalidate = 3600;
@@ -16,15 +16,15 @@ export default async function ChatbotCategoryPage() {
 
   return (
     <CategoryToolsPage
-      categoryLabel="聊天机器人"
-      heading="聊天机器人 AI工具"
-      description="包括AI对话、智能助手、AI客服等。这些工具可以提供智能对话服务，帮助解答问题和完成任务。"
+      categoryLabel="AI Chat"
+      heading="AI chat tools"
+      description="Includes conversational assistants, research copilots, support bots, and long-context chat products."
       tools={tools}
-      toolsFilterHref="/tools?category=AI聊天"
-      toolsFilterLabel="查看全部聊天工具"
+      toolsFilterHref="/tools?category=chatbot"
+      toolsFilterLabel="View all AI chat tools"
       emptyEmoji="🤖"
-      emptyTitle="暂无聊天机器人数据"
-      emptyDescription="请稍后再试或查看其他分类"
+      emptyTitle="No AI chat tools are indexed yet"
+      emptyDescription="Please try again later or explore another category."
     />
   );
 }

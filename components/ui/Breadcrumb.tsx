@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
+import { buildSiteUrl } from '@/lib/site';
 
 interface BreadcrumbItem {
   label: string;
@@ -23,14 +24,14 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
       {
         '@type': 'ListItem',
         position: 1,
-        name: '首页',
-        item: 'https://ai.poph163.com'
+        name: 'Home',
+        item: buildSiteUrl('/')
       },
       ...items.map((item, index) => ({
         '@type': 'ListItem',
         position: index + 2,
         name: item.label,
-        item: item.href ? `https://ai.poph163.com${item.href}` : undefined
+        item: item.href ? buildSiteUrl(item.href) : undefined
       }))
     ]
   };
@@ -44,7 +45,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
       />
       
       {/* 面包屑导航 UI */}
-      <nav aria-label="面包屑导航" className={`py-4 ${className}`}>
+      <nav aria-label="Breadcrumb" className={`py-4 ${className}`}>
         <ol className="flex items-center flex-wrap gap-2 text-sm">
           <li>
             <Link 
@@ -52,7 +53,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
               className="flex items-center gap-1 text-text-secondary hover:text-accent-warm transition-colors"
             >
               <Home className="w-4 h-4" />
-              <span className="sr-only">首页</span>
+              <span className="sr-only">Home</span>
             </Link>
           </li>
           
@@ -81,9 +82,9 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
 
 // 预设的面包屑配置
 export const breadcrumbPresets = {
-  tools: { label: '全部工具', href: '/tools' },
-  categories: { label: '分类浏览', href: '/categories' },
-  about: { label: '关于我们', href: '/about' },
-  submit: { label: '提交工具', href: '/submit' },
-  blog: { label: '博客', href: '/blog' },
+  tools: { label: 'Tools', href: '/tools' },
+  categories: { label: 'Categories', href: '/categories' },
+  about: { label: 'About', href: '/about' },
+  submit: { label: 'Submit', href: '/submit' },
+  blog: { label: 'Editorial', href: '/blog' },
 };

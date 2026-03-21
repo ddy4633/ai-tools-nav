@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName } from '@/lib/tool-display';
 
 interface EnhancedToolCardProps {
   tool: Tool;
@@ -53,6 +54,7 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
 
   const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
+  const displayName = getToolDisplayName(tool.name);
 
   return (
     <motion.div
@@ -126,10 +128,10 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
               >
                 <ToolLogo
-                  name={tool.name}
+                  name={displayName}
                   icon={tool.icon}
                   size={32}
-                  alt={`${tool.name} logo`}
+                  alt={`${displayName} logo`}
                   wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0"
                   imageClassName="w-8 h-8"
                   textClassName="text-xl text-accent-cyan"
@@ -137,7 +139,7 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
               </motion.div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors duration-300 truncate">
-                  {tool.name}
+                  {displayName}
                 </h3>
                 <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded border transition-all duration-300 ${pricing.className}`}
                 >
@@ -149,7 +151,7 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
             {/* 描述 */}
             <p className="text-text-secondary text-sm leading-relaxed mb-4 font-mono line-clamp-2 group-hover:text-text-primary transition-colors duration-300"
             >
-              {tool.reason || tool.description}
+              {getToolCardSummary(tool)}
             </p>
 
             {/* 底部分类 */}
@@ -157,7 +159,7 @@ export default function EnhancedToolCard({ tool, index = 0 }: EnhancedToolCardPr
             >
               <span className="text-xs font-mono text-text-muted group-hover:text-text-secondary transition-colors duration-300"
               >
-                {`// ${tool.category}`}
+                {`// ${getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}`}
               </span>
               <motion.span 
                 className="text-xs font-mono text-accent-cyan opacity-0 group-hover:opacity-100 flex items-center gap-1"

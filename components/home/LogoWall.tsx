@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Tool } from '@/types/tool';
+import { getToolDisplayName } from '@/lib/tool-display';
 
 interface LogoWallProps {
   tools: Tool[];
@@ -77,17 +78,19 @@ export default function LogoWall({ tools }: LogoWallProps) {
 }
 
 function LogoItem({ tool }: { tool: Tool }) {
+  const displayName = getToolDisplayName(tool.name);
+
   return (
     <Link
       href={`/tools/${tool.id}`}
       className="flex-shrink-0 group/logo"
-      title={tool.name}
+      title={displayName}
     >
       <div className="relative w-12 h-12 rounded-lg bg-bg-card border border-border-subtle flex items-center justify-center transition-all duration-300 group-hover/logo:border-accent-cyan/50 group-hover/logo:shadow-glow-cyan group-hover/logo:scale-110">
         {tool.icon ? (
           <Image
             src={tool.icon}
-            alt={tool.name}
+            alt={displayName}
             width={28}
             height={28}
             className="w-7 h-7 object-contain filter grayscale opacity-60 transition-all duration-300 group-hover/logo:grayscale-0 group-hover/logo:opacity-100"
@@ -95,7 +98,7 @@ function LogoItem({ tool }: { tool: Tool }) {
           />
         ) : (
           <span className="text-sm font-mono text-text-muted group-hover/logo:text-accent-cyan transition-colors">
-            {tool.name[0]}
+            {displayName[0]}
           </span>
         )}
       </div>

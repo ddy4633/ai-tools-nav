@@ -6,6 +6,7 @@ import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import PageHero from '@/components/ui/PageHero';
 import SectionHeading from '@/components/ui/SectionHeading';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName } from '@/lib/tool-display';
 
 interface CategoryToolsPageProps {
   categoryLabel: string;
@@ -20,9 +21,9 @@ interface CategoryToolsPageProps {
 }
 
 const pricingLabels = {
-  free: { text: '免费', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
-  paid: { text: '付费', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
-  freemium: { text: '部分免费', className: 'bg-white/6 text-text-secondary border-white/12' },
+  free: { text: 'Free', className: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/30' },
+  paid: { text: 'Paid', className: 'bg-accent-pink/10 text-accent-pink border-accent-pink/30' },
+  freemium: { text: 'Freemium', className: 'bg-white/6 text-text-secondary border-white/12' },
 };
 
 export function filterToolsByKeywords(tools: Tool[], keywords: string[]): Tool[] {
@@ -52,11 +53,11 @@ export default function CategoryToolsPage({
         <nav className="flex items-center gap-2 text-sm text-text-muted">
           <Link href="/" className="flex items-center gap-1 transition hover:text-text-primary">
             <Home className="w-4 h-4" />
-            首页
+            Home
           </Link>
           <span>/</span>
           <Link href="/categories" className="transition hover:text-text-primary">
-            分类
+            Categories
           </Link>
           <span>/</span>
           <span className="text-text-primary">{categoryLabel}</span>
@@ -64,36 +65,36 @@ export default function CategoryToolsPage({
       </div>
 
       <PageHero
-        eyebrow={`${categoryLabel} 分类页`}
-        title={heading}
-        highlight="先判断这一类工具最该看什么。"
-        description={`共 ${tools.length} 个工具。${description}`}
+        eyebrow={`${categoryLabel} category`}
+        title={heading.endsWith('.') ? heading : `${heading}.`}
+        highlight="Know what to judge before you start clicking."
+        description={`${tools.length} tools in this category. ${description}`}
         metrics={[
           {
             value: `${tools.length}`,
-            label: '当前分类工具数',
-            hint: '适合继续看详情页、替代方案和专题内容。',
+            label: 'Tools in category',
+            hint: 'Good for deeper review pages and tighter shortlist work.',
           },
           {
             value: `${freeCount}`,
-            label: '免费可试工具',
-            hint: '适合先跑通工作流，再决定是否采购。',
+            label: 'Free-to-try tools',
+            hint: 'Useful when you want proof before budget approval.',
           },
           {
             value: `${spotlightTools.length}`,
-            label: '优先入口',
-            hint: '先看评分和推荐理由更高的工具，减少试错成本。',
+            label: 'Priority starts',
+            hint: 'Start with stronger editorial reasoning to reduce false tries.',
           },
         ]}
         actions={[
           { href: toolsFilterHref, label: toolsFilterLabel, tone: 'secondary' },
-          { href: '/advertise', label: '购买该分类曝光', tone: 'primary' },
+          { href: '/advertise', label: 'Promote in this category', tone: 'primary' },
         ]}
         aside={
           <div>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <Sparkles className="h-4 w-4 text-accent-yellow" />
-              这一类工具怎么挑
+              How to judge this category
             </div>
             <div className="mt-5 space-y-3">
               {buildCategoryPrinciples(categoryLabel).map((item) => (
@@ -112,8 +113,8 @@ export default function CategoryToolsPage({
           <>
             <SectionHeading
               eyebrow="Top Pick"
-              title={`先看这 3 个 ${categoryLabel} 工具`}
-              description="它们不一定最有名，但更适合作为第一轮筛选入口。先把判断标准建立起来，再看更长的列表。"
+              title={`Start with these 3 ${categoryLabel} tools`}
+              description="They are not always the most famous. They are simply the easiest way to establish your decision criteria before you scan the longer list."
             />
 
             <div className="mt-10 grid gap-4 lg:grid-cols-3">
@@ -124,43 +125,43 @@ export default function CategoryToolsPage({
                 >
                   <div className="flex items-start gap-4">
                     <ToolLogo
-                      name={tool.name}
+                      name={getToolDisplayName(tool.name)}
                       icon={tool.icon}
                       size={32}
-                      alt={`${tool.name} logo`}
+                      alt={`${getToolDisplayName(tool.name)} logo`}
                       wrapperClassName="h-14 w-14 rounded-[20px] border border-white/10 bg-black/10"
                       imageClassName="h-8 w-8"
                       textClassName="text-xl text-accent-cyan"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="truncate text-lg font-semibold text-text-primary">{tool.name}</h3>
+                        <h3 className="truncate text-lg font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
                         <span
                           className={`rounded-full border px-2.5 py-1 text-xs ${
                             pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].className
                           }`}
                         >
-                          {pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].text}
-                        </span>
-                        <SponsorBadge tool={tool} />
-                      </div>
-                      <p className="mt-2 text-xs text-text-muted">{tool.category}</p>
+                      {pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].text}
+                    </span>
+                    <SponsorBadge tool={tool} />
+                  </div>
+                      <p className="mt-2 text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm leading-7 text-text-secondary">{tool.reason || tool.description}</p>
+                  <p className="mt-4 text-sm leading-7 text-text-secondary">{getToolCardSummary(tool)}</p>
                   <div className="mt-5 flex flex-wrap items-center gap-3">
                     <ToolPrimaryCta
                       tool={tool}
                       placement="category_page_spotlight_primary_cta"
-                      affiliateLabel="合作链接"
-                      websiteLabel="访问官网"
+                      affiliateLabel="Open partner link"
+                      websiteLabel="Visit site"
                       className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                     />
                     <Link
                       href={`/tools/${tool.id}`}
                       className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                     >
-                      看详情
+                      Open review
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -171,16 +172,16 @@ export default function CategoryToolsPage({
             <div className="mt-14 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Full List</p>
-                <h2 className="mt-2 text-2xl font-semibold text-text-primary">{categoryLabel} 工具全列表</h2>
+                <h2 className="mt-2 text-2xl font-semibold text-text-primary">Full {categoryLabel} list</h2>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">
-                  如果你已经知道自己要找的方向，下面这部分更适合逐个点进详情页做对比，尤其是价格、推荐理由和替代方案。
+                  If you already know the direction, this section is better for side-by-side review, especially around pricing, workflow fit, and alternatives.
                 </p>
               </div>
               <Link
                 href="/submit"
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
-              >
-                提交你的工具
+            >
+                Submit your tool
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -197,10 +198,10 @@ export default function CategoryToolsPage({
                   >
                     <div className="flex items-start gap-4">
                       <ToolLogo
-                        name={tool.name}
+                        name={getToolDisplayName(tool.name)}
                         icon={tool.icon}
                         size={32}
-                        alt={`${tool.name} logo`}
+                        alt={`${getToolDisplayName(tool.name)} logo`}
                         wrapperClassName="h-14 w-14 rounded-[20px] border border-white/10 bg-black/10"
                         imageClassName="h-8 w-8"
                         textClassName="text-xl text-accent-cyan"
@@ -208,7 +209,7 @@ export default function CategoryToolsPage({
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <Link href={detailHref} className="transition hover:text-accent-cyan">
-                            <h3 className="truncate text-lg font-semibold text-text-primary">{tool.name}</h3>
+                            <h3 className="truncate text-lg font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
                           </Link>
                           <span className={`rounded-full border px-2.5 py-1 text-xs ${pricing.className}`}>
                             {pricing.text}
@@ -216,27 +217,27 @@ export default function CategoryToolsPage({
                           <SponsorBadge tool={tool} />
                         </div>
                         <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-text-muted">
-                          <span>{tool.category}</span>
-                          {tool.editorRating ? <span>编辑分 {tool.editorRating.toFixed(1)}</span> : null}
+                          <span>{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</span>
+                          {tool.editorRating ? <span>Editor score {tool.editorRating.toFixed(1)}</span> : null}
                         </div>
                       </div>
                     </div>
 
-                    <p className="mt-4 text-sm leading-7 text-text-secondary">{tool.reason || tool.description}</p>
+                    <p className="mt-4 text-sm leading-7 text-text-secondary">{getToolCardSummary(tool)}</p>
 
                     <div className="mt-5 flex flex-wrap items-center gap-3">
                       <ToolPrimaryCta
                         tool={tool}
                         placement="category_page_primary_cta"
-                        affiliateLabel="合作链接"
-                        websiteLabel="访问官网"
+                        affiliateLabel="Open partner link"
+                        websiteLabel="Visit site"
                         className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                       />
                       <Link
                         href={detailHref}
                         className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                       >
-                        查看详情
+                        Open review
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
@@ -254,7 +255,7 @@ export default function CategoryToolsPage({
               href="/tools"
               className="mt-6 inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
             >
-              浏览全部工具
+              Browse all tools
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -266,7 +267,7 @@ export default function CategoryToolsPage({
             className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
           >
             <Home className="w-4 h-4" />
-            返回首页
+            Back home
           </Link>
         </div>
       </section>
@@ -276,44 +277,44 @@ export default function CategoryToolsPage({
 
 function buildCategoryPrinciples(categoryLabel: string) {
   const ruleMap: Record<string, Array<{ title: string; description: string }>> = {
-    聊天机器人: [
+    'AI Chat': [
       {
-        title: '先看上下文和推理',
-        description: '长文本处理、联网能力和推理稳定性，决定它是否只是“能聊”，还是“能干活”。',
+        title: 'Start with context depth and reasoning',
+        description: 'Long-context handling, browsing, and reasoning stability decide whether the tool can actually work, not just chat.',
       },
       {
-        title: '再看中文与工作流',
-        description: '如果主要服务中文用户或团队协作，就要优先看中文质量、文件支持和速度。',
-      },
-    ],
-    写作: [
-      {
-        title: '先看结构能力',
-        description: '好用的写作工具不只是能续写，而是能把提纲、观点和节奏组织清楚。',
-      },
-      {
-        title: '再看可控性',
-        description: '品牌语气、改写精度和输出稳定性，比“能不能生成一段话”更重要。',
+        title: 'Then check workflow fit',
+        description: 'Look at file handling, speed, and team coordination support before you assume the product can own a real workflow.',
       },
     ],
-    编程: [
+    'AI Writing': [
       {
-        title: '先看上下文理解',
-        description: '能不能读懂整个项目、跨文件修改，是 AI 编程工具的分水岭。',
+        title: 'Judge structure before polish',
+        description: 'The useful tools are the ones that can organize a brief, argument, and narrative flow before sentence cleanup.',
       },
       {
-        title: '再看执行闭环',
-        description: '从补全、重构到跑通任务，闭环越完整，越适合真实开发工作流。',
+        title: 'Then measure control',
+        description: 'Brand voice, rewrite precision, and output consistency matter more than whether it can generate a paragraph at all.',
       },
     ],
-    图像: [
+    'AI Coding': [
       {
-        title: '先看风格上限',
-        description: '不是出得快就够，关键是风格稳定、细节质量和商业可交付性。',
+        title: 'See if it understands the project',
+        description: 'The real divide is whether the product can read the repo, follow context, and edit across files.',
       },
       {
-        title: '再看版权与成本',
-        description: '如果用于商业项目，要一起考虑授权、生成限制和后续修改成本。',
+        title: 'Then check the execution loop',
+        description: 'From autocomplete to refactor to runnable output, the tighter the loop, the closer it is to real development work.',
+      },
+    ],
+    'Image & Art': [
+      {
+        title: 'Start with the style ceiling',
+        description: 'Speed is not enough. Consistency, detail quality, and commercial deliverability matter more.',
+      },
+      {
+        title: 'Then check rights and cost',
+        description: 'If the output is for commercial work, include licensing, generation limits, and post-edit cost in the decision.',
       },
     ],
   };
@@ -321,12 +322,12 @@ function buildCategoryPrinciples(categoryLabel: string) {
   return (
     ruleMap[categoryLabel] ?? [
       {
-        title: '先看是否解决真实任务',
-        description: '别被新鲜功能带偏，先看它是否能明显提升你当前工作流的效率。',
+        title: 'Start with the real job',
+        description: 'Do not let novelty decide for you. Check whether the product meaningfully improves the workflow you already care about.',
       },
       {
-        title: '再看价格和替代方案',
-        description: '好工具不一定最贵，关键是这个场景里它有没有更低成本的替代选项。',
+        title: 'Then compare price and substitutes',
+        description: 'The best option is not always the most expensive one. Judge whether this job has a simpler or cheaper alternative.',
       },
     ]
   );

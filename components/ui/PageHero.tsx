@@ -59,7 +59,12 @@ export default function PageHero({
 
             <h1 className="mt-6 font-display text-5xl leading-[1.04] tracking-tight text-text-primary md:text-6xl">
               {title}
-              {highlight ? <span className="block text-gradient-cyber">{highlight}</span> : null}
+              {highlight ? (
+                <>
+                  {' '}
+                  <span className="block text-gradient-cyber">{highlight}</span>
+                </>
+              ) : null}
             </h1>
 
             <p className="mt-6 max-w-3xl text-base leading-8 text-text-secondary md:text-lg">

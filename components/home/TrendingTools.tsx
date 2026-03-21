@@ -6,6 +6,7 @@ import { Flame, ArrowRight, Github } from 'lucide-react';
 import type { TrendingTool } from '@/types/tool';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
 
 interface TrendingToolsProps {
   tools: TrendingTool[];
@@ -88,6 +89,7 @@ export default function TrendingTools({ tools }: TrendingToolsProps) {
 function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; variants: Variants }) {
   const tier = tierConfig[tool.tier] || tierConfig['💡 WATCH'];
   const detailHref = `/tools/${tool.id}`;
+  const displayName = getToolDisplayName(tool.name);
 
   return (
     <motion.div variants={variants} className="group relative">
@@ -106,7 +108,7 @@ function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; 
                 <Link href={detailHref} className="inline-block">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-pink transition-colors duration-300">
-                      {tool.name}
+                      {displayName}
                     </h3>
                     <span className={`px-2 py-0.5 text-xs font-mono rounded border transition-all duration-300 group-hover:shadow-[0_0_10px_rgba(255,0,110,0.2)] ${tier.className}`}>
                       {tier.text}
@@ -115,7 +117,7 @@ function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; 
                 </Link>
 
                 <p className="text-sm text-text-secondary font-mono leading-relaxed group-hover:text-text-primary transition-colors duration-300">
-                  {tool.one_liner || tool.description}
+                  {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                 </p>
               </div>
 
@@ -173,13 +175,13 @@ function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; 
             <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border-subtle group-hover:border-accent-pink/20 transition-colors duration-300">
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-text-muted group-hover:text-text-secondary transition-colors duration-300">
-                  {`// ${tool.category}`}
+                  {`// ${getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}`}
                 </span>
                 <Link
                   href={detailHref}
                   className="inline-flex items-center gap-1 text-xs font-mono text-accent-pink hover:opacity-80 transition-opacity"
                 >
-                  [详情]
+                  [OPEN]
                   <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
@@ -187,8 +189,8 @@ function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; 
               <ToolPrimaryCta
                 tool={tool}
                 placement="home_trending_primary_cta"
-                affiliateLabel="合作链接"
-                websiteLabel="官网"
+                affiliateLabel="Open partner link"
+                websiteLabel="Visit site"
                 className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-lg border border-accent-pink/40 text-accent-pink hover:bg-accent-pink/10 transition-colors"
               />
             </div>

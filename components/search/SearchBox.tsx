@@ -23,14 +23,14 @@ export default function SearchBox() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="搜索 AI 工具..."
+          placeholder="Search AI tools..."
           className="w-full pl-12 pr-4 py-3 bg-white border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm focus:ring-2 focus:ring-accent-warm/20 transition-all"
         />
         <button
           type="submit"
           className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-accent-warm text-white text-sm font-medium rounded-lg hover:bg-accent-warm-hover transition-colors"
         >
-          搜索
+          Search
         </button>
       </div>
     </form>

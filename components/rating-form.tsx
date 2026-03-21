@@ -15,7 +15,7 @@ export function RatingForm({ toolId }: RatingFormProps) {
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      setMessage('请先选择评分');
+      setMessage('Please choose a rating first.');
       return;
     }
 
@@ -25,13 +25,13 @@ export function RatingForm({ toolId }: RatingFormProps) {
     try {
       const result = await submitRating(toolId, rating);
       if (result.success) {
-        setMessage('✅ 评分已保存到本地（静态版本）。');
+        setMessage('✅ Rating saved locally in this static build.');
         setRating(0);
       } else {
-        setMessage(`❌ ${result.message || '提交失败，请稍后重试。'}`);
+        setMessage(`❌ ${result.message || 'Rating submission failed. Please try again.'}`);
       }
     } catch {
-      setMessage('❌ 网络错误，请检查网络连接。');
+      setMessage('❌ Network error. Please check your connection.');
     } finally {
       setIsSubmitting(false);
     }
@@ -40,7 +40,7 @@ export function RatingForm({ toolId }: RatingFormProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <span className="text-text-secondary">您的评分：</span>
+        <span className="text-text-secondary">Your rating:</span>
         <StarRating
           rating={rating}
           interactive
@@ -48,7 +48,7 @@ export function RatingForm({ toolId }: RatingFormProps) {
           onRatingChange={setRating}
         />
         {rating > 0 && (
-          <span className="text-sm text-text-muted">{rating} 星</span>
+          <span className="text-sm text-text-muted">{rating} / 5</span>
         )}
       </div>
 
@@ -57,7 +57,7 @@ export function RatingForm({ toolId }: RatingFormProps) {
         disabled={isSubmitting || rating === 0}
         className="px-6 py-2 bg-accent-warm text-white font-medium rounded-lg hover:bg-accent-warm-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {isSubmitting ? '提交中...' : '提交评分'}
+        {isSubmitting ? 'Submitting...' : 'Submit rating'}
       </button>
 
       {message && (

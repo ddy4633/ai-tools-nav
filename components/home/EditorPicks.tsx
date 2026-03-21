@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
 
 interface EditorPicksProps {
   picks: EditorPick[];
@@ -87,17 +88,17 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                   {/* 头部：图标 + 名称 */}
                   <div className="flex items-start gap-4 mb-4">
                     <ToolLogo
-                      name={pick.tool.name}
+                      name={getToolDisplayName(pick.tool.name)}
                       icon={pick.tool.icon}
                       size={32}
-                      alt={`${pick.tool.name} logo`}
+                      alt={`${getToolDisplayName(pick.tool.name)} logo`}
                       wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all"
                       imageClassName="w-8 h-8"
                       textClassName="text-xl text-accent-cyan"
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors">
-                        {pick.tool.name}
+                        {getToolDisplayName(pick.tool.name)}
                       </h3>
                       {
                         (() => {
@@ -116,14 +117,14 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                   {/* 推荐理由 */}
                   <p className="text-text-secondary text-sm leading-relaxed mb-4 font-mono">
                     <span className="text-accent-cyan">“</span>
-                    {pick.tool.reason}
+                    {getToolCardSummary(pick.tool)}
                     <span className="text-accent-cyan">”</span>
                   </p>
                   
                   {/* 底部分类 */}
                   <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
                     <span className="text-xs font-mono text-text-muted">
-                      {`// ${pick.tool.category}`}
+                      {`// ${getCategoryLabel(pick.tool.category, pick.tool.categorySlug ?? pick.tool.category_slug)}`}
                     </span>
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-accent-yellow fill-accent-yellow" />
@@ -147,7 +148,10 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-text-secondary font-mono">
-                        <span className="text-accent-purple">#</span> {pick.comment}
+                        <span className="text-accent-purple">#</span>{' '}
+                        {!isCjkHeavy(pick.comment)
+                          ? pick.comment
+                          : 'Use this recommendation as a shortcut into the category, not as a blind endorsement.'}
                       </p>
                       <p className="text-xs text-text-muted font-mono mt-1">
                         @ {pick.editor.name}
@@ -159,13 +163,13 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                       href={`/tools/${pick.tool.id}`}
                       className="inline-flex items-center gap-1 text-xs font-mono text-accent-cyan hover:opacity-80 transition-opacity"
                     >
-                      查看详情
+                      Open review
                     </Link>
                     <ToolPrimaryCta
                       tool={pick.tool}
                       placement="home_editor_pick_primary_cta"
-                      affiliateLabel="合作链接"
-                      websiteLabel="官网"
+                      affiliateLabel="Open partner link"
+                      websiteLabel="Visit site"
                       className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-lg border border-accent-cyan/40 text-accent-cyan hover:bg-accent-cyan/10 transition-colors"
                     />
                   </div>

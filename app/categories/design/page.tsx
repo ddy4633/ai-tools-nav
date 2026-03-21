@@ -3,9 +3,9 @@ import { getAllTools } from '@/lib/supabase';
 import CategoryToolsPage, { filterToolsByKeywords } from '@/components/categories/CategoryToolsPage';
 
 export const metadata: Metadata = {
-  title: '设计 AI工具 - 最好的设计人工智能工具 | AI工具导航',
-  description: '发现最好的AI设计工具，包括UI 设计、创意生成、版式辅助、品牌设计、设计协作等各类人工智能设计助手。',
-  keywords: ['AI设计', 'UI设计', '创意生成', '品牌设计', '设计协作'],
+  title: 'AI Design Tools - UI, creative direction, and concept work',
+  description: 'Discover AI design tools for UI, prototyping, concept exploration, and visual direction.',
+  keywords: ['AI design tools', 'UI design AI', 'prototype AI', 'creative direction AI', 'visual concept AI'],
 };
 
 export const revalidate = 3600;
@@ -16,15 +16,15 @@ export default async function DesignCategoryPage() {
 
   return (
     <CategoryToolsPage
-      categoryLabel="设计"
-      heading="设计 AI工具"
-      description="包括 UI 设计、创意生成、品牌视觉、设计协作等。这些工具可以帮助设计师更快完成灵感探索与产出。"
+      categoryLabel="Design"
+      heading="AI design tools"
+      description="Includes UI copilots, prototype builders, creative layout tools, and design acceleration products."
       tools={tools}
-      toolsFilterHref="/tools?category=AI设计"
-      toolsFilterLabel="查看全部设计工具"
+      toolsFilterHref="/tools?category=design"
+      toolsFilterLabel="View all AI design tools"
       emptyEmoji="🎨"
-      emptyTitle="暂无设计工具数据"
-      emptyDescription="请稍后再试或查看其他分类"
+      emptyTitle="No AI design tools are indexed yet"
+      emptyDescription="Please try again later or explore another category."
     />
   );
 }

@@ -9,15 +9,15 @@ import { commercialPackages, partnershipSteps } from '@/lib/content/growth-conte
 import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: '提交工具 - 推荐好用的 AI 工具 | 好工具',
-  description: '提交你的 AI 工具，支持免费收录、加急评估和赞助合作。适合新品发布、分类曝光和专题内容联动。',
-  keywords: ['提交工具', '推荐工具', 'AI工具推荐', '工具提交', 'AI工具收录', 'AI工具导航', '人工智能工具分享'],
+  title: 'Submit Your Product',
+  description: 'Submit your AI product for a free listing, priority review, or sponsored visibility program built for launches and qualified discovery.',
+  keywords: ['submit AI product', 'AI listing request', 'priority review', 'sponsored listing', 'AI tool directory'],
   alternates: {
     canonical: buildSiteUrl('/submit'),
   },
   openGraph: {
-    title: '提交工具 - 推荐好用的 AI 工具',
-    description: '发现了好用的 AI 工具？提交给我们，让更多人知道它。',
+    title: 'Submit Your Product | AI Tool Atlas',
+    description: 'List your AI product, request priority review, or open a sponsored visibility conversation.',
     url: buildSiteUrl('/submit'),
     type: 'website',
   },
@@ -42,21 +42,21 @@ function CommercialPlans() {
   const plans = [
     {
       icon: CheckCircle2,
-      title: '免费收录',
-      desc: '适合自然推荐，先进入常规审核队列。',
-      meta: '标准审核',
+      title: 'Free listing',
+      desc: 'Best for organic discovery and standard editorial review.',
+      meta: 'Standard review',
     },
     {
       icon: Clock3,
-      title: '加急评估',
-      desc: '适合活动排期、产品发布周、需要更快拿到反馈的团队。',
-      meta: '48 小时优先处理',
+      title: 'Priority review',
+      desc: 'Best for launch weeks, campaigns, and teams that need fast feedback.',
+      meta: '48-hour priority',
     },
     {
       icon: Megaphone,
-      title: '赞助合作',
-      desc: '适合首页、分类页、榜单页和专题页的组合曝光。',
-      meta: '支持商务咨询',
+      title: 'Sponsored programs',
+      desc: 'Best for homepage, category, ranking, and editorial visibility packages.',
+      meta: 'Commercial inquiry',
     },
   ];
 
@@ -64,8 +64,8 @@ function CommercialPlans() {
     <section className="mx-auto max-w-7xl px-6 py-16">
       <SectionHeading
         eyebrow="Plan Entry"
-        title="先选合作路径，再决定要不要加预算"
-        description="免费收录是内容入口，加急和赞助是时间与曝光入口。它们服务的是不同阶段的增长目标。"
+        title="Choose the route first, then decide how much speed or reach you need"
+        description="A free listing is an editorial entry point. Priority review and sponsorship are growth levers for timing and visibility."
       />
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {plans.map((plan) => {
@@ -94,8 +94,8 @@ function PackageOverview() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <SectionHeading
           eyebrow="Package Ladder"
-          title="这页要承接“免费推荐”到“商业合作”的完整漏斗"
-          description="所以我们把收费方案拆成逐层递进的阶梯，先让用户敢提交，再让客户能看清升级路径。"
+          title="This page should hold the full funnel from free listing to paid growth"
+          description="The package ladder makes it easy to submit with no budget first and easy to upgrade when launch speed or exposure matters."
         />
 
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -132,8 +132,8 @@ function SubmissionGuide() {
       <div className="mx-auto max-w-4xl px-6 py-16">
         <SectionHeading
           eyebrow="How It Works"
-          title="提交之后会发生什么"
-          description="把流程说清楚，能显著提高提交率，也能减少后续沟通成本。"
+          title="What happens after you submit"
+          description="Clear process language increases completion rate and cuts follow-up back and forth."
           align="center"
         />
         <div className="mt-10 space-y-4">
@@ -159,8 +159,8 @@ function VisualTrustWall() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <SectionHeading
           eyebrow="Visual Trust"
-          title="让客户一眼确认：你提交的是主流可识别产品"
-          description="图像化展示可以降低人工审核沟通成本，也更容易让商务团队快速判断投放潜力。"
+          title="Help teams instantly recognize the kind of products we review"
+          description="A visual trust layer lowers review friction and helps commercial buyers understand the quality bar at a glance."
         />
 
         <div className="mt-10 grid gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -169,7 +169,7 @@ function VisualTrustWall() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(125,226,212,0.16),transparent_58%),radial-gradient(circle_at_82%_18%,rgba(240,154,121,0.13),transparent_46%)]" />
               <Image
                 src={logo}
-                alt="平台收录样例图标"
+                alt="Example product logo"
                 fill
                 unoptimized
                 className="object-contain p-4 opacity-90 transition group-hover:scale-105 group-hover:opacity-100"
@@ -184,9 +184,9 @@ function VisualTrustWall() {
 
 function RelatedLinks() {
   const links = [
-    { href: '/advertise', label: '商务合作方案', desc: '了解首页、分类页、榜单和专题位' },
-    { href: '/tools', label: '浏览全部工具', desc: '看看当前站内工具库长什么样' },
-    { href: '/blog', label: '阅读专题内容', desc: '了解我们如何写高意图内容页' },
+    { href: '/advertise', label: 'Commercial packages', desc: 'Review homepage, category, ranking, and editorial inventory' },
+    { href: '/tools', label: 'Browse the directory', desc: 'See how products are positioned across the live site' },
+    { href: '/blog', label: 'Read editorials', desc: 'Understand how we build high-intent discovery content' },
   ];
 
   return (
@@ -194,7 +194,7 @@ function RelatedLinks() {
       <div className="mx-auto max-w-7xl px-6 py-16">
         <SectionHeading
           eyebrow="Next Step"
-          title="你可能还想继续看这几个入口"
+          title="You may want these next"
           align="center"
         />
         <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -207,7 +207,7 @@ function RelatedLinks() {
               <h3 className="text-xl font-semibold text-text-primary">{link.label}</h3>
               <p className="mt-3 text-sm leading-7 text-text-secondary">{link.desc}</p>
               <span className="mt-5 inline-flex items-center gap-2 text-sm text-text-primary">
-                继续查看
+                Explore
                 <ArrowRight className="h-4 w-4 text-accent-cyan" />
               </span>
             </Link>
@@ -222,37 +222,37 @@ export default function SubmitPage() {
   return (
     <main className="min-h-screen bg-bg-primary">
       <PageHero
-        eyebrow="提交工具 / 商务合作"
-        title="这不是一个普通的提交表单。"
-        highlight="它应该是你的增长入口。"
-        description="如果你只是想被收录，可以走免费提交；如果你希望在发布窗口拿到更快审核、更多曝光或更高意图流量，就应该直接从这里进入商业合作路径。"
+        eyebrow="Submit / Partner"
+        title="This is not a generic intake form."
+        highlight="It should be a growth entry point."
+        description="Use the free route if you simply want to be listed. Use the paid routes if you need faster review, cleaner launch timing, or higher-intent visibility during a campaign window."
         metrics={[
           {
-            value: '免费收录',
-            label: '适合内容入库',
-            hint: '先进入标准审核队列，适合自然推荐。',
+            value: 'Free listing',
+            label: 'Best for editorial inclusion',
+            hint: 'Enter the standard queue and become eligible for organic discovery.',
           },
           {
-            value: '加急评估',
-            label: '适合发布窗口',
-            hint: '适合新品上线、营销活动和内容冷启动。',
+            value: 'Priority review',
+            label: 'Best for launch timing',
+            hint: 'Ideal for launches, campaigns, and cold-start growth tests.',
           },
           {
-            value: '赞助合作',
-            label: '适合买流量',
-            hint: '首页、分类页、榜单页和专题页都可组合。',
+            value: 'Sponsored programs',
+            label: 'Best for paid visibility',
+            hint: 'Mix homepage, category, ranking, and editorial surfaces into one package.',
           },
         ]}
         actions={[
-          { href: '/advertise', label: '先看合作方案', tone: 'primary' },
-          { href: '/tools', label: '先看站内现状', tone: 'secondary' },
+          { href: '/advertise', label: 'View commercial packages', tone: 'primary' },
+          { href: '/tools', label: 'Inspect the live directory', tone: 'secondary' },
         ]}
         aside={
           <div>
             <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Why This Page Exists</p>
-            <h2 className="mt-3 text-2xl font-semibold text-text-primary">把“提交入口”和“收费路径”放在同一页说清楚</h2>
+            <h2 className="mt-3 text-2xl font-semibold text-text-primary">One page should explain both the submission path and the paid upgrade path</h2>
             <p className="mt-4 text-sm leading-7 text-text-secondary">
-              这样既不会让自然推荐的用户被价格吓走，也不会让真正有预算的团队找不到升级入口。
+              That keeps organic submitters comfortable while making sure teams with budget can find the right upgrade route immediately.
             </p>
           </div>
         }

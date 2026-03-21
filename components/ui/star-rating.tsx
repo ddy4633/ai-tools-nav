@@ -62,7 +62,7 @@ export function RatingDisplay({
   averageRating,
   ratingCount = 0,
   size = 'md',
-  emptyLabel = '编辑评分',
+  emptyLabel = 'Editor score',
 }: RatingDisplayProps) {
   const showCount = ratingCount > 0;
 
@@ -70,7 +70,7 @@ export function RatingDisplay({
     <div className="flex items-center gap-2">
       <StarRating rating={Math.round(averageRating)} size={size} />
       <span className="text-sm text-gray-600">
-        {averageRating.toFixed(1)} {showCount ? `(${ratingCount} 评价)` : `(${emptyLabel})`}
+        {averageRating.toFixed(1)} {showCount ? `(${ratingCount} reviews)` : `(${emptyLabel})`}
       </span>
     </div>
   );

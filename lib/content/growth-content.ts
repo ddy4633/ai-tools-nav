@@ -1,119 +1,119 @@
 export const audienceProfiles = [
   {
-    title: '第一次系统用 AI 的新人',
-    summary: '他们不缺工具列表，缺的是“先从哪一个开始”。',
-    value: '更需要策展感和入门路径，而不是参数堆砌。',
+    title: 'First-time AI operators',
+    summary: 'They do not need a giant list. They need a confident first pick.',
+    value: 'Editorial guidance and clean onboarding paths outperform feature overload.',
   },
   {
-    title: '已经在用 AI 的进阶用户',
-    summary: '他们希望少踩坑，快速判断替代方案和真实上限。',
-    value: '更愿意点进对比、榜单、替代工具和编辑点评。',
+    title: 'Power users comparing stacks',
+    summary: 'They want fewer dead ends and faster clarity on trade-offs.',
+    value: 'They naturally click into comparisons, rankings, alternatives, and editorial notes.',
   },
   {
-    title: '想买曝光和线索的 AI 团队',
-    summary: '他们要的不是一次展示，而是明确的流量入口和转化去向。',
-    value: '更在意首页、分类页、榜单页和专题内容的组合曝光。',
+    title: 'AI teams buying attention',
+    summary: 'They are not buying impressions alone. They want intent, clicks, and qualified demand.',
+    value: 'They care about bundles across the homepage, category hubs, rankings, and editorial pages.',
   },
 ];
 
 export const editorialPrinciples = [
   {
-    title: '先给判断，再给链接',
-    description: '每个页面都先回答“适不适合你”，再引导去官网或合作链接。',
+    title: 'Judgment before links',
+    description: 'Every page should answer fit, risk, and use case before pushing a click.',
   },
   {
-    title: '商业合作必须披露',
-    description: '赞助位、合作链接和编辑推荐分开展示，保证用户信任不被透支。',
+    title: 'Commercial relationships stay visible',
+    description: 'Sponsored placements, partner links, and editorial picks stay clearly separated to protect trust.',
   },
   {
-    title: '围绕任务组织信息',
-    description: '把“写作、做图、开发、调研、团队协作”放在第一层，而不是把工具名塞满页面。',
+    title: 'Organize around jobs to be done',
+    description: 'Writing, design, coding, research, and operations should lead the structure instead of brand names.',
   },
   {
-    title: '每个页面都承担转化目标',
-    description: '不是只有提交页能赚钱，榜单、专题、详情页和关于页都要能产生线索。',
+    title: 'Every page has a conversion job',
+    description: 'Revenue should not rely on one form. Rankings, editorials, detail pages, and company pages all need next steps.',
   },
 ];
 
 export const contentPillars = [
   {
-    title: '榜单与热度页',
-    detail: '负责拿高 CTR 和高分享，适合承接新品、热点和口碑爆发。',
+    title: 'Rankings and momentum pages',
+    detail: 'These pages drive strong CTR and sharing, especially for launches, fast movers, and social proof.',
   },
   {
-    title: '替代方案与对比页',
-    detail: '负责拦截高意图搜索词，最适合放联盟链接和商业导流。',
+    title: 'Alternatives and comparison pages',
+    detail: 'These pages capture high-intent search demand and perform best for affiliate clicks and partner leads.',
   },
   {
-    title: '任务场景页',
-    detail: '把同类工具放进具体工作流中，提升停留时长和二跳率。',
+    title: 'Workflow landing pages',
+    detail: 'These pages group similar tools inside a real workflow, improving session depth and second clicks.',
   },
   {
-    title: '工具详情页',
-    detail: '承担“最后一击”，负责解释推荐理由、风险、替代品和行动按钮。',
+    title: 'Tool detail pages',
+    detail: 'These pages close the loop with reasons to trust, risks to watch, alternatives, and action buttons.',
   },
 ];
 
 export const growthChannels = [
   {
-    title: '搜索流量',
-    summary: '围绕“推荐、对比、替代、教程、价格、适合谁”做内容集群。',
+    title: 'Search capture',
+    summary: 'Build topic clusters around recommendations, comparisons, alternatives, tutorials, pricing, and fit.',
   },
   {
-    title: '榜单传播',
-    summary: '用“本周热门”“值得先试”“编辑押注”制造可转发素材。',
+    title: 'Ranking distribution',
+    summary: 'Formats like this week’s movers, first picks, and editor bets create highly shareable assets.',
   },
   {
-    title: '社区扩散',
-    summary: '把新文章和榜单切片投放到知乎、小红书、X、Linux.do、微信群。',
+    title: 'Community seeding',
+    summary: 'Break editorials into short-form assets for X, Reddit, LinkedIn, maker communities, and niche forums.',
   },
   {
-    title: '商业合作',
-    summary: '给客户明确曝光位、节奏和预期结果，而不是只说“投广告”。',
+    title: 'Commercial programs',
+    summary: 'Sell clear placements, timing, and outcomes instead of vague advertising promises.',
   },
 ];
 
 export const commercialPackages = [
   {
-    title: '免费收录',
-    budget: '0 元',
-    summary: '进入标准审核队列，适合自然推荐和资料入库。',
-    deliverables: ['基础详情页', '进入工具库检索', '可被榜单与内容页后续选中'],
+    title: 'Free listing',
+    budget: '$0',
+    summary: 'Join the standard review queue for organic discovery and database inclusion.',
+    deliverables: ['Standard detail page', 'Searchable in the directory', 'Eligible for future editorial picks'],
   },
   {
-    title: '加急评估',
-    budget: '建议预算 499 元起',
-    summary: '48 小时内优先审核，适合新品发布周、活动期和增长测试。',
-    deliverables: ['优先审核反馈', '更快进入站内曝光位', '支持补充产品亮点与团队信息'],
+    title: 'Priority review',
+    budget: 'From $99',
+    summary: 'Priority review within 48 hours for launch weeks, campaigns, and growth tests.',
+    deliverables: ['Priority editorial review', 'Faster access to exposure slots', 'Expanded space for product and team context'],
   },
   {
-    title: '分类置顶',
-    budget: '建议预算 1,500 元 / 周起',
-    summary: '适合只买垂直流量的团队，比如 AI 编程、AI 写作、AI 视频等。',
-    deliverables: ['分类页置顶', '合作链接优先跳转', '分类内容页联动推荐'],
+    title: 'Category spotlight',
+    budget: 'From $350 / week',
+    summary: 'Built for teams buying vertical intent such as AI coding, AI writing, or AI video demand.',
+    deliverables: ['Top placement in a category hub', 'Priority partner-link routing', 'Cross-links from related editorial pages'],
   },
   {
-    title: '首页赞助',
-    budget: '建议预算 3,500 元 / 周起',
-    summary: '适合拉新获客、品牌露出和新品起量，覆盖首页策展区与热点入口。',
-    deliverables: ['首页赞助区', '热榜或精选联动', '清晰赞助标识与点击埋点'],
+    title: 'Homepage sponsor',
+    budget: 'From $990 / week',
+    summary: 'Best for awareness, launch acceleration, and premium visibility across the homepage and discovery entry points.',
+    deliverables: ['Homepage sponsor module', 'Trending or featured inclusion', 'Clear sponsor label with click tracking'],
   },
   {
-    title: '专题内容合作',
-    budget: '建议预算 5,000 元 / 次起',
-    summary: '适合要讲清产品价值、替代关系和使用场景的团队。',
-    deliverables: ['专题文章或榜单共创', '详情页互链', '长尾搜索词承接'],
+    title: 'Editorial feature',
+    budget: 'From $1,500 / campaign',
+    summary: 'Ideal when a team needs to explain value, alternatives, and workflow fit in more depth.',
+    deliverables: ['Co-created editorial or ranking page', 'Cross-links into detail pages', 'Long-tail search capture'],
   },
   {
-    title: '选型与顾问支持',
-    budget: '项目制',
-    summary: '适合企业团队做工具选型、采购建议和工作流咨询。',
-    deliverables: ['需求访谈', '工具 shortlist', '部署与落地建议'],
+    title: 'Advisory support',
+    budget: 'Custom quote',
+    summary: 'Designed for teams choosing a stack, evaluating vendors, or mapping AI workflows.',
+    deliverables: ['Needs interview', 'Tool shortlist', 'Deployment and workflow guidance'],
   },
 ];
 
 export const partnershipSteps = [
-  '先确定目标：是要品牌曝光、产品试用、销售线索还是联盟转化。',
-  '再选页面组合：首页、分类页、榜单页、专题内容页和工具详情页可以混搭。',
-  '上线后统一走点击埋点与线索表单，方便复盘合作效果。',
+  'Define the commercial goal first: awareness, trial starts, qualified leads, or partner-link conversions.',
+  'Choose the page bundle next: homepage, category hubs, rankings, editorial pages, and detail pages can be mixed.',
+  'Launch with tracked clicks and structured lead capture so every campaign can be reviewed clearly.',
 ];

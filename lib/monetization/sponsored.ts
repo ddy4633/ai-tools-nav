@@ -125,18 +125,18 @@ export function getToolSponsorLabel(tool: Tool): string {
   const sponsorType = tool.sponsor_type ?? tool.sponsorType;
 
   if (sponsorType === 'homepage_spotlight') {
-    return '首页赞助';
+    return 'Homepage sponsor';
   }
 
   if (sponsorType === 'category_spotlight') {
-    return '分类赞助';
+    return 'Category sponsor';
   }
 
   if (sponsorType === 'newsletter_spotlight') {
-    return '周报赞助';
+    return 'Digest sponsor';
   }
 
-  return '赞助推荐';
+  return 'Sponsored pick';
 }
 
 export function getSponsoredToolsFromList(
@@ -173,7 +173,7 @@ export function getSponsoredToolsFromList(
         return featuredRight - featuredLeft;
       }
 
-      return left.name.localeCompare(right.name, 'zh-CN');
+      return left.name.localeCompare(right.name, 'en');
     })
     .slice(0, normalizedLimit);
 }

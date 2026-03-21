@@ -21,13 +21,13 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
 
     if (!trimmedEmail) {
       setStatus('error');
-      setMessage('请输入邮箱地址');
+      setMessage('Enter an email address');
       return;
     }
 
     if (!validateEmail(trimmedEmail)) {
       setStatus('error');
-      setMessage('请输入有效的邮箱地址');
+      setMessage('Enter a valid email address');
       return;
     }
 
@@ -44,16 +44,16 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
 
       if (!result.success) {
         setStatus('error');
-        setMessage(result.message || '订阅失败，请稍后重试');
+        setMessage('Subscription failed. Please try again shortly.');
         return;
       }
 
       setStatus('success');
-      setMessage(result.message || '订阅成功！感谢您的关注');
+      setMessage('Subscribed. The next digest will land in your inbox.');
       setEmail('');
     } catch {
       setStatus('error');
-      setMessage('订阅失败，请稍后重试');
+      setMessage('Subscription failed. Please try again shortly.');
     }
   };
 
@@ -75,7 +75,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="输入邮箱订阅"
+            placeholder="Enter email"
             className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/50 focus:outline-none focus:border-white/40"
           />
           <button
@@ -83,7 +83,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
             disabled={status === 'loading'}
             className="px-4 py-2 bg-white text-accent-warm font-medium rounded-lg hover:bg-white/90 disabled:opacity-50 transition-colors"
           >
-            {status === 'loading' ? '...' : '订阅'}
+            {status === 'loading' ? '...' : 'Join'}
           </button>
           {status === 'success' && (
             <Check className="w-5 h-5 text-green-400" />
@@ -123,7 +123,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
             disabled={status === 'loading'}
             className="px-6 py-3 bg-accent-warm text-white font-medium rounded-xl hover:bg-accent-warm-hover disabled:opacity-50 transition-colors whitespace-nowrap"
           >
-            {status === 'loading' ? '订阅中...' : '立即订阅'}
+            {status === 'loading' ? 'Joining...' : 'Join now'}
           </button>
         </form>
         {status !== 'idle' && status !== 'loading' && (
@@ -140,8 +140,8 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
           <Mail className="w-5 h-5 text-accent-warm" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-text-primary">订阅 AI 工具周报</h3>
-          <p className="text-sm text-text-secondary">每周精选最新 AI 工具和行业动态</p>
+          <h3 className="text-lg font-semibold text-text-primary">Join the AI launch digest</h3>
+          <p className="text-sm text-text-secondary">Weekly tool launches, breakout movers, and workflow picks</p>
         </div>
       </div>
 
@@ -162,7 +162,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="输入您的邮箱地址"
+            placeholder="Enter your email"
             className="w-full pl-12 pr-4 py-3 bg-white border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm transition-colors"
           />
         </div>
@@ -175,12 +175,12 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
           {status === 'loading' ? (
             <>
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              订阅中...
+              Joining...
             </>
           ) : (
             <>
               <Mail className="w-4 h-4" />
-              立即订阅
+              Join now
             </>
           )}
         </button>
@@ -202,7 +202,7 @@ export function NewsletterForm({ variant = 'default' }: NewsletterFormProps) {
       )}
 
       <p className="mt-4 text-xs text-text-muted text-center">
-        订阅即表示您同意接收我们的邮件，您可以随时取消订阅
+        By joining, you agree to receive our emails. You can unsubscribe at any time.
       </p>
     </div>
   );

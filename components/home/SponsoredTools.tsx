@@ -7,6 +7,7 @@ import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import { getToolSponsorLabel } from '@/lib/monetization/sponsored';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName } from '@/lib/tool-display';
 
 interface SponsoredToolsProps {
   tools: Tool[];
@@ -34,7 +35,7 @@ export default function SponsoredTools({ tools }: SponsoredToolsProps) {
               <span className="text-sm font-mono text-text-muted">{'// paid_placements'}</span>
             </div>
             <p className="text-sm text-text-secondary">
-              商务合作展示位，会清晰标注为赞助推荐。
+              Paid placements stay clearly labeled and visually separate from editorial recommendations.
             </p>
           </div>
           <Link
@@ -55,19 +56,19 @@ export default function SponsoredTools({ tools }: SponsoredToolsProps) {
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex items-start gap-3 min-w-0">
                   <ToolLogo
-                    name={tool.name}
+                    name={getToolDisplayName(tool.name)}
                     icon={tool.icon}
                     size={32}
-                    alt={`${tool.name} logo`}
+                    alt={`${getToolDisplayName(tool.name)} logo`}
                     wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0"
                     imageClassName="w-8 h-8"
                     textClassName="text-xl text-accent-cyan"
                   />
                   <div className="min-w-0">
                     <h3 className="text-lg font-mono font-bold text-text-primary truncate">
-                      {tool.name}
+                      {getToolDisplayName(tool.name)}
                     </h3>
-                    <p className="text-xs font-mono text-text-muted mt-1">{tool.category}</p>
+                    <p className="text-xs font-mono text-text-muted mt-1">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                   </div>
                 </div>
                 <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-mono bg-accent-yellow/10 text-accent-yellow border border-accent-yellow/30 shrink-0">
@@ -76,12 +77,12 @@ export default function SponsoredTools({ tools }: SponsoredToolsProps) {
               </div>
 
               <p className="text-sm text-text-secondary leading-relaxed mb-4 line-clamp-3">
-                {tool.reason || tool.description}
+                {getToolCardSummary(tool)}
               </p>
 
               {tool.priceRange ? (
                 <p className="text-xs text-text-muted mb-4">
-                  价格：{tool.priceRange}
+                  Pricing: {tool.priceRange}
                 </p>
               ) : null}
 
@@ -90,14 +91,14 @@ export default function SponsoredTools({ tools }: SponsoredToolsProps) {
                   href={`/tools/${tool.id}`}
                   className="inline-flex items-center gap-1 text-xs font-mono text-accent-cyan hover:opacity-80 transition-opacity"
                 >
-                  查看详情
+                  Open review
                   <ArrowRight className="w-3 h-3" />
                 </Link>
                 <ToolPrimaryCta
                   tool={tool}
                   placement="home_sponsored_primary_cta"
-                  affiliateLabel="合作链接"
-                  websiteLabel="官网"
+                  affiliateLabel="Open partner link"
+                  websiteLabel="Visit site"
                   className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-mono rounded-lg border border-accent-yellow/40 text-accent-yellow hover:bg-accent-yellow/10 transition-colors"
                 />
               </div>

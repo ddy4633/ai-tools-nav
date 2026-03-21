@@ -37,8 +37,8 @@ export function hasToolAffiliateUrl(tool: Pick<Tool, 'affiliate_url' | 'affiliat
 
 export function getToolPrimaryCtaLabel(
   tool: Pick<Tool, 'affiliate_url' | 'affiliateUrl'>,
-  affiliateLabel = '访问合作链接',
-  websiteLabel = '访问官网'
+  affiliateLabel = 'Open partner link',
+  websiteLabel = 'Visit site'
 ): string {
   return hasToolAffiliateUrl(tool) ? affiliateLabel : websiteLabel;
 }

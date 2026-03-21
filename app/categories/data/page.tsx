@@ -3,9 +3,9 @@ import { getAllTools } from '@/lib/supabase';
 import CategoryToolsPage, { filterToolsByKeywords } from '@/components/categories/CategoryToolsPage';
 
 export const metadata: Metadata = {
-  title: '数据 AI工具 - 最好的数据人工智能工具 | AI工具导航',
-  description: '发现最好的AI数据工具，包括数据分析、可视化、BI、表格处理、智能洞察等各类人工智能数据助手。',
-  keywords: ['AI数据', '数据分析', '数据可视化', 'BI', '智能洞察'],
+  title: 'Data and Analytics AI Tools - analysis, reporting, and BI',
+  description: 'Discover AI data tools for analysis, reporting, business intelligence, and decision support.',
+  keywords: ['AI data tools', 'analytics AI', 'business intelligence AI', 'reporting AI', 'analysis tools'],
 };
 
 export const revalidate = 3600;
@@ -16,15 +16,15 @@ export default async function DataCategoryPage() {
 
   return (
     <CategoryToolsPage
-      categoryLabel="数据"
-      heading="数据 AI工具"
-      description="包括数据分析、表格处理、商业智能、智能洞察等。这些工具可以帮助你更快理解数据并产出可执行结论。"
+      categoryLabel="Data & Analytics"
+      heading="Data and analytics AI tools"
+      description="Includes analysis assistants, BI tools, reporting layers, and products built for decision support."
       tools={tools}
-      toolsFilterHref="/tools?category=AI数据"
-      toolsFilterLabel="查看全部数据工具"
+      toolsFilterHref="/tools?category=data"
+      toolsFilterLabel="View all data tools"
       emptyEmoji="📊"
-      emptyTitle="暂无数据工具数据"
-      emptyDescription="请稍后再试或查看其他分类"
+      emptyTitle="No data tools are indexed yet"
+      emptyDescription="Please try again later or explore another category."
     />
   );
 }

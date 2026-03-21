@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X, Clock, TrendingUp } from 'lucide-react';
+import { getCategoryLabel, getToolDisplayName } from '@/lib/tool-display';
 
 interface SearchSuggestion {
   id: string;
@@ -88,9 +89,9 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
       }));
       
       const trendingSuggestions: SearchSuggestion[] = [
-        { id: 'trend-1', name: 'ChatGPT', category: 'AI聊天', type: 'trending' },
-        { id: 'trend-2', name: 'Midjourney', category: 'AI图像', type: 'trending' },
-        { id: 'trend-3', name: 'Claude', category: 'AI聊天', type: 'trending' },
+        { id: 'trend-1', name: 'ChatGPT', category: 'AI Chat', type: 'trending' },
+        { id: 'trend-2', name: 'Cursor', category: 'AI Coding', type: 'trending' },
+        { id: 'trend-3', name: 'Midjourney', category: 'Image & Art', type: 'trending' },
       ];
       
       setSuggestions([...historySuggestions, ...trendingSuggestions]);
@@ -102,9 +103,13 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
     // 匹配工具名称和描述
     const matchedTools = tools
       .filter(tool => {
+        const displayName = getToolDisplayName(tool.name);
+        const categoryLabel = getCategoryLabel(tool.category);
         const nameMatch = tool.name.toLowerCase().includes(lowerQuery);
+        const displayNameMatch = displayName.toLowerCase().includes(lowerQuery);
         const descMatch = tool.description.toLowerCase().includes(lowerQuery);
         const categoryMatch = tool.category.toLowerCase().includes(lowerQuery);
+        const categoryLabelMatch = categoryLabel.toLowerCase().includes(lowerQuery);
         
         // 拼音匹配
         let pinyinMatch = false;
@@ -119,13 +124,13 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
           }
         }
         
-        return nameMatch || descMatch || categoryMatch || pinyinMatch;
+        return nameMatch || displayNameMatch || descMatch || categoryMatch || categoryLabelMatch || pinyinMatch;
       })
       .slice(0, 8)
       .map(tool => ({
         id: tool.id,
-        name: tool.name,
-        category: tool.category,
+        name: getToolDisplayName(tool.name),
+        category: getCategoryLabel(tool.category),
         type: 'tool' as const,
       }));
 
@@ -201,7 +206,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
               setShowSuggestions(true);
             }}
             onFocus={() => setShowSuggestions(true)}
-            placeholder="搜索工具名称、描述或拼音..."
+            placeholder="Search by product, workflow, category, or use case..."
             className="w-full pl-12 pr-12 py-3 bg-bg-secondary border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm transition-colors"
           />
           {query && (
@@ -225,13 +230,13 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
               {query.trim() === '' && searchHistory.length > 0 && (
                 <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary border-b border-border-subtle flex items-center gap-1">
                   <Clock className="w-3 h-3" />
-                  历史记录
+                  Recent searches
                 </div>
               )}
               {query.trim() === '' && (
                 <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary border-b border-border-subtle flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
-                  热门搜索
+                  Popular searches
                 </div>
               )}
               
@@ -260,8 +265,8 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
             </div>
           ) : query.trim() !== '' ? (
             <div className="px-4 py-8 text-center">
-              <p className="text-text-muted">未找到匹配的工具</p>
-              <p className="text-sm text-text-muted mt-1">试试其他关键词或拼音</p>
+              <p className="text-text-muted">No matching tools found</p>
+              <p className="text-sm text-text-muted mt-1">Try another keyword, workflow, or product name</p>
             </div>
           ) : null}
         </div>

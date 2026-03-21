@@ -5,17 +5,18 @@ import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
 import PageHero from '@/components/ui/PageHero';
 import ToolsClient from './ToolsClient';
 import { buildSiteUrl } from '@/lib/site';
+import { brandConfig } from '@/lib/brand';
 
 export const metadata: Metadata = {
-  title: '全部 AI 工具 - 发现最好用的 AI 工具导航',
-  description: '浏览精选 AI 工具，按分类、价格、任务场景快速筛选，找到真正适合你的 AI 工具。',
-  keywords: ['AI工具', 'AI工具导航', '人工智能工具', 'AI写作', 'AI图像', 'AI编程', 'AI聊天'],
+  title: 'AI Tools Directory - Filter launch-ready tools by workflow',
+  description: 'Browse curated AI tools, filter by workflow and pricing, and compare which products deserve the next click.',
+  keywords: ['AI tools directory', 'AI tool search', 'AI tool categories', 'AI launch feed', 'AI coding tools', 'AI writing tools', 'AI design tools'],
   alternates: {
     canonical: buildSiteUrl('/tools'),
   },
   openGraph: {
-    title: '全部 AI 工具 - 好工具',
-    description: '浏览精选 AI 工具，支持分类筛选和搜索',
+    title: `AI Tools Directory | ${brandConfig.siteName}`,
+    description: 'Browse curated AI tools with workflow-first filtering and review-ready cards.',
     url: buildSiteUrl('/tools'),
     type: 'website',
   },
@@ -46,59 +47,59 @@ export default async function ToolsPage({
       </div>
 
       <PageHero
-        eyebrow="完整工具库"
-        title="不是把名字堆满页面。"
-        highlight="而是先帮你缩小选择范围。"
-        description="这里承接首页、榜单和专题页之后的深度筛选需求。你可以按分类、价格和关键词快速收敛，也可以先看我们挑出来的优先入口，再决定要不要继续深挖。"
+        eyebrow="Full directory"
+        title="This is not a wall of names."
+        highlight="It is a decision surface that narrows the field first."
+        description="The directory takes over after the homepage, trending page, and editorial content. Filter by workflow, pricing, and search intent first, then decide which product pages deserve attention."
         metrics={[
           {
             value: `${tools.length}+`,
-            label: '当前可筛选工具',
-            hint: '保持更新，但不会为了凑数牺牲信息质量。',
+            label: 'Filterable tools',
+            hint: 'Continuously updated without turning the page into a noisy dump.',
           },
           {
             value: `${categories.length}`,
-            label: '一级任务分类',
-            hint: '按场景找工具，而不是先背模型名字。',
+            label: 'Workflow categories',
+            hint: 'Built around jobs to be done before model-brand recall.',
           },
           {
             value: `${freeCount}`,
-            label: '免费工具',
-            hint: '适合先试后买，降低第一次决策成本。',
+            label: 'Free tools',
+            hint: 'Useful when you want proof before budget.',
           },
           {
             value: `${featuredCount}/${sponsoredCount}`,
-            label: '精选 / 合作位',
-            hint: '编辑推荐与商业曝光分开展示，判断更透明。',
+            label: 'Editorial / paid',
+            hint: 'Editorial picks and paid placement stay visibly separate.',
           },
         ]}
         actions={[
-          { href: '/categories', label: '先按任务找工具', tone: 'secondary' },
-          { href: '/trending', label: '查看本周热榜', tone: 'ghost' },
-          { href: '/advertise', label: '查看合作方案', tone: 'primary' },
+          { href: '/categories', label: 'Browse by workflow', tone: 'secondary' },
+          { href: '/trending', label: 'Open trending', tone: 'ghost' },
+          { href: '/advertise', label: 'View paid plans', tone: 'primary' },
         ]}
         aside={
           <div>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <Sparkles className="h-4 w-4 text-accent-yellow" />
-              这个页面适合谁
+              Who this page helps
             </div>
             <div className="mt-5 space-y-3">
               {[
                 {
                   icon: Search,
-                  title: '先搜关键词',
-                  description: '适合你已经知道目标任务，比如“写周报”“做产品图”“读长文档”。',
+                  title: 'Search by job first',
+                  description: 'Use this when you already know the job to be done, such as writing a brief, generating assets, or reviewing a long document.',
                 },
                 {
                   icon: Layers3,
-                  title: '再缩分类和价格',
-                  description: '把选择压缩到 5-10 个以内，才值得逐个点详情页。',
+                  title: 'Then compress by category and price',
+                  description: 'The goal is to shrink the list to 5 to 10 serious candidates before you open detailed reviews.',
                 },
                 {
                   icon: Compass,
-                  title: '最后看编辑判断',
-                  description: '重点看推荐理由、替代方案和官网入口，而不是只看工具热度。',
+                  title: 'Use editor judgment at the end',
+                  description: 'Read the reasoning, alternatives, and direct entry points instead of picking on hype alone.',
                 },
               ].map((item) => (
                 <div key={item.title} className="rounded-[22px] border border-white/8 bg-black/10 p-4">

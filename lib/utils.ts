@@ -1,6 +1,7 @@
 // lib/utils.ts - 工具函数
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { formatGlobalNumber } from '@/lib/brand';
 
 /**
  * 合并 Tailwind CSS 类名
@@ -21,7 +22,7 @@ export function delay(ms: number): Promise<void> {
  * 格式化数字（添加千位分隔符）
  */
 export function formatNumber(num: number): string {
-  return num.toLocaleString('zh-CN');
+  return formatGlobalNumber(num);
 }
 
 /**

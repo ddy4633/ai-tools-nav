@@ -13,7 +13,7 @@ const allowedEvents = new Set([
 export async function POST(request: Request) {
   try {
     if (!hasValidOrigin(request)) {
-      return NextResponse.json({ success: false, message: '请求来源不受信任' }, { status: 403 });
+      return NextResponse.json({ success: false, message: 'Untrusted request origin' }, { status: 403 });
     }
 
     const rateLimit = checkRateLimit(request, {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     });
 
     if (!rateLimit.ok) {
-      return NextResponse.json({ success: false, message: '埋点请求过于频繁' }, { status: 429 });
+      return NextResponse.json({ success: false, message: 'Too many tracking requests' }, { status: 429 });
     }
 
     const body = await request.json().catch(() => null);
@@ -31,14 +31,14 @@ export async function POST(request: Request) {
     if (!body || typeof body.name !== 'string') {
       return NextResponse.json({
         success: false,
-        message: '缺少事件名称',
+        message: 'Missing event name',
       }, { status: 400 });
     }
 
     if (!allowedEvents.has(body.name)) {
       return NextResponse.json({
         success: false,
-        message: '不支持的事件类型',
+        message: 'Unsupported event type',
       }, { status: 400 });
     }
 
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     if (payload.length > 20_000) {
       return NextResponse.json({
         success: false,
-        message: '事件体过大，已拒绝',
+        message: 'Event payload too large',
       }, { status: 400 });
     }
 
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       if (!response.ok) {
         return NextResponse.json({
           success: false,
-          message: `埋点下游写入失败（${response.status}）`,
+          message: `Tracking webhook write failed (${response.status})`,
         }, { status: 502 });
       }
     } else {
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: error instanceof Error ? error.message : '埋点上报失败',
+      message: error instanceof Error ? error.message : 'Tracking request failed',
     }, { status: 500 });
   }
 }

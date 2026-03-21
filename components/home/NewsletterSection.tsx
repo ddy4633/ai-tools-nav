@@ -17,13 +17,13 @@ export default function NewsletterSection() {
     const trimmedEmail = email.trim();
     if (!trimmedEmail) {
       setStatus('error');
-      setMessage('请输入邮箱地址。');
+      setMessage('Enter an email address.');
       return;
     }
 
     if (!validateEmail(trimmedEmail)) {
       setStatus('error');
-      setMessage('请输入有效的邮箱地址。');
+      setMessage('Enter a valid email address.');
       return;
     }
 
@@ -40,16 +40,16 @@ export default function NewsletterSection() {
 
       if (!result.success) {
         setStatus('error');
-        setMessage(result.message || '订阅失败，请稍后再试。');
+        setMessage('Subscription failed. Please try again in a moment.');
         return;
       }
 
       setStatus('success');
-      setMessage(result.message || '订阅成功，后续更新会发到你的邮箱。');
+      setMessage('You are in. We will send the next launch digest to your inbox.');
       setEmail('');
     } catch {
       setStatus('error');
-      setMessage('订阅失败，请稍后再试。');
+      setMessage('Subscription failed. Please try again in a moment.');
     }
   };
 
@@ -69,23 +69,24 @@ export default function NewsletterSection() {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-secondary">
                 <Sparkles className="h-4 w-4 text-accent-yellow" />
-                首页更新周报
+                Weekly launch digest
               </div>
 
               <h2 className="mt-5 font-display text-4xl leading-tight text-text-primary md:text-5xl">
-                每周一次，把值得关注的
-                <span className="block text-gradient-cyber">AI 工具变化发给你。</span>
+                One email a week,
+                {' '}
+                <span className="block text-gradient-cyber">only when the tool movement matters.</span>
               </h2>
 
               <p className="mt-5 max-w-2xl text-base leading-8 text-text-secondary">
-                我们不会给你“资讯堆砌”，只会发真正值得你打开的更新：新工具上线、热度突然飙升、老工具能力大变动，以及编辑部本周结论。
+                No filler, no generic “AI news” dump. We send the tool launches, breakout movers, major product updates, and editorial decisions worth acting on across global markets.
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 {[
-                  '每周一封，控制信息密度',
-                  '重点写清楚为什么值得看',
-                  '随时退订，不做骚扰',
+                  'One tight email per week',
+                  'Why it matters, not just what happened',
+                  'Unsubscribe anytime',
                 ].map((item) => (
                   <div key={item} className="rounded-[20px] border border-white/8 bg-black/10 px-4 py-4 text-sm text-text-secondary">
                     {item}
@@ -97,7 +98,7 @@ export default function NewsletterSection() {
             <div className="rounded-[28px] border border-white/10 bg-black/12 p-5">
               <div className="flex items-center gap-2 text-sm text-text-secondary">
                 <Mail className="h-4 w-4 text-accent-cyan" />
-                订阅后你会收到首页策展周报
+                Get the editorial launch recap
               </div>
 
               <form onSubmit={handleSubmit} className="mt-5 space-y-4">
@@ -112,7 +113,7 @@ export default function NewsletterSection() {
                   className="hidden"
                 />
                 <label className="block">
-                  <span className="mb-2 block text-sm text-text-muted">邮箱地址</span>
+                  <span className="mb-2 block text-sm text-text-muted">Work email</span>
                   <div className="flex flex-col gap-3 rounded-[24px] border border-white/10 bg-white/6 p-3 sm:flex-row sm:items-center">
                     <input
                       type="email"
@@ -128,10 +129,10 @@ export default function NewsletterSection() {
                       className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] border border-accent-cyan/35 bg-accent-cyan/12 px-5 text-sm font-semibold text-text-primary transition hover:bg-accent-cyan/18 disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {status === 'loading' ? (
-                        '提交中'
+                        'Joining...'
                       ) : (
                         <>
-                          订阅周报
+                          Join the digest
                           <Send className="h-4 w-4" />
                         </>
                       )}

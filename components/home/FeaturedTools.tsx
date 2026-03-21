@@ -7,6 +7,7 @@ import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName } from '@/lib/tool-display';
 
 interface FeaturedToolsProps {
   tools: Tool[];
@@ -84,6 +85,7 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
   const pricingType = tool.pricing_type || tool.pricingType || 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
   const detailHref = `/tools/${tool.id}`;
+  const displayName = getToolDisplayName(tool.name);
 
   return (
     <motion.div variants={variants} className="group relative">
@@ -94,17 +96,17 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
         <Link href={detailHref} className="block flex-1">
           <div className="flex items-start gap-4 mb-4">
             <ToolLogo
-              name={tool.name}
+              name={displayName}
               icon={tool.icon}
               size={32}
-              alt={`${tool.name} logo`}
+              alt={`${displayName} logo`}
               wrapperClassName="w-12 h-12 rounded-lg bg-bg-secondary border border-border-subtle flex-shrink-0 group-hover:border-accent-cyan/50 group-hover:shadow-glow-cyan transition-all duration-300 group-hover:scale-105"
               imageClassName="w-8 h-8 transition-transform duration-300 group-hover:scale-110"
               textClassName="text-xl text-accent-cyan group-hover:text-accent-pink transition-colors"
             />
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-mono font-bold text-text-primary group-hover:text-accent-cyan transition-colors duration-300 truncate">
-                {tool.name}
+                {displayName}
               </h3>
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className={`inline-block px-2 py-0.5 text-xs font-mono rounded border transition-all duration-300 group-hover:shadow-[0_0_10px_rgba(0,245,212,0.2)] ${pricing.className}`}>
@@ -116,27 +118,27 @@ function ToolCard({ tool, variants }: { tool: Tool; variants: Variants }) {
           </div>
 
           <p className="text-text-secondary text-sm leading-relaxed mb-4 font-mono line-clamp-2 group-hover:text-text-primary transition-colors duration-300">
-            {tool.reason || tool.description}
+            {getToolCardSummary(tool)}
           </p>
         </Link>
 
         <div className="mt-auto pt-4 border-t border-border-subtle group-hover:border-accent-cyan/20 transition-colors duration-300 flex items-center justify-between gap-3">
           <span className="text-xs font-mono text-text-muted group-hover:text-text-secondary transition-colors duration-300">
-            {`// ${tool.category}`}
+            {`// ${getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}`}
           </span>
           <div className="flex items-center gap-2">
             <ToolPrimaryCta
               tool={tool}
               placement="home_featured_card_primary_cta"
-              affiliateLabel="合作链接"
-              websiteLabel="官网"
+              affiliateLabel="Open partner link"
+              websiteLabel="Visit site"
               className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono rounded-lg border border-accent-cyan/40 text-accent-cyan hover:bg-accent-cyan/10 transition-colors"
             />
             <Link
               href={detailHref}
               className="inline-flex items-center gap-1 text-xs font-mono text-accent-cyan hover:opacity-80 transition-opacity"
             >
-              [详情]
+              [OPEN]
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>

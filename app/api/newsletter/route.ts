@@ -11,7 +11,7 @@ function isValidEmail(email: string): boolean {
 export async function POST(request: Request) {
   try {
     if (!hasValidOrigin(request)) {
-      return NextResponse.json({ success: false, message: '请求来源不受信任' }, { status: 403 });
+      return NextResponse.json({ success: false, message: 'Untrusted request origin' }, { status: 403 });
     }
 
     const rateLimit = checkRateLimit(request, {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     });
 
     if (!rateLimit.ok) {
-      return NextResponse.json({ success: false, message: '订阅请求过于频繁，请稍后再试' }, { status: 429 });
+      return NextResponse.json({ success: false, message: 'Too many subscription attempts. Please try again later.' }, { status: 429 });
     }
 
     const rawBody = await request.json().catch((): unknown => ({}));
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     if (honeypot) {
       return NextResponse.json({
         success: true,
-        message: '订阅成功',
+        message: 'Subscription accepted',
         data: { provider: 'noop' },
       });
     }
@@ -52,21 +52,21 @@ export async function POST(request: Request) {
     if (!email || !isValidEmail(email)) {
       return NextResponse.json({
         success: false,
-        message: '请输入有效的邮箱地址',
+        message: 'Enter a valid email address.',
       }, { status: 400 });
     }
 
     if (email.length > 200) {
       return NextResponse.json({
         success: false,
-        message: '邮箱长度异常，请检查后重试',
+        message: 'Email address is too long. Please check it and try again.',
       }, { status: 400 });
     }
 
     if (tags.some((tag) => tag.length > 32)) {
       return NextResponse.json({
         success: false,
-        message: '标签过长，请精简后重试',
+        message: 'One or more tags are too long. Please shorten them and try again.',
       }, { status: 400 });
     }
 
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: error instanceof Error ? error.message : 'Newsletter 订阅失败',
+      message: error instanceof Error ? error.message : 'Newsletter subscription failed.',
     }, { status: 500 });
   }
 }

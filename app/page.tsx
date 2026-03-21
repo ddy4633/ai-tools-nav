@@ -4,22 +4,35 @@ import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data
 import { getSponsoredToolsFromList } from '@/lib/monetization/sponsored';
 import { getAllTools, getCategories, getTrendingTools } from '@/lib/supabase';
 import type { Category, Tool, TrendingTool } from '@/types/tool';
+import { buildSiteUrl, siteConfig } from '@/lib/site';
+import { brandConfig } from '@/lib/brand';
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'AI工具导航 - 精选好用AI工具 | 国内AI工具推荐',
-  description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等各类人工智能工具导航，助您提升工作效率。',
-  keywords: ['AI工具', 'AI工具导航', 'AI写作', 'AI绘画', 'AI编程', 'ChatGPT', 'DeepSeek', 'Midjourney', '免费AI工具', '国内AI工具'],
+  title: `${brandConfig.siteName} - Curated AI Tools for English, German, Japanese, and Korean Markets`,
+  description: siteConfig.siteDescription,
+  keywords: [
+    'AI tools directory',
+    'global AI tools',
+    'AI launch feed',
+    'AI coding tools',
+    'AI writing tools',
+    'AI video tools',
+    'AI design tools',
+    'ChatGPT alternatives',
+    'Cursor alternatives',
+    'AI tool reviews',
+  ],
   alternates: {
-    canonical: 'https://ai.poph163.com',
+    canonical: buildSiteUrl('/'),
   },
   openGraph: {
-    title: 'AI工具导航 - 精选好用AI工具',
-    description: '精选国内外好用的AI工具，包括AI写作、AI绘画、AI编程、AI视频等',
-    url: 'https://ai.poph163.com',
-    siteName: 'AI工具导航',
-    locale: 'zh_CN',
+    title: `${brandConfig.siteName} - Curated AI tools and launch-ready discovery`,
+    description: siteConfig.ogDescription,
+    url: buildSiteUrl('/'),
+    siteName: brandConfig.siteName,
+    locale: brandConfig.locale,
     type: 'website',
   },
 };

@@ -15,11 +15,12 @@ import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import { getTrendingTools } from '@/lib/supabase';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
 
 export const metadata: Metadata = {
-  title: '热门 AI工具排行 - 最受欢迎的人工智能工具 | AI工具导航',
-  description: '发现最受欢迎的AI工具排行，基于热度、用户评价、社区活跃度等多维度数据，推荐最热门的AI工具。',
-  keywords: ['热门AI工具', 'AI工具排行', '最受欢迎AI工具', 'AI工具推荐', '热门人工智能'],
+  title: 'Trending AI Tools - momentum, hype, and breakout movers',
+  description: 'Track the AI tools with breakout momentum across hype, GitHub growth, and cross-market attention.',
+  keywords: ['trending AI tools', 'AI momentum tracker', 'AI breakout products', 'AI launch feed', 'AI tool leaderboard'],
 };
 
 export const revalidate = 3600;
@@ -33,22 +34,22 @@ const tierStyles: Record<
   }
 > = {
   '🔥 BREAKING': {
-    label: '爆发期',
+    label: 'Breakout',
     badge: 'border-[#f09a79]/30 bg-[#f09a79]/12 text-[#ffd4c1]',
     ring: 'from-[#f09a79]/18 via-transparent to-transparent',
   },
   '⚡ TRENDING': {
-    label: '热度上升',
+    label: 'Rising fast',
     badge: 'border-[#f0c979]/30 bg-[#f0c979]/12 text-[#f5ddb1]',
     ring: 'from-[#f0c979]/16 via-transparent to-transparent',
   },
   '🚀 NEW': {
-    label: '新品观察',
+    label: 'New watch',
     badge: 'border-[#7de2d4]/30 bg-[#7de2d4]/12 text-[#a6f1e7]',
     ring: 'from-[#7de2d4]/16 via-transparent to-transparent',
   },
   '💡 WATCH': {
-    label: '持续观察',
+    label: 'Watch list',
     badge: 'border-[#8ea2ff]/28 bg-[#8ea2ff]/12 text-[#d8defe]',
     ring: 'from-[#8ea2ff]/16 via-transparent to-transparent',
   },
@@ -80,42 +81,43 @@ export default async function TrendingPage() {
           <nav className="flex items-center gap-2 text-sm text-text-muted">
             <Link href="/" className="inline-flex items-center gap-1 transition hover:text-text-primary">
               <Home className="h-4 w-4" />
-              首页
+              Home
             </Link>
             <span>/</span>
-            <span className="text-text-primary">热门榜单</span>
+            <span className="text-text-primary">Trending</span>
           </nav>
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_26rem]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary backdrop-blur">
                 <Flame className="h-4 w-4 text-accent-pink" />
-                热门榜单
-                <span className="text-text-muted">每小时刷新热度</span>
+                Trending board
+                <span className="text-text-muted">Momentum refreshed hourly</span>
               </div>
 
               <h1 className="mt-6 font-display text-5xl leading-[1.04] tracking-tight text-text-primary md:text-6xl">
-                热门工具不是
-                <span className="block text-gradient-cyber">名字越响越值得用。</span>
+                Hype alone is not the signal.
+                {' '}
+                <span className="block text-gradient-cyber">Momentum plus fit is what matters.</span>
               </h1>
 
               <p className="mt-6 max-w-2xl text-base leading-8 text-text-secondary md:text-lg">
-                这里不只看讨论量，还把 GitHub 增长、传播系数和产品状态放在一起。你看到的不只是“大家在聊什么”，也是“哪些工具真的在往前冲”。
+                This board does not stop at discussion volume. It layers GitHub growth, viral lift, and product status so you can see which tools are actually moving, not just getting mentioned.
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                <MetricCard value={`${tools.length}`} label="当前入榜工具" hint="按热度分数排序，不混入首页普通推荐。" />
-                <MetricCard value={`${averageHype}`} label="平均热度分" hint="越高代表近期增长越明显。" />
-                <MetricCard value={formatCompactNumber(totalStars)} label="GitHub 总 Stars" hint="只统计榜单内可获取的仓库数据。" />
+                <MetricCard value={`${tools.length}`} label="Tracked movers" hint="Ranked by hype score, independent from homepage editorial picks." />
+                <MetricCard value={`${averageHype}`} label="Average hype score" hint="Higher means stronger recent momentum." />
+                <MetricCard value={formatCompactNumber(totalStars)} label="GitHub stars" hint="Counts visible repository data from tools on this board." />
               </div>
 
               <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-text-muted">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-3 py-1.5">
                   <TrendingUp className="h-4 w-4 text-accent-yellow" />
-                  {explodingCount} 款工具传播系数超过 2.0
+                  {explodingCount} tools are above a 2.0 viral coefficient
                 </span>
                 <Link href="/tools" className="inline-flex items-center gap-2 text-text-secondary transition hover:text-text-primary">
-                  去完整工具库继续筛选
+                  Keep filtering in the full directory
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -124,7 +126,7 @@ export default async function TrendingPage() {
             <aside className="rounded-[30px] border border-white/10 bg-white/5 p-5 backdrop-blur">
               <div className="flex items-center gap-2 text-sm text-text-secondary">
                 <Compass className="h-4 w-4 text-accent-cyan" />
-                榜单怎么看
+                How to read this board
               </div>
 
               <div className="mt-5 space-y-3">
@@ -151,14 +153,14 @@ export default async function TrendingPage() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Visual Radar</p>
-                <h2 className="mt-2 text-3xl font-semibold text-text-primary">大众用户最先看的图像热度图</h2>
+                <h2 className="mt-2 text-3xl font-semibold text-text-primary">The icon-first radar mainstream users scan first</h2>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">
-                  不少用户先凭图标识别工具，再决定是否点开详情。这一块直接把热榜工具做成图像矩阵，降低认知门槛。
+                  Many people recognize products by logo before they remember positioning. This matrix lowers the cost of the first click.
                 </p>
               </div>
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary">
                 <ImageIcon className="h-4 w-4 text-accent-cyan" />
-                {visualGridTools.length} 个热榜图标
+                {visualGridTools.length} trending icons
               </span>
             </div>
 
@@ -170,16 +172,16 @@ export default async function TrendingPage() {
                   className="group rounded-[22px] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.07]"
                 >
                   <ToolLogo
-                    name={tool.name}
+                    name={getToolDisplayName(tool.name)}
                     icon={tool.icon}
                     size={38}
-                    alt={`${tool.name} logo`}
+                    alt={`${getToolDisplayName(tool.name)} logo`}
                     wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/12"
                     imageClassName="h-10 w-10"
                     textClassName="text-xl text-accent-cyan"
                   />
-                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{tool.name}</p>
-                  <p className="mt-1 text-xs text-text-muted">热度分 {tool.hype_score.toFixed(0)}</p>
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                  <p className="mt-1 text-xs text-text-muted">Hype {tool.hype_score.toFixed(0)}</p>
                 </Link>
               ))}
             </div>
@@ -193,11 +195,11 @@ export default async function TrendingPage() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Top 3</p>
-                <h2 className="mt-2 text-3xl font-semibold text-text-primary">本轮最值得先看的三款</h2>
+                <h2 className="mt-2 text-3xl font-semibold text-text-primary">The three products worth checking first</h2>
               </div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary">
                 <Sparkles className="h-4 w-4 text-accent-yellow" />
-                图标已补齐，支持缺图自动回退
+                Icon coverage includes graceful fallback handling
               </div>
             </div>
 
@@ -205,6 +207,7 @@ export default async function TrendingPage() {
               {heroTools.map((tool, index) => {
                 const style = tierStyles[tool.tier] ?? tierStyles['💡 WATCH'];
                 const detailHref = `/tools/${tool.id}`;
+                const displayName = getToolDisplayName(tool.name);
 
                 return (
                   <article
@@ -214,24 +217,24 @@ export default async function TrendingPage() {
                     <div className={`absolute inset-0 bg-gradient-to-br ${style.ring}`} />
                     <div className="relative flex h-full flex-col">
                       <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-4">
-                          <ToolLogo
-                            name={tool.name}
+                      <div className="flex items-start gap-4">
+                        <ToolLogo
+                            name={displayName}
                             icon={tool.icon}
                             size={34}
-                            alt={`${tool.name} logo`}
+                            alt={`${displayName} logo`}
                             wrapperClassName="h-14 w-14 rounded-[22px] border border-white/10 bg-black/12"
                             imageClassName="h-9 w-9"
                             textClassName="text-xl text-accent-cyan"
                           />
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
-                              <h3 className="truncate text-xl font-semibold text-text-primary">{tool.name}</h3>
+                              <h3 className="truncate text-xl font-semibold text-text-primary">{displayName}</h3>
                               <span className={`rounded-full border px-2.5 py-1 text-xs ${style.badge}`}>
                                 {style.label}
                               </span>
                             </div>
-                            <p className="mt-2 text-sm text-text-muted">{tool.category}</p>
+                            <p className="mt-2 text-sm text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                           </div>
                         </div>
 
@@ -241,18 +244,18 @@ export default async function TrendingPage() {
                       </div>
 
                       <p className="mt-5 text-sm leading-8 text-text-secondary">
-                        {tool.one_liner || tool.description}
+                        {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                       </p>
 
                       <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                        <StatPill label="热度分" value={`${tool.hype_score.toFixed(0)}`} />
-                        <StatPill label="传播系数" value={`${tool.viral_coefficient.toFixed(1)}x`} />
+                        <StatPill label="Hype" value={`${tool.hype_score.toFixed(0)}`} />
+                        <StatPill label="Viral" value={`${tool.viral_coefficient.toFixed(1)}x`} />
                         <StatPill
                           label="GitHub"
                           value={
                             tool.metrics?.github?.stars
                               ? formatCompactNumber(tool.metrics.github.stars)
-                              : '无公开数据'
+                              : 'No public data'
                           }
                         />
                       </div>
@@ -274,15 +277,15 @@ export default async function TrendingPage() {
                         <ToolPrimaryCta
                           tool={tool}
                           placement="trending_page_top_primary_cta"
-                          affiliateLabel="合作链接"
-                          websiteLabel="访问官网"
+                          affiliateLabel="Open partner link"
+                          websiteLabel="Visit site"
                           className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                         />
                         <Link
                           href={detailHref}
                           className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                         >
-                          查看详情
+                          Open review
                           <ArrowRight className="h-4 w-4" />
                         </Link>
                       </div>
@@ -300,10 +303,10 @@ export default async function TrendingPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-text-muted">Full Ranking</p>
-              <h2 className="mt-2 text-3xl font-semibold text-text-primary">完整热门榜单</h2>
+              <h2 className="mt-2 text-3xl font-semibold text-text-primary">Full trending board</h2>
             </div>
             <p className="max-w-xl text-sm leading-7 text-text-secondary">
-              下面这部分更适合做横向比较，所以我把图标、热度、仓库表现和行动按钮放在同一行，避免你来回跳页面找信息。
+              This section is built for side-by-side scanning. Hype, repo signal, and action buttons stay in one lane so comparison stays fast.
             </p>
           </div>
 
@@ -313,6 +316,7 @@ export default async function TrendingPage() {
                 const style = tierStyles[tool.tier] ?? tierStyles['💡 WATCH'];
                 const detailHref = `/tools/${tool.id}`;
                 const github = tool.metrics?.github;
+                const displayName = getToolDisplayName(tool.name);
 
                 return (
                   <article
@@ -326,10 +330,10 @@ export default async function TrendingPage() {
                         </div>
 
                         <ToolLogo
-                          name={tool.name}
+                          name={displayName}
                           icon={tool.icon}
                           size={30}
-                          alt={`${tool.name} logo`}
+                          alt={`${displayName} logo`}
                           wrapperClassName="h-12 w-12 rounded-2xl border border-white/10 bg-black/12"
                           imageClassName="h-8 w-8"
                           textClassName="text-lg text-accent-cyan"
@@ -338,18 +342,18 @@ export default async function TrendingPage() {
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <Link href={detailHref} className="transition hover:text-accent-cyan">
-                              <h3 className="truncate text-lg font-semibold text-text-primary">{tool.name}</h3>
+                              <h3 className="truncate text-lg font-semibold text-text-primary">{displayName}</h3>
                             </Link>
                             <span className={`rounded-full border px-2.5 py-1 text-xs ${style.badge}`}>
                               {style.label}
                             </span>
                             <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1 text-xs text-text-muted">
-                              {tool.category}
+                              {getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}
                             </span>
                           </div>
 
                           <p className="mt-3 text-sm leading-7 text-text-secondary">
-                            {tool.one_liner || tool.description}
+                            {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                           </p>
 
                           {tool.install_methods?.length ? (
@@ -370,7 +374,7 @@ export default async function TrendingPage() {
                       <div className="grid gap-3 sm:grid-cols-2 lg:w-[20rem] lg:grid-cols-1">
                         <div className="rounded-[22px] border border-white/8 bg-black/10 px-4 py-4">
                           <div className="flex items-center justify-between gap-3 text-sm">
-                            <span className="text-text-muted">热度分</span>
+                            <span className="text-text-muted">Hype</span>
                             <span className="font-semibold text-text-primary">{tool.hype_score.toFixed(0)}</span>
                           </div>
                           <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/8">
@@ -380,7 +384,7 @@ export default async function TrendingPage() {
                             />
                           </div>
                           <p className="mt-3 text-xs text-text-muted">
-                            传播系数 {tool.viral_coefficient.toFixed(1)}x
+                            Viral lift {tool.viral_coefficient.toFixed(1)}x
                           </p>
                         </div>
 
@@ -413,7 +417,7 @@ export default async function TrendingPage() {
                             ) : (
                               <span className="inline-flex items-center gap-1 text-text-muted">
                                 <Github className="h-4 w-4" />
-                                无公开仓库
+                                No public repo
                               </span>
                             )}
 
@@ -433,15 +437,15 @@ export default async function TrendingPage() {
                             <ToolPrimaryCta
                               tool={tool}
                               placement="trending_page_primary_cta"
-                              affiliateLabel="合作链接"
-                              websiteLabel="访问官网"
+                              affiliateLabel="Open partner link"
+                              websiteLabel="Visit site"
                               className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                             />
                             <Link
                               href={detailHref}
                               className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                             >
-                              查看详情
+                              Open review
                               <ArrowRight className="h-4 w-4" />
                             </Link>
                           </div>
@@ -457,13 +461,13 @@ export default async function TrendingPage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-black/10">
                 <TrendingUp className="h-7 w-7 text-accent-cyan" />
               </div>
-              <p className="mt-5 text-lg font-semibold text-text-primary">暂时还没有热榜数据</p>
-              <p className="mt-2 text-sm text-text-secondary">你可以先去完整工具库继续浏览，我们稍后会补齐热度数据。</p>
+              <p className="mt-5 text-lg font-semibold text-text-primary">No trending data is available yet</p>
+              <p className="mt-2 text-sm text-text-secondary">Open the full directory first. We will backfill momentum data shortly.</p>
               <Link
                 href="/tools"
                 className="mt-6 inline-flex items-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-5 py-2.5 text-sm text-text-primary transition hover:bg-accent-cyan/18"
               >
-                浏览全部工具
+                Browse the full directory
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -494,8 +498,8 @@ function StatPill({ label, value }: { label: string; value: string }) {
 }
 
 function formatCompactNumber(value: number) {
-  if (value >= 10000) {
-    return `${(value / 10000).toFixed(1)}w`;
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(1)}m`;
   }
   if (value >= 1000) {
     return `${(value / 1000).toFixed(1)}k`;
@@ -506,12 +510,12 @@ function formatCompactNumber(value: number) {
 function getTierExplanation(tier: string) {
   switch (tier) {
     case '🔥 BREAKING':
-      return '最近增长很猛，讨论度和传播速度都处在高位，适合第一时间关注。';
+      return 'Growth is accelerating fast and the discussion curve is steep. These are the tools worth checking immediately.';
     case '⚡ TRENDING':
-      return '整体热度持续上升，已经跨过“只是有人提起”的阶段。';
+      return 'Momentum is still climbing and the product has moved beyond “people just started mentioning it.”';
     case '🚀 NEW':
-      return '属于新进入视野的产品，数据还在形成，适合提前观察。';
+      return 'A newer arrival with early data forming. Good for early observation before the category settles.';
     default:
-      return '不是短期爆发，但在某个领域里保持稳定可见度。';
+      return 'Not a short-term explosion, but a tool with steady visibility inside its niche.';
   }
 }

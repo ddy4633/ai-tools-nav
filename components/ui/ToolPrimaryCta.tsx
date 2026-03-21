@@ -24,8 +24,8 @@ interface ToolPrimaryCtaProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
 export default function ToolPrimaryCta({
   tool,
   placement,
-  affiliateLabel = '访问合作链接',
-  websiteLabel = '访问官网',
+  affiliateLabel = 'Open partner link',
+  websiteLabel = 'Visit site',
   showIcon = true,
   iconClassName = 'w-4 h-4',
   target,

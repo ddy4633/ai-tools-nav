@@ -7,6 +7,7 @@ import { toolsData } from '@/lib/content/tools-data';
 import { useRouter } from 'next/navigation';
 import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
+import { getCategoryLabel, getToolDisplayName } from '@/lib/tool-display';
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,9 +20,11 @@ export function CommandPalette() {
     if (!query.trim()) return toolsData.slice(0, 8);
     const lowerQuery = query.toLowerCase();
     return toolsData.filter(tool =>
+      getToolDisplayName(tool.name).toLowerCase().includes(lowerQuery) ||
       tool.name.toLowerCase().includes(lowerQuery) ||
       tool.description.toLowerCase().includes(lowerQuery) ||
-      tool.category.toLowerCase().includes(lowerQuery)
+      tool.category.toLowerCase().includes(lowerQuery) ||
+      getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug).toLowerCase().includes(lowerQuery)
     ).slice(0, 8);
   }, [query]);
 
@@ -73,7 +76,7 @@ export function CommandPalette() {
         className="hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary"
       >
         <Search className="w-4 h-4" />
-        <span className="text-sm">搜索工具</span>
+        <span className="text-sm">Search tools</span>
         <kbd className="ml-1 rounded-full border border-white/10 bg-black/10 px-2 py-0.5 text-[11px] text-text-muted">
           ⌘K
         </kbd>
@@ -107,7 +110,7 @@ export function CommandPalette() {
                   <Search className="w-5 h-5 text-text-muted mr-4" />
                   <input
                     type="text"
-                    placeholder="搜索工具名称、描述、分类或场景..."
+                    placeholder="Search by product, workflow, category, or use case..."
                     className="flex-1 bg-transparent text-text-primary text-lg outline-none placeholder:text-text-muted"
                     value={query}
                     onChange={e => {
@@ -129,7 +132,7 @@ export function CommandPalette() {
                   {filteredTools.length > 0 ? (
                     <div className="px-2">
                       <div className="px-4 py-2 text-xs font-mono text-text-muted">
-                        {query.trim() ? `找到 ${filteredTools.length} 个结果` : '热门工具'}
+                        {query.trim() ? `${filteredTools.length} results` : 'Popular picks'}
                       </div>
                       {filteredTools.map((tool, index) => (
                         <motion.button
@@ -144,11 +147,17 @@ export function CommandPalette() {
                           whileTap={{ scale: 0.98 }}
                         >
                           {/* 工具图标 */}
+                          {(() => {
+                            const displayName = getToolDisplayName(tool.name);
+                            const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
+
+                            return (
+                              <>
                           <ToolLogo
-                            name={tool.name}
+                            name={displayName}
                             icon={tool.icon}
                             size={24}
-                            alt={`${tool.name} logo`}
+                            alt={`${displayName} logo`}
                             wrapperClassName="h-10 w-10 rounded-xl border border-white/10 bg-white/5"
                             imageClassName="h-6 w-6"
                             textClassName="text-lg text-accent-cyan"
@@ -158,16 +167,19 @@ export function CommandPalette() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-text-primary truncate">
-                                {tool.name}
+                                {displayName}
                               </span>
                               <span className="rounded-full border border-white/10 bg-black/10 px-2 py-0.5 text-xs text-text-secondary">
-                                {tool.category}
+                                {categoryLabel}
                               </span>
                             </div>
                             <p className="text-sm text-text-secondary truncate mt-0.5">
                               {tool.description}
                             </p>
                           </div>
+                              </>
+                            );
+                          })()}
 
                           {/* 箭头指示 */}
                           {index === selectedIndex && (
@@ -181,8 +193,8 @@ export function CommandPalette() {
                       <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-secondary flex items-center justify-center">
                         <Search className="w-8 h-8 text-text-muted" />
                       </div>
-                      <p className="text-text-secondary">未找到相关工具</p>
-                      <p className="text-sm text-text-muted mt-1">尝试其他关键词</p>
+                      <p className="text-text-secondary">No matching tools found</p>
+                      <p className="text-sm text-text-muted mt-1">Try another keyword or product name.</p>
                     </div>
                   )}
                 </div>
@@ -192,14 +204,14 @@ export function CommandPalette() {
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <kbd className="rounded border border-white/10 bg-bg-card px-1.5 py-0.5">↑↓</kbd>
-                      <span>导航</span>
+                      <span>Navigate</span>
                     </span>
                     <span className="flex items-center gap-1">
                       <kbd className="rounded border border-white/10 bg-bg-card px-1.5 py-0.5">↵</kbd>
-                      <span>选择</span>
+                      <span>Open</span>
                     </span>
                   </div>
-                  <span className="font-mono">AI工具导航</span>
+                  <span className="font-mono">AI Tool Atlas</span>
                 </div>
               </div>
             </motion.div>

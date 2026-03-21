@@ -17,18 +17,18 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
   const nextSteps = [
     {
       href: '/tools',
-      title: '继续看工具库',
-      desc: '按任务和分类继续筛选，不中断你的决策流程。',
+      title: 'Open the directory',
+      desc: 'Keep filtering by workflow and category without breaking the decision flow.',
     },
     {
       href: '/blog',
-      title: '去专题页获取判断',
-      desc: '从推荐、对比和教程页继续，降低恢复成本。',
+      title: 'Read editorial guidance',
+      desc: 'Continue through rankings, comparisons, and guides to recover quickly.',
     },
     {
       href: '/submit',
-      title: '提交你的产品',
-      desc: '如果你是产品方，仍可直接进入提交和合作入口。',
+      title: 'Submit your product',
+      desc: 'If you are a product team, the submission and commercial paths are still available.',
     },
   ];
 
@@ -41,14 +41,15 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm text-text-secondary">
                 <span className="h-2 w-2 rounded-full bg-accent-yellow" />
-                页面加载异常
+                Loading error
               </div>
               <h1 className="mt-6 font-display text-5xl leading-[1.04] tracking-tight text-text-primary md:text-6xl">
-                页面暂时出了点问题。
-                <span className="block text-gradient-cyber">流程别中断，我们给你可恢复入口。</span>
+                This page hit a temporary problem.
+                {' '}
+                <span className="block text-gradient-cyber">Your workflow does not have to stop here.</span>
               </h1>
               <p className="mt-6 max-w-3xl text-base leading-8 text-text-secondary md:text-lg">
-                这通常是暂时性异常。你可以先重试当前页面，或者走下方的恢复入口继续浏览。
+                This is usually temporary. Retry the current page or use the recovery paths below to keep moving.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
@@ -56,14 +57,14 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-accent-cyan/35 bg-accent-cyan/12 px-4 py-2 text-sm text-text-primary transition hover:bg-accent-cyan/18"
                 >
                   <RefreshCw className="h-4 w-4" />
-                  重试当前页面
+                  Retry this page
                 </button>
                 <TrackedLink
                   href="/"
                   trackingPayload={{ placement: 'error_hero_home', source: 'error_boundary' }}
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-text-secondary transition hover:text-text-primary"
                 >
-                  回到首页
+                  Return home
                   <ArrowRight className="h-4 w-4" />
                 </TrackedLink>
               </div>
@@ -72,7 +73,7 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
             <aside className="rounded-[30px] border border-white/10 bg-white/5 p-5 backdrop-blur">
               <div className="flex items-center gap-2 text-sm text-text-secondary">
                 <AlertTriangle className="h-4 w-4 text-accent-pink" />
-                错误信息
+                Error details
               </div>
               <div className="mt-4 rounded-[22px] border border-white/8 bg-black/10 p-4 text-left">
                 <p className="text-sm leading-7 text-text-secondary">{error.message || 'Unknown error'}</p>
@@ -81,7 +82,7 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
                 ) : null}
               </div>
               <p className="mt-3 text-xs leading-6 text-text-muted">
-                记录这个错误后，可帮助我们后续定位和修复。
+                Saving this error detail helps us investigate and fix the issue later.
               </p>
             </aside>
           </div>
@@ -100,7 +101,7 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
               <h2 className="text-xl font-semibold text-text-primary">{item.title}</h2>
               <p className="mt-3 text-sm leading-7 text-text-secondary">{item.desc}</p>
               <span className="mt-5 inline-flex items-center gap-2 text-sm text-text-primary">
-                进入
+                Open
                 <ArrowRight className="h-4 w-4 text-accent-cyan" />
               </span>
             </TrackedLink>

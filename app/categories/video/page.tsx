@@ -3,9 +3,9 @@ import { getAllTools } from '@/lib/supabase';
 import CategoryToolsPage, { filterToolsByKeywords } from '@/components/categories/CategoryToolsPage';
 
 export const metadata: Metadata = {
-  title: '视频 AI工具 - 最好的视频人工智能工具 | AI工具导航',
-  description: '发现最好的AI视频工具，包括视频生成、剪辑、口播、数字人、字幕处理等各类人工智能视频助手。',
-  keywords: ['AI视频', '视频生成', 'AI剪辑', '数字人', '字幕处理'],
+  title: 'AI Video Tools - generation, editing, and motion workflows',
+  description: 'Discover AI video tools for generation, editing, animation, and motion-heavy content workflows.',
+  keywords: ['AI video tools', 'video generation AI', 'animation AI', 'motion graphics AI', 'video editing AI'],
 };
 
 export const revalidate = 3600;
@@ -16,15 +16,15 @@ export default async function VideoCategoryPage() {
 
   return (
     <CategoryToolsPage
-      categoryLabel="视频"
-      heading="视频 AI工具"
-      description="包括视频生成、剪辑、字幕处理、口播和数字人等。这些工具适合做短视频、品牌宣传和内容生产提效。"
+      categoryLabel="Video Generation"
+      heading="AI video tools"
+      description="Includes generators, editors, animation tools, and products for motion-driven content creation."
       tools={tools}
-      toolsFilterHref="/tools?category=AI视频"
-      toolsFilterLabel="查看全部视频工具"
+      toolsFilterHref="/tools?category=video"
+      toolsFilterLabel="View all AI video tools"
       emptyEmoji="🎬"
-      emptyTitle="暂无视频工具数据"
-      emptyDescription="请稍后再试或查看其他分类"
+      emptyTitle="No AI video tools are indexed yet"
+      emptyDescription="Please try again later or explore another category."
     />
   );
 }
