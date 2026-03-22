@@ -18,6 +18,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import NewsletterSection from '@/components/home/NewsletterSection';
+import LocalizedToolName from '@/components/ui/LocalizedToolName';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import type { Category, EditorPick, Tool, TrendingTool } from '@/types/tool';
@@ -320,7 +321,9 @@ export default function HomeShowcase({
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-2xl font-semibold text-text-primary">{spotlightDisplayName}</h2>
+                          <h2 className="text-2xl font-semibold text-text-primary">
+                            <LocalizedToolName name={spotlightTool.name} mode="surface" />
+                          </h2>
                           <span
                             className={`rounded-full border px-2.5 py-1 text-xs ${
                               pricingTone[spotlightTool.pricing_type || spotlightTool.pricingType || 'freemium']
@@ -414,7 +417,9 @@ export default function HomeShowcase({
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</span>
+                          <span className="truncate text-sm font-semibold text-text-primary">
+                            <LocalizedToolName name={tool.name} mode="surface" />
+                          </span>
                           <span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-text-muted">
                             {getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}
                           </span>
@@ -472,7 +477,9 @@ export default function HomeShowcase({
                     textClassName="text-lg text-accent-cyan"
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
+                    <p className="truncate text-sm font-semibold text-text-primary">
+                      <LocalizedToolName name={tool.name} mode="surface" />
+                    </p>
                     <p className="truncate text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                   </div>
                 </Link>
@@ -537,7 +544,7 @@ export default function HomeShowcase({
                             key={tool.id}
                             className="rounded-full border border-white/12 bg-black/12 px-3 py-1 text-xs text-text-secondary"
                           >
-                            {getToolPrimaryName(tool.name)}
+                            <LocalizedToolName name={tool.name} mode="surface" />
                           </span>
                         ))}
                       </div>
@@ -583,7 +590,9 @@ export default function HomeShowcase({
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-lg font-semibold text-text-primary">{getToolPrimaryName(pick.tool.name)}</h3>
+                          <h3 className="text-lg font-semibold text-text-primary">
+                            <LocalizedToolName name={pick.tool.name} mode="surface" />
+                          </h3>
                           <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs text-text-muted">
                             Editor pick #{index + 2}
                           </span>
@@ -643,7 +652,9 @@ export default function HomeShowcase({
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
+                          <p className="truncate text-sm font-semibold text-text-primary">
+                            <LocalizedToolName name={tool.name} mode="surface" />
+                          </p>
                           <p className="mt-1 text-sm leading-7 text-text-secondary">
                             {getToolCardSummary(tool)}
                           </p>
@@ -699,7 +710,9 @@ export default function HomeShowcase({
                     imageClassName="h-10 w-10"
                     textClassName="text-xl text-accent-cyan"
                   />
-                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">
+                    <LocalizedToolName name={tool.name} mode="surface" />
+                  </p>
                   <p className="mt-1 truncate text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                 </Link>
               ))}
@@ -746,7 +759,9 @@ export default function HomeShowcase({
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="truncate text-xl font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
+                          <h3 className="truncate text-xl font-semibold text-text-primary">
+                            <LocalizedToolName name={tool.name} mode="surface" />
+                          </h3>
                           <span
                             className={`rounded-full border px-2.5 py-1 text-xs ${
                               pricingTone[tool.pricing_type || tool.pricingType || 'freemium']

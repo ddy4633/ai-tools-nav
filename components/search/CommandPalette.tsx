@@ -5,15 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ArrowRight } from 'lucide-react';
 import { toolsData } from '@/lib/content/tools-data';
 import { useRouter } from 'next/navigation';
+import { useUiLanguage } from '@/components/providers/LanguageProvider';
 import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
-import { getCategoryLabel, getToolDisplayName, getToolPrimaryName } from '@/lib/tool-display';
+import { getCategoryLabel, getToolDisplayName, getToolNameForLanguage } from '@/lib/tool-display';
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
+  const { language, copy } = useUiLanguage();
 
   // 过滤工具
   const filteredTools = useMemo(() => {
@@ -76,7 +78,7 @@ export function CommandPalette() {
         className="hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary"
       >
         <Search className="w-4 h-4" />
-        <span className="text-sm">Search tools</span>
+        <span className="text-sm">{copy.search.trigger}</span>
         <kbd className="ml-1 rounded-full border border-white/10 bg-black/10 px-2 py-0.5 text-[11px] text-text-muted">
           ⌘K
         </kbd>
@@ -110,7 +112,7 @@ export function CommandPalette() {
                   <Search className="w-5 h-5 text-text-muted mr-4" />
                   <input
                     type="text"
-                    placeholder="Search by product, workflow, category, or use case..."
+                    placeholder={copy.search.placeholder}
                     className="flex-1 bg-transparent text-text-primary text-lg outline-none placeholder:text-text-muted"
                     value={query}
                     onChange={e => {
@@ -132,7 +134,7 @@ export function CommandPalette() {
                   {filteredTools.length > 0 ? (
                     <div className="px-2">
                       <div className="px-4 py-2 text-xs font-mono text-text-muted">
-                        {query.trim() ? `${filteredTools.length} results` : 'Popular picks'}
+                        {copy.search.results(filteredTools.length, Boolean(query.trim()))}
                       </div>
                       {filteredTools.map((tool, index) => (
                         <motion.button
@@ -148,7 +150,7 @@ export function CommandPalette() {
                         >
                           {/* 工具图标 */}
                           {(() => {
-                            const displayName = getToolPrimaryName(tool.name);
+                            const displayName = getToolNameForLanguage(tool.name, language, 'surface');
                             const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
 
                             return (
@@ -193,8 +195,8 @@ export function CommandPalette() {
                       <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-secondary flex items-center justify-center">
                         <Search className="w-8 h-8 text-text-muted" />
                       </div>
-                      <p className="text-text-secondary">No matching tools found</p>
-                      <p className="text-sm text-text-muted mt-1">Try another keyword or product name.</p>
+                      <p className="text-text-secondary">{copy.search.noMatchingTools}</p>
+                      <p className="text-sm text-text-muted mt-1">{copy.search.tryAnotherKeyword}</p>
                     </div>
                   )}
                 </div>
@@ -204,11 +206,11 @@ export function CommandPalette() {
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <kbd className="rounded border border-white/10 bg-bg-card px-1.5 py-0.5">↑↓</kbd>
-                      <span>Navigate</span>
+                      <span>{copy.search.navigate}</span>
                     </span>
                     <span className="flex items-center gap-1">
                       <kbd className="rounded border border-white/10 bg-bg-card px-1.5 py-0.5">↵</kbd>
-                      <span>Open</span>
+                      <span>{copy.search.open}</span>
                     </span>
                   </div>
                   <span className="font-mono">AI Tool Atlas</span>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Home, Sparkles } from 'lucide-react';
 import type { Tool } from '@/types/tool';
+import LocalizedToolName from '@/components/ui/LocalizedToolName';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
@@ -135,7 +136,9 @@ export default function CategoryToolsPage({
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="truncate text-lg font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
+                        <h3 className="truncate text-lg font-semibold text-text-primary">
+                          <LocalizedToolName name={tool.name} mode="surface" />
+                        </h3>
                         <span
                           className={`rounded-full border px-2.5 py-1 text-xs ${
                             pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].className
@@ -209,7 +212,9 @@ export default function CategoryToolsPage({
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <Link href={detailHref} className="transition hover:text-accent-cyan">
-                            <h3 className="truncate text-lg font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
+                            <h3 className="truncate text-lg font-semibold text-text-primary">
+                              <LocalizedToolName name={tool.name} mode="surface" />
+                            </h3>
                           </Link>
                           <span className={`rounded-full border px-2.5 py-1 text-xs ${pricing.className}`}>
                             {pricing.text}

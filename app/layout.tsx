@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from 'next';
 import { JetBrains_Mono, Inter } from 'next/font/google';
+import { cookies } from 'next/headers';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { LanguageProvider } from '@/components/providers/LanguageProvider';
 import PageTransition from '@/components/transitions/PageTransition';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { buildSiteUrl, siteConfig } from '@/lib/site';
 import { brandConfig, globalAudienceBlurb } from '@/lib/brand';
+import { getUiLanguageMeta, resolveUiLanguage, UI_LANGUAGE_COOKIE_KEY } from '@/lib/ui-language';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -110,11 +113,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const initialLanguage = resolveUiLanguage(cookieStore.get(UI_LANGUAGE_COOKIE_KEY)?.value);
+  const languageMeta = getUiLanguageMeta(initialLanguage);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -134,7 +140,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang={brandConfig.htmlLang} className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang={languageMeta.htmlLang} className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Resource Hints - DNS Prefetch and Preconnect */}
         {supabaseUrl ? <link rel="dns-prefetch" href={supabaseUrl} /> : null}
@@ -150,15 +156,17 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-bg-primary text-text-primary font-sans antialiased">
-        <ScrollProgress />
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <PageTransition>
-            <main className="flex-1">{children}</main>
-          </PageTransition>
-          <Footer />
-        </div>
-        <BackToTop />
+        <LanguageProvider initialLanguage={initialLanguage}>
+          <ScrollProgress />
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <PageTransition>
+              <main className="flex-1">{children}</main>
+            </PageTransition>
+            <Footer />
+          </div>
+          <BackToTop />
+        </LanguageProvider>
       </body>
     </html>
   );

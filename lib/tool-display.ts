@@ -1,4 +1,5 @@
 import type { Tool } from '@/types/tool';
+import type { UiLanguage } from '@/lib/ui-language';
 
 type CategoryMeta = {
   label: string;
@@ -216,6 +217,22 @@ export function getToolDisplayName(name?: string | null) {
 
 export function getToolPrimaryName(name?: string | null) {
   return getToolDisplayName(name).replace(/\s*\([^)]*[\u3400-\u9fff][^)]*\)\s*$/, '').trim();
+}
+
+export function getToolNameForLanguage(
+  name: string | null | undefined,
+  language: UiLanguage,
+  mode: 'surface' | 'detail' = 'surface'
+) {
+  if (language === 'zh') {
+    return getToolDisplayName(name);
+  }
+
+  if (mode === 'detail') {
+    return getToolPrimaryName(name);
+  }
+
+  return getToolPrimaryName(name);
 }
 
 export function getToolPricingNote(tool: Tool) {

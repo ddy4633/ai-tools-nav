@@ -7,6 +7,7 @@ import { getAllTools, getToolById } from '@/lib/supabase';
 import { RatingDisplay } from '@/components/ui/star-rating';
 import { RatingForm } from '@/components/rating-form';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
+import LocalizedToolName from '@/components/ui/LocalizedToolName';
 import ToolLogo from '@/components/ui/ToolLogo';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Tool } from '@/types/tool';
@@ -85,7 +86,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
   const pricingType: keyof typeof pricingLabels = tool.pricing_type ?? tool.pricingType ?? 'freemium';
   const pricing = pricingLabels[pricingType] || pricingLabels.freemium;
-  const displayName = getToolDisplayName(tool.name);
+  const displayName = getToolPrimaryName(tool.name);
   const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
   const averageRating = tool.average_rating ?? tool.editorRating ?? 0;
   const ratingCount = tool.rating_count ?? 0;
@@ -97,6 +98,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const visibleReviewSources =
     tool.reviewSources?.map((source) => ({
       ...source,
+      displaySource: hasCjk(source.source) ? 'Original source page' : source.source,
       displaySummary: !hasCjk(source.summary)
         ? source.summary
         : 'The original source summary is stored in Simplified Chinese. Use the English-first summary on this page before opening the source.',
@@ -176,7 +178,9 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   textClassName="text-3xl text-accent-cyan"
                 />
                 <div className="min-w-0">
-                  <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">{displayName}</h1>
+                  <h1 className="text-4xl font-semibold text-text-primary md:text-5xl">
+                    <LocalizedToolName name={tool.name} mode="detail" />
+                  </h1>
                   <p className="mt-4 max-w-3xl text-base leading-8 text-text-secondary">{getToolHeroSummary(tool)}</p>
                   {isCjkHeavy(tool.description) ? (
                     <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted">{getToolSourceNote(tool)}</p>
@@ -378,7 +382,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                     className="rounded-[24px] border border-white/8 bg-black/10 p-4"
                   >
                     <div className="flex items-center justify-between gap-4">
-                      <p className="text-sm font-semibold text-text-primary">{source.source}</p>
+                      <p className="text-sm font-semibold text-text-primary">{source.displaySource}</p>
                       <a
                         href={source.url}
                         target="_blank"

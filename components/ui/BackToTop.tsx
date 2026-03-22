@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import { useUiLanguage } from '@/components/providers/LanguageProvider';
 
 export function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const { copy } = useUiLanguage();
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -28,7 +30,7 @@ export function BackToTop() {
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={scrollToTop}
           className="fixed bottom-8 right-8 p-3 bg-accent-warm/10 border border-accent-warm/30 rounded-full hover:bg-accent-warm/20 transition-colors z-40 backdrop-blur-sm"
-          aria-label="Back to top"
+          aria-label={copy.backToTop}
         >
           <ArrowUp className="w-5 h-5 text-accent-warm" />
         </motion.button>

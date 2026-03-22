@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X, Clock, TrendingUp } from 'lucide-react';
-import { getCategoryLabel, getToolDisplayName, getToolPrimaryName } from '@/lib/tool-display';
+import { useUiLanguage } from '@/components/providers/LanguageProvider';
+import { getCategoryLabel, getToolDisplayName, getToolNameForLanguage } from '@/lib/tool-display';
 
 interface SearchSuggestion {
   id: string;
@@ -43,6 +44,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { language, copy } = useUiLanguage();
 
   // 同步外部查询参数（例如清除筛选）
   useEffect(() => {
@@ -129,13 +131,13 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
       .slice(0, 8)
       .map(tool => ({
         id: tool.id,
-        name: getToolPrimaryName(tool.name),
+        name: getToolNameForLanguage(tool.name, language, 'surface'),
         category: getCategoryLabel(tool.category),
         type: 'tool' as const,
       }));
 
     setSuggestions(matchedTools);
-  }, [query, tools, searchHistory]);
+  }, [language, query, tools, searchHistory]);
 
   // 点击外部关闭建议
   useEffect(() => {
@@ -206,7 +208,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
               setShowSuggestions(true);
             }}
             onFocus={() => setShowSuggestions(true)}
-            placeholder="Search by product, workflow, category, or use case..."
+            placeholder={copy.search.placeholder}
             className="w-full pl-12 pr-12 py-3 bg-bg-secondary border border-border-light rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-warm transition-colors"
           />
           {query && (
@@ -230,13 +232,13 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
               {query.trim() === '' && searchHistory.length > 0 && (
                 <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary border-b border-border-subtle flex items-center gap-1">
                   <Clock className="w-3 h-3" />
-                  Recent searches
+                  {copy.search.recentSearches}
                 </div>
               )}
               {query.trim() === '' && (
                 <div className="px-4 py-2 text-xs text-text-muted bg-bg-secondary border-b border-border-subtle flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
-                  Popular searches
+                  {copy.search.popularSearches}
                 </div>
               )}
               
@@ -265,8 +267,8 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
             </div>
           ) : query.trim() !== '' ? (
             <div className="px-4 py-8 text-center">
-              <p className="text-text-muted">No matching tools found</p>
-              <p className="text-sm text-text-muted mt-1">Try another keyword, workflow, or product name</p>
+              <p className="text-text-muted">{copy.search.noMatchingTools}</p>
+              <p className="text-sm text-text-muted mt-1">{copy.search.tryAnotherKeyword}</p>
             </div>
           ) : null}
         </div>

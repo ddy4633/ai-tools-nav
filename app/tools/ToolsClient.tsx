@@ -4,6 +4,7 @@ import { Suspense, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link';
 import { ArrowRight, Search, Sparkles } from 'lucide-react';
 import { EnhancedSearch } from '@/components/enhanced-search';
+import LocalizedToolName from '@/components/ui/LocalizedToolName';
 import { ToolCardSkeletonGrid } from '@/components/ui/Skeleton';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
@@ -227,7 +228,9 @@ export default function ToolsClient({
                 />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="truncate text-lg font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
+                    <h3 className="truncate text-lg font-semibold text-text-primary">
+                      <LocalizedToolName name={tool.name} mode="surface" />
+                    </h3>
                     <span
                       className={`rounded-full border px-2.5 py-1 text-xs ${
                         pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].className
@@ -366,7 +369,9 @@ function ToolCard({ tool }: { tool: Tool }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <Link href={detailHref} className="transition hover:text-accent-cyan">
-              <h3 className="truncate text-lg font-semibold text-text-primary">{displayName}</h3>
+              <h3 className="truncate text-lg font-semibold text-text-primary">
+                <LocalizedToolName name={tool.name} mode="surface" />
+              </h3>
             </Link>
             <span className={`rounded-full border px-2.5 py-1 text-xs ${pricing.className}`}>
               {getPricingLabel(tool.pricing_type ?? tool.pricingType)}
@@ -390,7 +395,7 @@ function ToolCard({ tool }: { tool: Tool }) {
               key={alternative}
               className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
             >
-              Alternative: {alternative}
+              Alternative: <LocalizedToolName name={alternative} mode="surface" />
             </span>
           ))}
         </div>

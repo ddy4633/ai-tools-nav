@@ -14,6 +14,7 @@ import {
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
+import LocalizedToolName from '@/components/ui/LocalizedToolName';
 import { getTrendingTools } from '@/lib/supabase';
 import { getCategoryLabel, getInstallMethodLabel, getToolCardSummary, getToolPrimaryName, hasCjk } from '@/lib/tool-display';
 
@@ -180,7 +181,9 @@ export default async function TrendingPage() {
                     imageClassName="h-10 w-10"
                     textClassName="text-xl text-accent-cyan"
                   />
-                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">
+                    <LocalizedToolName name={tool.name} mode="surface" />
+                  </p>
                   <p className="mt-1 text-xs text-text-muted">Hype {tool.hype_score.toFixed(0)}</p>
                 </Link>
               ))}
@@ -229,7 +232,9 @@ export default async function TrendingPage() {
                           />
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
-                              <h3 className="truncate text-xl font-semibold text-text-primary">{displayName}</h3>
+                              <h3 className="truncate text-xl font-semibold text-text-primary">
+                                <LocalizedToolName name={tool.name} mode="surface" />
+                              </h3>
                               <span className={`rounded-full border px-2.5 py-1 text-xs ${style.badge}`}>
                                 {style.label}
                               </span>
@@ -342,7 +347,9 @@ export default async function TrendingPage() {
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <Link href={detailHref} className="transition hover:text-accent-cyan">
-                              <h3 className="truncate text-lg font-semibold text-text-primary">{displayName}</h3>
+                              <h3 className="truncate text-lg font-semibold text-text-primary">
+                                <LocalizedToolName name={tool.name} mode="surface" />
+                              </h3>
                             </Link>
                             <span className={`rounded-full border px-2.5 py-1 text-xs ${style.badge}`}>
                               {style.label}
