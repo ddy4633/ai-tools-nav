@@ -19,6 +19,7 @@ import {
   getToolCardSummary,
   getToolDisplayName,
   getToolHeroSummary,
+  getToolPrimaryName,
   getToolPricingNote,
   getToolSourceNote,
   hasCjk,
@@ -100,7 +101,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
         ? source.summary
         : 'The original source summary is stored in Simplified Chinese. Use the English-first summary on this page before opening the source.',
     })) ?? [];
-  const displayAlternatives = (tool.alternatives ?? []).map((item) => getToolDisplayName(item));
+  const displayAlternatives = (tool.alternatives ?? []).map((item) => getToolPrimaryName(item));
   const relatedTools = allTools
     .filter((item: Tool) => item.id !== tool.id && item.category === tool.category)
     .slice(0, 3);
@@ -424,7 +425,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   >
                     <div className="flex items-start gap-3">
                       <ToolLogo
-                        name={getToolDisplayName(relatedTool.name)}
+                        name={getToolPrimaryName(relatedTool.name)}
                         icon={relatedTool.icon}
                         size={24}
                         wrapperClassName="h-11 w-11 rounded-2xl border border-white/10 bg-black/10 shrink-0"
@@ -432,7 +433,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                         textClassName="text-sm text-accent-cyan"
                       />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(relatedTool.name)}</p>
+                        <p className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(relatedTool.name)}</p>
                         <p className="mt-2 line-clamp-3 text-xs leading-6 text-text-secondary">{getToolCardSummary(relatedTool)}</p>
                       </div>
                     </div>
@@ -483,13 +484,13 @@ function ContentCard({ title, children }: { title: string; children: ReactNode }
 
 function buildDecisionBullets(tool: Tool) {
   const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
-  const displayName = getToolDisplayName(tool.name);
+  const displayName = getToolPrimaryName(tool.name);
 
   return [
     `If ${displayName} improves the job you do inside ${categoryLabel}, it deserves a first click.`,
     `Pricing signal: ${getToolPricingNote(tool)} Decide whether the access tier fits your first test before you commit time.`,
     tool.alternatives?.length
-      ? `Alternative set: people often compare it with ${tool.alternatives.slice(0, 2).map((item) => getToolDisplayName(item)).join(', ')}.`
+      ? `Alternative set: people often compare it with ${tool.alternatives.slice(0, 2).map((item) => getToolPrimaryName(item)).join(', ')}.`
       : 'If this page does not convince you yet, compare related picks before making the final call.',
   ];
 }

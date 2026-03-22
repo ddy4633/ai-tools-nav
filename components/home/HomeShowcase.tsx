@@ -21,7 +21,7 @@ import NewsletterSection from '@/components/home/NewsletterSection';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import type { Category, EditorPick, Tool, TrendingTool } from '@/types/tool';
-import { getCategoryLabel, getToolCardSummary, getToolDisplayName, hasCjk } from '@/lib/tool-display';
+import { getCategoryLabel, getToolCardSummary, getToolPrimaryName, hasCjk } from '@/lib/tool-display';
 
 interface HomeShowcaseProps {
   allTools: Tool[];
@@ -149,11 +149,11 @@ export default function HomeShowcase({
 
   const spotlightPick = editorPicks[0];
   const spotlightTool = spotlightPick?.tool ?? featuredTools[0];
-  const spotlightDisplayName = spotlightTool ? getToolDisplayName(spotlightTool.name) : '';
+  const spotlightDisplayName = spotlightTool ? getToolPrimaryName(spotlightTool.name) : '';
   const heroShowcaseTools = featuredTools.slice(0, 8);
   const spotlightFeatures =
     spotlightTool?.features?.filter((item) => !hasCjk(item)).slice(0, 3) ??
-    spotlightTool?.alternatives?.map((item) => getToolDisplayName(item)).slice(0, 3) ??
+    spotlightTool?.alternatives?.map((item) => getToolPrimaryName(item)).slice(0, 3) ??
     [];
   const rankedCategories = [...categories]
     .sort((left, right) => right.popularity - left.popularity)
@@ -414,7 +414,7 @@ export default function HomeShowcase({
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</span>
+                          <span className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</span>
                           <span className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-text-muted">
                             {getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}
                           </span>
@@ -463,16 +463,16 @@ export default function HomeShowcase({
                   className="group flex items-center gap-3 rounded-[20px] border border-white/8 bg-black/10 px-4 py-3 transition hover:border-accent-cyan/28 hover:bg-white/6"
                 >
                   <ToolLogo
-                    name={getToolDisplayName(tool.name)}
+                    name={getToolPrimaryName(tool.name)}
                     icon={tool.icon}
                     size={28}
-                    alt={`${getToolDisplayName(tool.name)} logo`}
+                    alt={`${getToolPrimaryName(tool.name)} logo`}
                     wrapperClassName="h-11 w-11 rounded-2xl border border-white/10 bg-white/5"
                     imageClassName="h-7 w-7"
                     textClassName="text-lg text-accent-cyan"
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                    <p className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
                     <p className="truncate text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                   </div>
                 </Link>
@@ -537,7 +537,7 @@ export default function HomeShowcase({
                             key={tool.id}
                             className="rounded-full border border-white/12 bg-black/12 px-3 py-1 text-xs text-text-secondary"
                           >
-                            {getToolDisplayName(tool.name)}
+                            {getToolPrimaryName(tool.name)}
                           </span>
                         ))}
                       </div>
@@ -573,17 +573,17 @@ export default function HomeShowcase({
                   <div className="flex flex-col gap-5 md:flex-row md:items-start">
                     <div className="flex min-w-0 flex-1 items-start gap-4">
                       <ToolLogo
-                        name={getToolDisplayName(pick.tool.name)}
+                        name={getToolPrimaryName(pick.tool.name)}
                         icon={pick.tool.icon}
                         size={30}
-                        alt={`${getToolDisplayName(pick.tool.name)} logo`}
+                        alt={`${getToolPrimaryName(pick.tool.name)} logo`}
                         wrapperClassName="h-12 w-12 rounded-2xl border border-white/10 bg-white/5"
                         imageClassName="h-8 w-8"
                         textClassName="text-xl text-accent-cyan"
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-lg font-semibold text-text-primary">{getToolDisplayName(pick.tool.name)}</h3>
+                          <h3 className="text-lg font-semibold text-text-primary">{getToolPrimaryName(pick.tool.name)}</h3>
                           <span className="rounded-full border border-white/10 px-2.5 py-1 text-xs text-text-muted">
                             Editor pick #{index + 2}
                           </span>
@@ -643,7 +643,7 @@ export default function HomeShowcase({
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                          <p className="truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
                           <p className="mt-1 text-sm leading-7 text-text-secondary">
                             {getToolCardSummary(tool)}
                           </p>
@@ -691,15 +691,15 @@ export default function HomeShowcase({
                   className="group rounded-[22px] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.07]"
                 >
                   <ToolLogo
-                    name={getToolDisplayName(tool.name)}
+                    name={getToolPrimaryName(tool.name)}
                     icon={tool.icon}
                     size={40}
-                    alt={`${getToolDisplayName(tool.name)} logo`}
+                    alt={`${getToolPrimaryName(tool.name)} logo`}
                     wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/12"
                     imageClassName="h-10 w-10"
                     textClassName="text-xl text-accent-cyan"
                   />
-                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
                   <p className="mt-1 truncate text-xs text-text-muted">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</p>
                 </Link>
               ))}
@@ -736,17 +736,17 @@ export default function HomeShowcase({
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-4">
                       <ToolLogo
-                        name={getToolDisplayName(tool.name)}
+                        name={getToolPrimaryName(tool.name)}
                         icon={tool.icon}
                         size={32}
-                        alt={`${getToolDisplayName(tool.name)} logo`}
+                        alt={`${getToolPrimaryName(tool.name)} logo`}
                         wrapperClassName="h-14 w-14 rounded-[22px] border border-white/10 bg-black/12"
                         imageClassName="h-8 w-8"
                         textClassName="text-xl text-accent-cyan"
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="truncate text-xl font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
+                          <h3 className="truncate text-xl font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
                           <span
                             className={`rounded-full border px-2.5 py-1 text-xs ${
                               pricingTone[tool.pricing_type || tool.pricingType || 'freemium']

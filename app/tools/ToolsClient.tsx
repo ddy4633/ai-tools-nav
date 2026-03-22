@@ -9,7 +9,7 @@ import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Category, Tool } from '@/types/tool';
-import { getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName, getToolPricingNote } from '@/lib/tool-display';
+import { getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName, getToolPricingNote, getToolPrimaryName } from '@/lib/tool-display';
 
 interface ToolsClientProps {
   tools: Tool[];
@@ -217,17 +217,17 @@ export default function ToolsClient({
             >
               <div className="flex items-start gap-4">
                 <ToolLogo
-                  name={getToolDisplayName(tool.name)}
+                  name={getToolPrimaryName(tool.name)}
                   icon={tool.icon}
                   size={32}
-                  alt={`${getToolDisplayName(tool.name)} logo`}
+                  alt={`${getToolPrimaryName(tool.name)} logo`}
                   wrapperClassName="h-14 w-14 rounded-[20px] border border-white/10 bg-bg-secondary"
                   imageClassName="h-8 w-8"
                   textClassName="text-xl text-accent-cyan"
                 />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="truncate text-lg font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
+                    <h3 className="truncate text-lg font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
                     <span
                       className={`rounded-full border px-2.5 py-1 text-xs ${
                         pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].className
@@ -348,8 +348,8 @@ function ToolCard({ tool }: { tool: Tool }) {
   const pricingType = tool.pricing_type ?? tool.pricingType ?? 'freemium';
   const pricing = pricingLabels[pricingType] ?? pricingLabels.freemium;
   const detailHref = `/tools/${tool.id}`;
-  const displayName = getToolDisplayName(tool.name);
-  const displayAlternatives = tool.alternatives?.slice(0, 3).map((alternative) => getToolDisplayName(alternative)) ?? [];
+  const displayName = getToolPrimaryName(tool.name);
+  const displayAlternatives = tool.alternatives?.slice(0, 3).map((alternative) => getToolPrimaryName(alternative)) ?? [];
 
   return (
     <article className="group rounded-[28px] border border-white/10 bg-white/5 p-5 transition hover:border-white/16 hover:bg-white/[0.07]">

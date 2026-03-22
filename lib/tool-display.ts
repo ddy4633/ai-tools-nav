@@ -214,6 +214,10 @@ export function getToolDisplayName(name?: string | null) {
   return localizedToolNameMap[trimmedName] ?? trimmedName;
 }
 
+export function getToolPrimaryName(name?: string | null) {
+  return getToolDisplayName(name).replace(/\s*\([^)]*[\u3400-\u9fff][^)]*\)\s*$/, '').trim();
+}
+
 export function getToolPricingNote(tool: Tool) {
   const priceRange = tool.priceRange?.trim();
 
@@ -263,7 +267,7 @@ export function getInstallMethodLabel(method?: string | null) {
 
 export function getToolHeroSummary(tool: Tool) {
   const description = tool.description?.trim();
-  const displayName = getToolDisplayName(tool.name);
+  const displayName = getToolPrimaryName(tool.name);
 
   if (description && !hasCjk(description)) {
     return description;
@@ -278,7 +282,7 @@ export function getToolHeroSummary(tool: Tool) {
 export function getToolCardSummary(tool: Tool) {
   const reason = tool.reason?.trim();
   const description = tool.description?.trim();
-  const displayName = getToolDisplayName(tool.name);
+  const displayName = getToolPrimaryName(tool.name);
 
   if (reason && !hasCjk(reason)) {
     return reason;

@@ -7,7 +7,7 @@ import { toolsData } from '@/lib/content/tools-data';
 import { useRouter } from 'next/navigation';
 import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
-import { getCategoryLabel, getToolDisplayName } from '@/lib/tool-display';
+import { getCategoryLabel, getToolDisplayName, getToolPrimaryName } from '@/lib/tool-display';
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -148,7 +148,7 @@ export function CommandPalette() {
                         >
                           {/* 工具图标 */}
                           {(() => {
-                            const displayName = getToolDisplayName(tool.name);
+                            const displayName = getToolPrimaryName(tool.name);
                             const categoryLabel = getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug);
 
                             return (

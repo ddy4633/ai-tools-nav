@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X, Clock, TrendingUp } from 'lucide-react';
-import { getCategoryLabel, getToolDisplayName } from '@/lib/tool-display';
+import { getCategoryLabel, getToolDisplayName, getToolPrimaryName } from '@/lib/tool-display';
 
 interface SearchSuggestion {
   id: string;
@@ -129,7 +129,7 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
       .slice(0, 8)
       .map(tool => ({
         id: tool.id,
-        name: getToolDisplayName(tool.name),
+        name: getToolPrimaryName(tool.name),
         category: getCategoryLabel(tool.category),
         type: 'tool' as const,
       }));

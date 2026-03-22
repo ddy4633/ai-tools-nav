@@ -6,7 +6,7 @@ import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import PageHero from '@/components/ui/PageHero';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { getCategoryLabel, getToolCardSummary, getToolDisplayName } from '@/lib/tool-display';
+import { getCategoryLabel, getToolCardSummary, getToolPrimaryName } from '@/lib/tool-display';
 
 interface CategoryToolsPageProps {
   categoryLabel: string;
@@ -125,17 +125,17 @@ export default function CategoryToolsPage({
                 >
                   <div className="flex items-start gap-4">
                     <ToolLogo
-                      name={getToolDisplayName(tool.name)}
+                      name={getToolPrimaryName(tool.name)}
                       icon={tool.icon}
                       size={32}
-                      alt={`${getToolDisplayName(tool.name)} logo`}
+                      alt={`${getToolPrimaryName(tool.name)} logo`}
                       wrapperClassName="h-14 w-14 rounded-[20px] border border-white/10 bg-black/10"
                       imageClassName="h-8 w-8"
                       textClassName="text-xl text-accent-cyan"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="truncate text-lg font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
+                        <h3 className="truncate text-lg font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
                         <span
                           className={`rounded-full border px-2.5 py-1 text-xs ${
                             pricingLabels[tool.pricing_type ?? tool.pricingType ?? 'freemium'].className
@@ -198,10 +198,10 @@ export default function CategoryToolsPage({
                   >
                     <div className="flex items-start gap-4">
                       <ToolLogo
-                        name={getToolDisplayName(tool.name)}
+                        name={getToolPrimaryName(tool.name)}
                         icon={tool.icon}
                         size={32}
-                        alt={`${getToolDisplayName(tool.name)} logo`}
+                        alt={`${getToolPrimaryName(tool.name)} logo`}
                         wrapperClassName="h-14 w-14 rounded-[20px] border border-white/10 bg-black/10"
                         imageClassName="h-8 w-8"
                         textClassName="text-xl text-accent-cyan"
@@ -209,7 +209,7 @@ export default function CategoryToolsPage({
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <Link href={detailHref} className="transition hover:text-accent-cyan">
-                            <h3 className="truncate text-lg font-semibold text-text-primary">{getToolDisplayName(tool.name)}</h3>
+                            <h3 className="truncate text-lg font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</h3>
                           </Link>
                           <span className={`rounded-full border px-2.5 py-1 text-xs ${pricing.className}`}>
                             {pricing.text}

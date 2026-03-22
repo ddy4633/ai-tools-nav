@@ -15,7 +15,7 @@ import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import { getTrendingTools } from '@/lib/supabase';
-import { getCategoryLabel, getInstallMethodLabel, getToolCardSummary, getToolDisplayName, hasCjk } from '@/lib/tool-display';
+import { getCategoryLabel, getInstallMethodLabel, getToolCardSummary, getToolPrimaryName, hasCjk } from '@/lib/tool-display';
 
 export const metadata: Metadata = {
   title: 'Trending AI Tools - momentum, hype, and breakout movers',
@@ -172,15 +172,15 @@ export default async function TrendingPage() {
                   className="group rounded-[22px] border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.07]"
                 >
                   <ToolLogo
-                    name={getToolDisplayName(tool.name)}
+                    name={getToolPrimaryName(tool.name)}
                     icon={tool.icon}
                     size={38}
-                    alt={`${getToolDisplayName(tool.name)} logo`}
+                    alt={`${getToolPrimaryName(tool.name)} logo`}
                     wrapperClassName="h-14 w-14 rounded-[18px] border border-white/10 bg-black/12"
                     imageClassName="h-10 w-10"
                     textClassName="text-xl text-accent-cyan"
                   />
-                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolDisplayName(tool.name)}</p>
+                  <p className="mt-4 truncate text-sm font-semibold text-text-primary">{getToolPrimaryName(tool.name)}</p>
                   <p className="mt-1 text-xs text-text-muted">Hype {tool.hype_score.toFixed(0)}</p>
                 </Link>
               ))}
@@ -207,7 +207,7 @@ export default async function TrendingPage() {
               {heroTools.map((tool, index) => {
                 const style = tierStyles[tool.tier] ?? tierStyles['💡 WATCH'];
                 const detailHref = `/tools/${tool.id}`;
-                const displayName = getToolDisplayName(tool.name);
+                const displayName = getToolPrimaryName(tool.name);
 
                 return (
                   <article
@@ -316,7 +316,7 @@ export default async function TrendingPage() {
                 const style = tierStyles[tool.tier] ?? tierStyles['💡 WATCH'];
                 const detailHref = `/tools/${tool.id}`;
                 const github = tool.metrics?.github;
-                const displayName = getToolDisplayName(tool.name);
+                const displayName = getToolPrimaryName(tool.name);
 
                 return (
                   <article
