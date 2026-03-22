@@ -6,7 +6,7 @@ import { Flame, ArrowRight, Github } from 'lucide-react';
 import type { TrendingTool } from '@/types/tool';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
-import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, hasCjk } from '@/lib/tool-display';
 
 interface TrendingToolsProps {
   tools: TrendingTool[];
@@ -117,7 +117,7 @@ function ToolCard({ tool, rank, variants }: { tool: TrendingTool; rank: number; 
                 </Link>
 
                 <p className="text-sm text-text-secondary font-mono leading-relaxed group-hover:text-text-primary transition-colors duration-300">
-                  {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
+                  {!hasCjk(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                 </p>
               </div>
 

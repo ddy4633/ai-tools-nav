@@ -46,7 +46,7 @@ async function subscribeByWebhook(input: NewsletterSubscribeInput): Promise<News
     return {
       ok: false,
       provider: 'webhook',
-      message: '未配置 NEWSLETTER_WEBHOOK_URL',
+      message: 'NEWSLETTER_WEBHOOK_URL is not configured',
       status: 500,
     };
   }
@@ -64,7 +64,7 @@ async function subscribeByWebhook(input: NewsletterSubscribeInput): Promise<News
     return {
       ok: false,
       provider: 'webhook',
-      message: `Webhook 订阅失败（${response.status}）`,
+      message: `Webhook subscription failed (${response.status})`,
       status: response.status,
     };
   }
@@ -72,7 +72,7 @@ async function subscribeByWebhook(input: NewsletterSubscribeInput): Promise<News
   return {
     ok: true,
     provider: 'webhook',
-    message: '订阅成功',
+    message: 'Subscription successful',
     status: response.status,
   };
 }
@@ -84,7 +84,7 @@ async function subscribeByButtondown(input: NewsletterSubscribeInput): Promise<N
     return {
       ok: false,
       provider: 'buttondown',
-      message: '未配置 NEWSLETTER_BUTTONDOWN_API_KEY',
+      message: 'NEWSLETTER_BUTTONDOWN_API_KEY is not configured',
       status: 500,
     };
   }
@@ -108,7 +108,7 @@ async function subscribeByButtondown(input: NewsletterSubscribeInput): Promise<N
     return {
       ok: false,
       provider: 'buttondown',
-      message: `Buttondown 订阅失败（${response.status}）`,
+      message: `Buttondown subscription failed (${response.status})`,
       status: response.status,
     };
   }
@@ -116,7 +116,7 @@ async function subscribeByButtondown(input: NewsletterSubscribeInput): Promise<N
   return {
     ok: true,
     provider: 'buttondown',
-    message: '订阅成功',
+    message: 'Subscription successful',
     status: response.status,
   };
 }
@@ -126,7 +126,7 @@ async function subscribeByNoop(input: NewsletterSubscribeInput): Promise<Newslet
     return {
       ok: false,
       provider: 'noop',
-      message: '订阅通道未配置完成，请联系站点管理员',
+      message: 'The newsletter channel is not configured yet. Please contact the site owner.',
       status: 503,
     };
   }
@@ -136,7 +136,7 @@ async function subscribeByNoop(input: NewsletterSubscribeInput): Promise<Newslet
   return {
     ok: true,
     provider: 'noop',
-    message: '订阅请求已记录，待接入真实邮件提供商',
+    message: 'Subscription request recorded while the live email provider is still being connected',
     status: 200,
   };
 }

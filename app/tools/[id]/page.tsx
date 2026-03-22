@@ -16,11 +16,12 @@ import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import { resolveToolPrimaryUrl } from '@/lib/tracking';
 import {
   getCategoryLabel,
-  getPricingLabel,
   getToolCardSummary,
   getToolDisplayName,
   getToolHeroSummary,
+  getToolPricingNote,
   getToolSourceNote,
+  hasCjk,
   isCjkHeavy,
 } from '@/lib/tool-display';
 
@@ -89,13 +90,13 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const ratingCount = tool.rating_count ?? 0;
   const toolUrl = buildSiteUrl(`/tools/${tool.id}`);
   const hasPrimaryCta = Boolean(resolveToolPrimaryUrl(tool));
-  const visibleFeatures = tool.features?.filter((item) => !isCjkHeavy(item)) ?? [];
-  const visiblePros = tool.pros?.filter((item) => !isCjkHeavy(item)) ?? [];
-  const visibleCons = tool.cons?.filter((item) => !isCjkHeavy(item)) ?? [];
+  const visibleFeatures = tool.features?.filter((item) => !hasCjk(item)) ?? [];
+  const visiblePros = tool.pros?.filter((item) => !hasCjk(item)) ?? [];
+  const visibleCons = tool.cons?.filter((item) => !hasCjk(item)) ?? [];
   const visibleReviewSources =
     tool.reviewSources?.map((source) => ({
       ...source,
-      displaySummary: !isCjkHeavy(source.summary)
+      displaySummary: !hasCjk(source.summary)
         ? source.summary
         : 'The original source summary is stored in Simplified Chinese. Use the English-first summary on this page before opening the source.',
     })) ?? [];
@@ -187,7 +188,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <MetricCard
-                  value={tool.priceRange || getPricingLabel(tool.pricing_type ?? tool.pricingType)}
+                  value={getToolPricingNote(tool)}
                   label="Pricing"
                   hint="Check whether the access tier fits your first test."
                 />
@@ -486,7 +487,7 @@ function buildDecisionBullets(tool: Tool) {
 
   return [
     `If ${displayName} improves the job you do inside ${categoryLabel}, it deserves a first click.`,
-    tool.priceRange ? `Pricing signal: ${tool.priceRange}. Decide whether the access tier fits your first test before you commit time.` : 'If you are not ready to spend yet, check whether the tool offers a free or low-friction entry tier.',
+    `Pricing signal: ${getToolPricingNote(tool)} Decide whether the access tier fits your first test before you commit time.`,
     tool.alternatives?.length
       ? `Alternative set: people often compare it with ${tool.alternatives.slice(0, 2).map((item) => getToolDisplayName(item)).join(', ')}.`
       : 'If this page does not convince you yet, compare related picks before making the final call.',

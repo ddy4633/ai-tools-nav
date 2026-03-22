@@ -378,16 +378,16 @@ function getMockTools(): Tool[] {
 }
 function getMockCategories() {
   const categoryMeta = [
-    { id: '1', name: 'AI聊天', slug: 'chatbot', popularity: 95 },
-    { id: '2', name: 'AI写作', slug: 'writing', popularity: 85 },
-    { id: '3', name: 'AI编程', slug: 'code', popularity: 92 },
-    { id: '4', name: 'AI图像', slug: 'image', popularity: 94 },
-    { id: '5', name: 'AI视频', slug: 'video', popularity: 90 },
-    { id: '6', name: 'AI音频', slug: 'audio', popularity: 82 },
-    { id: '7', name: '效率工具', slug: 'productivity', popularity: 88 },
-    { id: '8', name: '设计助手', slug: 'design', popularity: 78 },
-    { id: '9', name: '知识管理', slug: 'knowledge', popularity: 75 },
-    { id: '10', name: '数据分析', slug: 'data', popularity: 72 },
+    { id: '1', name: 'Chatbots', slug: 'chatbot', popularity: 95 },
+    { id: '2', name: 'Writing', slug: 'writing', popularity: 85 },
+    { id: '3', name: 'Coding', slug: 'code', popularity: 92 },
+    { id: '4', name: 'Image', slug: 'image', popularity: 94 },
+    { id: '5', name: 'Video', slug: 'video', popularity: 90 },
+    { id: '6', name: 'Audio', slug: 'audio', popularity: 82 },
+    { id: '7', name: 'Productivity', slug: 'productivity', popularity: 88 },
+    { id: '8', name: 'Design', slug: 'design', popularity: 78 },
+    { id: '9', name: 'Knowledge', slug: 'knowledge', popularity: 75 },
+    { id: '10', name: 'Data', slug: 'data', popularity: 72 },
   ];
 
   return categoryMeta.map((category) => ({
@@ -401,15 +401,15 @@ export async function submitRating(
   rating: number
 ): Promise<{ success: boolean; message?: string }> {
   if (typeof window === 'undefined') {
-    return { success: false, message: '仅支持在浏览器中评分' };
+    return { success: false, message: 'Ratings can only be submitted in the browser' };
   }
 
   if (!toolId) {
-    return { success: false, message: '缺少工具标识' };
+    return { success: false, message: 'Missing tool identifier' };
   }
 
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
-    return { success: false, message: '评分需为 1-5 的整数' };
+    return { success: false, message: 'Rating must be an integer from 1 to 5' };
   }
 
   try {
@@ -433,6 +433,6 @@ export async function submitRating(
     return { success: true };
   } catch (error) {
     console.error('提交评分失败:', error);
-    return { success: false, message: '本地保存失败' };
+    return { success: false, message: 'Failed to save the rating locally' };
   }
 }

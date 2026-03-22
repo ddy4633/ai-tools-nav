@@ -9,7 +9,7 @@ import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Category, Tool } from '@/types/tool';
-import { getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName } from '@/lib/tool-display';
+import { getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName, getToolPricingNote } from '@/lib/tool-display';
 
 interface ToolsClientProps {
   tools: Tool[];
@@ -376,7 +376,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-text-muted">
             <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1">{getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}</span>
             {tool.editorRating ? <span>Editor score {tool.editorRating.toFixed(1)}</span> : null}
-            {tool.priceRange ? <span>{tool.priceRange}</span> : null}
+            <span>{getToolPricingNote(tool)}</span>
           </div>
         </div>
       </div>

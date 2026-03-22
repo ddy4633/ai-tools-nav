@@ -60,8 +60,8 @@ export async function GET(request: Request) {
     if (rawSponsorType && !isSponsorTypeParam(rawSponsorType)) {
       return NextResponse.json({
         success: false,
-        error: '无效的 sponsor_type 参数',
-        message: `可选值：${['all', ...sponsorTypes].join(', ')}`,
+        error: 'Invalid sponsor_type parameter',
+        message: `Allowed values: ${['all', ...sponsorTypes].join(', ')}`,
       }, { status: 400 });
     }
 
@@ -119,7 +119,7 @@ export async function GET(request: Request) {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      error: '获取工具列表失败',
+      error: 'Failed to fetch tools',
       message: error instanceof Error ? error.message : 'Unknown error',
     }, { status: 500 });
   }

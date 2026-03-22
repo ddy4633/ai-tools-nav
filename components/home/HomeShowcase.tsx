@@ -21,7 +21,7 @@ import NewsletterSection from '@/components/home/NewsletterSection';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import type { Category, EditorPick, Tool, TrendingTool } from '@/types/tool';
-import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, hasCjk } from '@/lib/tool-display';
 
 interface HomeShowcaseProps {
   allTools: Tool[];
@@ -152,7 +152,7 @@ export default function HomeShowcase({
   const spotlightDisplayName = spotlightTool ? getToolDisplayName(spotlightTool.name) : '';
   const heroShowcaseTools = featuredTools.slice(0, 8);
   const spotlightFeatures =
-    spotlightTool?.features?.filter((item) => !isCjkHeavy(item)).slice(0, 3) ??
+    spotlightTool?.features?.filter((item) => !hasCjk(item)).slice(0, 3) ??
     spotlightTool?.alternatives?.map((item) => getToolDisplayName(item)).slice(0, 3) ??
     [];
   const rankedCategories = [...categories]
@@ -337,7 +337,7 @@ export default function HomeShowcase({
 
                     <blockquote className="mt-6 border-l border-accent-cyan/30 pl-4 text-base leading-8 text-text-primary/92">
                       “
-                      {spotlightPick?.comment && !isCjkHeavy(spotlightPick.comment)
+                      {spotlightPick?.comment && !hasCjk(spotlightPick.comment)
                         ? spotlightPick.comment
                         : 'Every card on the homepage should make a decision easier, not just list another product name.'}
                       ”
@@ -420,7 +420,7 @@ export default function HomeShowcase({
                           </span>
                         </div>
                         <p className="mt-1 truncate text-sm text-text-secondary">
-                          {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
+                          {!hasCjk(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                         </p>
                       </div>
                       <div className="text-right">
@@ -592,7 +592,7 @@ export default function HomeShowcase({
                           {getToolCardSummary(pick.tool)}
                         </p>
                         <p className="mt-4 text-base leading-8 text-text-primary/92">
-                          “{!isCjkHeavy(pick.comment) ? pick.comment : 'Use this recommendation as a shortcut into the category, not as a blind endorsement.'}”
+                          “{!hasCjk(pick.comment) ? pick.comment : 'Use this recommendation as a shortcut into the category, not as a blind endorsement.'}”
                         </p>
                       </div>
                     </div>
@@ -767,10 +767,10 @@ export default function HomeShowcase({
                     {getToolCardSummary(tool)}
                   </p>
 
-                  {tool.features?.filter((feature) => !isCjkHeavy(feature)).length ? (
+                  {tool.features?.filter((feature) => !hasCjk(feature)).length ? (
                     <div className="mt-6 flex flex-wrap gap-2">
                       {tool.features
-                        .filter((feature) => !isCjkHeavy(feature))
+                        .filter((feature) => !hasCjk(feature))
                         .slice(0, index === 0 ? 4 : 3)
                         .map((feature) => (
                         <span
@@ -783,10 +783,10 @@ export default function HomeShowcase({
                     </div>
                   ) : null}
 
-                  {tool.pros?.filter((item) => !isCjkHeavy(item)).length ? (
+                  {tool.pros?.filter((item) => !hasCjk(item)).length ? (
                     <div className="mt-6 grid gap-3 sm:grid-cols-2">
                       {tool.pros
-                        .filter((item) => !isCjkHeavy(item))
+                        .filter((item) => !hasCjk(item))
                         .slice(0, 2)
                         .map((item) => (
                         <div key={item} className="rounded-[18px] border border-white/8 bg-black/12 px-3 py-3 text-sm text-text-secondary">

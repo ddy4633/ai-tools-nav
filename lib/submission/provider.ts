@@ -33,7 +33,7 @@ async function submitByWebhook(input: ToolSubmissionInput): Promise<ToolSubmissi
     return {
       ok: false,
       provider: 'webhook',
-      message: '未配置 SUBMISSIONS_WEBHOOK_URL',
+      message: 'SUBMISSIONS_WEBHOOK_URL is not configured',
       status: 500,
     };
   }
@@ -54,7 +54,7 @@ async function submitByWebhook(input: ToolSubmissionInput): Promise<ToolSubmissi
     return {
       ok: false,
       provider: 'webhook',
-      message: `提交线索失败（${response.status}）`,
+      message: `Submission request failed (${response.status})`,
       status: response.status,
     };
   }
@@ -62,7 +62,9 @@ async function submitByWebhook(input: ToolSubmissionInput): Promise<ToolSubmissi
   return {
     ok: true,
     provider: 'webhook',
-    message: input.submissionType === 'free' ? '提交成功，已进入审核队列' : '商务线索已提交，我们会尽快联系您',
+    message: input.submissionType === 'free'
+      ? 'Submission received and added to the review queue'
+      : 'Commercial inquiry received. We will follow up soon.',
     status: response.status,
   };
 }
@@ -72,7 +74,7 @@ async function submitByNoop(input: ToolSubmissionInput): Promise<ToolSubmissionR
     return {
       ok: false,
       provider: 'noop',
-      message: '线索通道未配置完成，请联系站点管理员',
+      message: 'The submission channel is not configured yet. Please contact the site owner.',
       status: 503,
     };
   }
@@ -85,7 +87,9 @@ async function submitByNoop(input: ToolSubmissionInput): Promise<ToolSubmissionR
   return {
     ok: true,
     provider: 'noop',
-    message: input.submissionType === 'free' ? '提交请求已记录，当前为演示模式' : '商务线索已记录，当前为演示模式',
+    message: input.submissionType === 'free'
+      ? 'Submission recorded in demo mode'
+      : 'Commercial inquiry recorded in demo mode',
     status: 200,
   };
 }

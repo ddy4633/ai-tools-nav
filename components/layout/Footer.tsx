@@ -24,11 +24,11 @@ const legalLinks = [
 
 const creatorToolLinks = [
   {
-    name: 'ProductoKit 图片工具箱',
+    name: 'ProductoKit Image Kit',
     href: 'https://www.productokit.com/image-kit?utm_source=ai-tools-nav&utm_medium=footer&utm_campaign=creator_toolbox',
   },
   {
-    name: 'ProductoKit 文案润色器',
+    name: 'ProductoKit Text Polisher',
     href: 'https://www.productokit.com/text-polisher?utm_source=ai-tools-nav&utm_medium=footer&utm_campaign=creator_toolbox',
   },
 ];
@@ -125,7 +125,7 @@ export default function Footer() {
               </div>
 
               <div className="mt-6">
-                <h4 className="text-xs uppercase tracking-[0.22em] text-text-muted">创作者工具推荐</h4>
+                <h4 className="text-xs uppercase tracking-[0.22em] text-text-muted">Creator toolbox</h4>
                 <div className="mt-3 flex flex-wrap gap-3">
                   {creatorToolLinks.map((link) => (
                     <a

@@ -180,6 +180,14 @@ export function isCjkHeavy(value?: string | null) {
   return cjk > letters;
 }
 
+export function hasCjk(value?: string | null) {
+  if (!value) {
+    return false;
+  }
+
+  return /[\u3400-\u9fff]/.test(value);
+}
+
 export function getCategoryMeta(category?: string, slug?: string) {
   const key = normalizeCategoryKey(category, slug);
   return categoryMetaMap[key] ?? categoryMetaMap.chatbot;
@@ -206,11 +214,58 @@ export function getToolDisplayName(name?: string | null) {
   return localizedToolNameMap[trimmedName] ?? trimmedName;
 }
 
+export function getToolPricingNote(tool: Tool) {
+  const priceRange = tool.priceRange?.trim();
+
+  if (priceRange && !hasCjk(priceRange)) {
+    return priceRange;
+  }
+
+  const pricingType = tool.pricing_type ?? tool.pricingType;
+
+  switch (pricingType) {
+    case 'free':
+      return 'Free to start. Check usage limits before relying on it in production workflows.';
+    case 'paid':
+      return 'Paid access. Review the plan details before rolling it out to the team.';
+    case 'freemium':
+    default:
+      return 'Free entry is available, with advanced usage usually gated behind paid plans.';
+  }
+}
+
+const installMethodLabelMap: Record<string, string> = {
+  '☁️ 云端': '☁️ Cloud',
+  '☁️ API': '☁️ API',
+  '🐳 Docker': '🐳 Docker',
+  '📦 API': '📦 API',
+  '📦 pip': '📦 pip',
+  '📦 npm': '📦 npm',
+  '💻 客户端': '💻 Desktop app',
+  云端: 'Cloud',
+  客户端: 'Desktop app',
+};
+
+export function getInstallMethodLabel(method?: string | null) {
+  if (!method) {
+    return 'Platform';
+  }
+
+  const trimmedMethod = method.trim();
+  const mappedLabel = installMethodLabelMap[trimmedMethod];
+
+  if (mappedLabel) {
+    return mappedLabel;
+  }
+
+  return hasCjk(trimmedMethod) ? 'Platform' : trimmedMethod;
+}
+
 export function getToolHeroSummary(tool: Tool) {
   const description = tool.description?.trim();
   const displayName = getToolDisplayName(tool.name);
 
-  if (description && !isCjkHeavy(description)) {
+  if (description && !hasCjk(description)) {
     return description;
   }
 
@@ -225,11 +280,11 @@ export function getToolCardSummary(tool: Tool) {
   const description = tool.description?.trim();
   const displayName = getToolDisplayName(tool.name);
 
-  if (reason && !isCjkHeavy(reason)) {
+  if (reason && !hasCjk(reason)) {
     return reason;
   }
 
-  if (description && !isCjkHeavy(description)) {
+  if (description && !hasCjk(description)) {
     return description;
   }
 

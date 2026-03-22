@@ -45,13 +45,13 @@ const aboutVisualLogos = [
 
 const ecosystemTools = [
   {
-    name: 'ProductoKit 图片工具箱',
-    description: '适合做封面图、社媒图、缩略图的尺寸与质量优化。',
+    name: 'ProductoKit Image Kit',
+    description: 'Built for teams that need faster sizing, polish, and export control across thumbnails, social posts, and campaign covers.',
     href: 'https://www.productokit.com/image-kit?utm_source=ai-tools-nav&utm_medium=about_page&utm_campaign=ecosystem_links',
   },
   {
-    name: 'ProductoKit 文案润色器',
-    description: '适合给专题文案、推广描述和落地页文案做快速优化。',
+    name: 'ProductoKit Text Polisher',
+    description: 'Useful for tightening editorial copy, campaign messaging, and landing page language without rewriting from scratch.',
     href: 'https://www.productokit.com/text-polisher?utm_source=ai-tools-nav&utm_medium=about_page&utm_campaign=ecosystem_links',
   },
 ];
@@ -226,8 +226,8 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-6 py-16">
           <SectionHeading
             eyebrow="Ecosystem"
-            title="我们也在用的创作工具"
-            description="导航站本身也是内容产品，图片处理和文案优化是高频刚需。"
+            title="The creator tools we use inside the publishing workflow"
+            description="This site is a content product too, so image preparation and copy refinement show up as recurring production tasks."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {ecosystemTools.map((tool) => (
@@ -240,7 +240,7 @@ export default function AboutPage() {
                   rel="noopener noreferrer"
                   className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-primary transition hover:border-accent-cyan/30"
                 >
-                  查看工具
+                  Open tool
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </article>

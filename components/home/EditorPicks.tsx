@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
-import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
+import { getCategoryLabel, getToolCardSummary, getToolDisplayName, hasCjk } from '@/lib/tool-display';
 
 interface EditorPicksProps {
   picks: EditorPick[];
@@ -149,7 +149,7 @@ export default function EditorPicks({ picks }: EditorPicksProps) {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-text-secondary font-mono">
                         <span className="text-accent-purple">#</span>{' '}
-                        {!isCjkHeavy(pick.comment)
+                        {!hasCjk(pick.comment)
                           ? pick.comment
                           : 'Use this recommendation as a shortcut into the category, not as a blind endorsement.'}
                       </p>

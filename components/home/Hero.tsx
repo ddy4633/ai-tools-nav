@@ -127,11 +127,11 @@ export default function Hero() {
             variants={itemVariants}
             className="text-4xl md:text-6xl font-mono font-bold mb-6"
           >
-            <span className="text-text-primary">发现</span>
+            <span className="text-text-primary">Discover</span>
             <span className="text-gradient-cyber">
-              最好用
+              launch-ready
             </span>
-            <span className="text-text-primary">的AI工具</span>
+            <span className="text-text-primary">AI tools</span>
           </motion.h1>
           
           {/* 副标题 - 终端风格 */}

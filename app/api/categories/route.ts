@@ -22,7 +22,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      error: '获取分类列表失败',
+      error: 'Failed to fetch categories',
       message: error instanceof Error ? error.message : 'Unknown error',
     }, { status: 500 });
   }

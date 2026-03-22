@@ -16,23 +16,23 @@ import sourcedBatchToolsRound10 from '@/content/batch-11-tools-sourced';
 export const editors: Editor[] = [
   {
     id: 'editor1',
-    name: '小明',
-    avatar: 'https://ui-avatars.com/api/?name=小明&background=f59e0b&color=fff&size=128',
-    bio: 'AI工具重度使用者，每天测试3-5个新工具',
+    name: 'Ming',
+    avatar: 'https://ui-avatars.com/api/?name=Ming&background=f59e0b&color=fff&size=128',
+    bio: 'Heavy AI tool tester who tries three to five new products most days.',
     role: 'editor'
   },
   {
     id: 'editor2',
-    name: '阿强',
-    avatar: 'https://ui-avatars.com/api/?name=阿强&background=ea580c&color=fff&size=128',
-    bio: '前产品经理，专注效率工具和工作流优化',
+    name: 'Kai',
+    avatar: 'https://ui-avatars.com/api/?name=Kai&background=ea580c&color=fff&size=128',
+    bio: 'Former product manager focused on productivity tools and workflow design.',
     role: 'editor'
   },
   {
     id: 'editor3',
     name: 'Lisa',
     avatar: 'https://ui-avatars.com/api/?name=Lisa&background=8b5cf6&color=fff&size=128',
-    bio: '设计师出身，对AI图像和视频工具有独到见解',
+    bio: 'Designer-turned-editor with a strong eye for image and video tooling.',
     role: 'editor'
   }
 ];

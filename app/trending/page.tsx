@@ -15,7 +15,7 @@ import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import { getTrendingTools } from '@/lib/supabase';
-import { getCategoryLabel, getToolCardSummary, getToolDisplayName, isCjkHeavy } from '@/lib/tool-display';
+import { getCategoryLabel, getInstallMethodLabel, getToolCardSummary, getToolDisplayName, hasCjk } from '@/lib/tool-display';
 
 export const metadata: Metadata = {
   title: 'Trending AI Tools - momentum, hype, and breakout movers',
@@ -244,7 +244,7 @@ export default async function TrendingPage() {
                       </div>
 
                       <p className="mt-5 text-sm leading-8 text-text-secondary">
-                        {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
+                        {!hasCjk(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                       </p>
 
                       <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -267,7 +267,7 @@ export default async function TrendingPage() {
                               key={item}
                               className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
                             >
-                              {item}
+                              {getInstallMethodLabel(item)}
                             </span>
                           ))}
                         </div>
@@ -353,7 +353,7 @@ export default async function TrendingPage() {
                           </div>
 
                           <p className="mt-3 text-sm leading-7 text-text-secondary">
-                            {!isCjkHeavy(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
+                            {!hasCjk(tool.one_liner) && tool.one_liner ? tool.one_liner : getToolCardSummary(tool)}
                           </p>
 
                           {tool.install_methods?.length ? (
@@ -363,7 +363,7 @@ export default async function TrendingPage() {
                                   key={item}
                                   className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-text-secondary"
                                 >
-                                  {item}
+                                  {getInstallMethodLabel(item)}
                                 </span>
                               ))}
                             </div>

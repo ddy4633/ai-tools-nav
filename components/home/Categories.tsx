@@ -17,16 +17,16 @@ interface CategoriesProps {
 }
 
 const defaultCategories: Category[] = [
-  { id: '1', name: 'AI写作', slug: 'writing', count: 120, popularity: 95 },
-  { id: '2', name: 'AI图像', slug: 'image', count: 85, popularity: 90 },
-  { id: '3', name: 'AI编程', slug: 'code', count: 64, popularity: 85 },
-  { id: '4', name: 'AI聊天', slug: 'chatbot', count: 56, popularity: 88 },
-  { id: '5', name: 'AI音频', slug: 'audio', count: 42, popularity: 70 },
-  { id: '6', name: 'AI视频', slug: 'video', count: 38, popularity: 75 },
-  { id: '7', name: '设计助手', slug: 'design', count: 35, popularity: 65 },
-  { id: '8', name: '效率工具', slug: 'productivity', count: 48, popularity: 80 },
-  { id: '9', name: '知识管理', slug: 'knowledge', count: 28, popularity: 60 },
-  { id: '10', name: '数据分析', slug: 'data', count: 32, popularity: 55 },
+  { id: '1', name: 'AI Writing', slug: 'writing', count: 120, popularity: 95 },
+  { id: '2', name: 'AI Image', slug: 'image', count: 85, popularity: 90 },
+  { id: '3', name: 'AI Coding', slug: 'code', count: 64, popularity: 85 },
+  { id: '4', name: 'AI Chat', slug: 'chatbot', count: 56, popularity: 88 },
+  { id: '5', name: 'AI Audio', slug: 'audio', count: 42, popularity: 70 },
+  { id: '6', name: 'AI Video', slug: 'video', count: 38, popularity: 75 },
+  { id: '7', name: 'Design Assistants', slug: 'design', count: 35, popularity: 65 },
+  { id: '8', name: 'Productivity', slug: 'productivity', count: 48, popularity: 80 },
+  { id: '9', name: 'Knowledge', slug: 'knowledge', count: 28, popularity: 60 },
+  { id: '10', name: 'Data Analysis', slug: 'data', count: 32, popularity: 55 },
 ];
 
 export default function Categories({ categories = [] }: CategoriesProps) {

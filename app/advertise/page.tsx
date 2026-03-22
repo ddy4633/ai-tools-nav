@@ -44,13 +44,13 @@ const adVisualLogos = [
 
 const ecosystemCaseTools = [
   {
-    name: 'ProductoKit 图片工具箱',
-    description: '适合需要快速出多规格投放素材和社媒封面的团队。',
+    name: 'ProductoKit Image Kit',
+    description: 'Best for teams producing multi-size ad assets, social covers, and campaign visuals on tight launch timelines.',
     href: 'https://www.productokit.com/image-kit?utm_source=ai-tools-nav&utm_medium=advertise_page&utm_campaign=ecosystem_links',
   },
   {
-    name: 'ProductoKit 文案润色器',
-    description: '适合推广文案、合作页面和广告落地页的文本优化。',
+    name: 'ProductoKit Text Polisher',
+    description: 'Useful for campaign copy, partnership pages, and ad landing page refinement when messaging needs to move faster.',
     href: 'https://www.productokit.com/text-polisher?utm_source=ai-tools-nav&utm_medium=advertise_page&utm_campaign=ecosystem_links',
   },
 ];
@@ -231,8 +231,8 @@ export default function AdvertisePage() {
         <div className="mx-auto max-w-7xl px-6 py-16">
           <SectionHeading
             eyebrow="Ecosystem Cases"
-            title="合作方常用的制作与优化工具"
-            description="以下工具常用于合作素材准备与落地页优化，适合增长团队快速落地。"
+            title="The production tools partner teams often use alongside campaigns"
+            description="These tools are commonly used for asset prep and landing page refinement when growth teams need to ship quickly."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {ecosystemCaseTools.map((tool) => (
@@ -245,7 +245,7 @@ export default function AdvertisePage() {
                   rel="noopener noreferrer"
                   className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/10 px-4 py-2 text-sm text-text-primary transition hover:border-accent-cyan/30"
                 >
-                  打开工具
+                  Open tool
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </article>
