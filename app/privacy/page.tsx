@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { ShieldCheck } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
+import { getPolicyIllustrationPath } from '@/lib/illustrations';
 import { buildSiteUrl, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -60,14 +63,39 @@ export default function PrivacyPage() {
           },
         ]}
         aside={
-          <div className="rounded-[24px] border border-white/10 bg-black/10 p-5">
-            <div className="flex items-center gap-2 text-sm text-text-secondary">
-              <ShieldCheck className="h-4 w-4 text-accent-cyan" />
-              Contact
+          <div>
+            <IllustrationFrame
+              src={getPolicyIllustrationPath('privacy')}
+              alt="Abstract privacy and data boundary illustration"
+              eyebrow="Data Boundaries"
+              title="Keep collection lean and visible"
+              description="The privacy surface should feel calm, structured, and deliberate rather than like a legal wall of text."
+              chips={['Lead forms', 'Request logs', 'Deletion path']}
+              priority
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { src: getPolicyIllustrationPath('privacy'), label: 'Collection scope' },
+                  { src: getPolicyIllustrationPath('disclosure'), label: 'Deletion pathway' },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[20px] border border-white/10 bg-white/5 p-3">
+                    <div className="overflow-hidden rounded-[16px] border border-white/10 bg-[#0A1726]">
+                      <Image src={item.src} alt={item.label} width={1200} height={900} className="h-auto w-full object-cover" />
+                    </div>
+                    <p className="mt-2 text-xs text-text-secondary">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </IllustrationFrame>
+            <div className="mt-5 rounded-[24px] border border-white/10 bg-black/10 p-5">
+              <div className="flex items-center gap-2 text-sm text-text-secondary">
+                <ShieldCheck className="h-4 w-4 text-accent-cyan" />
+                Contact
+              </div>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">
+                For privacy-related requests, email: {siteConfig.contactEmail}
+              </p>
             </div>
-            <p className="mt-3 text-sm leading-7 text-text-secondary">
-              For privacy-related requests, email: {siteConfig.contactEmail}
-            </p>
           </div>
         }
       />

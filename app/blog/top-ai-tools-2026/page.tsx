@@ -2,10 +2,12 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BarChart3, Layers3, Sparkles, Target, TrendingUp } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
 import SectionHeading from '@/components/ui/SectionHeading';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { getEditorialIllustrationPath } from '@/lib/illustrations';
 import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -213,6 +215,31 @@ export default function TopAiTools2026Page() {
         ]}
         aside={
           <div>
+            <IllustrationFrame
+              src={getEditorialIllustrationPath('topAiTools2026')}
+              alt="Abstract launch watchlist illustration for AI tools in 2026"
+              eyebrow="Visual brief"
+              title="This ranking now has a visual watchlist layer"
+              description="The annual list should feel like a live market board, not a plain stack of paragraphs. This image gives the page that market energy."
+              chips={['Watchlist', 'Workflow shifts', 'Trial priority']}
+              priority
+            >
+              <div className="grid grid-cols-4 gap-2">
+                {tools.slice(0, 4).map((tool) => (
+                  <div key={tool.id} className="rounded-[18px] border border-white/10 bg-white/5 p-3 text-center">
+                    <ToolLogo
+                      name={tool.name}
+                      icon={tool.icon}
+                      size={24}
+                      wrapperClassName="mx-auto h-9 w-9 rounded-2xl border border-white/10 bg-black/15"
+                      imageClassName="h-6 w-6"
+                      textClassName="text-xs text-text-primary"
+                    />
+                    <p className="mt-2 line-clamp-1 text-[11px] text-text-secondary">{tool.name}</p>
+                  </div>
+                ))}
+              </div>
+            </IllustrationFrame>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <Sparkles className="h-4 w-4 text-accent-yellow" />
               Before you read

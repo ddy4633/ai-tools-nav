@@ -12,10 +12,12 @@ import {
   XCircle,
 } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
 import SectionHeading from '@/components/ui/SectionHeading';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { getEditorialIllustrationPath } from '@/lib/illustrations';
 import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -209,6 +211,15 @@ export default function DeepSeekGuidePage() {
         ]}
         aside={
           <div>
+            <IllustrationFrame
+              src={getEditorialIllustrationPath('deepseekGuide')}
+              alt="Abstract reasoning workflow illustration for the DeepSeek guide"
+              eyebrow="Visual brief"
+              title="A reasoning-first workflow snapshot"
+              description="This artwork gives the page a clearer visual anchor before the reader moves into onboarding, comparison, and prompt design."
+              chips={['Reasoning', 'Prompt structure', 'Workflow fit']}
+              priority
+            />
             <div className="flex items-center gap-3 rounded-[24px] border border-white/10 bg-black/10 p-4">
               <ToolLogo
                 name={deepseekTool.name}

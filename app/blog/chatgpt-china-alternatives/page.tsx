@@ -14,10 +14,12 @@ import {
   XCircle,
 } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
 import SectionHeading from '@/components/ui/SectionHeading';
 import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import { getToolCardData, getToolDetailHref } from '@/lib/content/tool-directory';
+import { getEditorialIllustrationPath } from '@/lib/illustrations';
 import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -190,6 +192,31 @@ export default function ChatGPTAlternativesPage() {
         ]}
         aside={
           <div>
+            <IllustrationFrame
+              src={getEditorialIllustrationPath('chatgptAlternatives')}
+              alt="Abstract comparison workflow illustration for ChatGPT alternatives"
+              eyebrow="Visual brief"
+              title="Compare the workflow owners first"
+              description="Instead of stacking brand names, this image anchors the page around language fit, code fit, and long-context handling."
+              chips={['Language fit', 'Code fit', 'Long context']}
+              priority
+            >
+              <div className="grid grid-cols-3 gap-2">
+                {alternatives.slice(0, 3).map((tool) => (
+                  <div key={tool.id} className="rounded-[20px] border border-white/10 bg-white/5 p-3 text-center">
+                    <ToolLogo
+                      name={tool.name}
+                      icon={tool.icon}
+                      size={28}
+                      wrapperClassName="mx-auto h-10 w-10 rounded-2xl border border-white/10 bg-black/15"
+                      imageClassName="h-7 w-7"
+                      textClassName="text-sm text-text-primary"
+                    />
+                    <p className="mt-2 text-xs text-text-secondary">{tool.name}</p>
+                  </div>
+                ))}
+              </div>
+            </IllustrationFrame>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
               <Sparkles className="h-4 w-4 text-accent-yellow" />
               Quick takeaways

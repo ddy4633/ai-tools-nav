@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { Megaphone } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
+import { getPolicyIllustrationPath } from '@/lib/illustrations';
 import { buildSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -55,14 +58,39 @@ export default function DisclosurePage() {
           },
         ]}
         aside={
-          <div className="rounded-[24px] border border-white/10 bg-black/10 p-5">
-            <div className="flex items-center gap-2 text-sm text-text-secondary">
-              <Megaphone className="h-4 w-4 text-accent-cyan" />
-              Update policy
+          <div>
+            <IllustrationFrame
+              src={getPolicyIllustrationPath('disclosure')}
+              alt="Abstract disclosure and sponsor signal illustration"
+              eyebrow="Trust Layer"
+              title="Commercial signals should be obvious"
+              description="When money enters the page, the design should clarify that relationship instead of hiding it inside generic UI."
+              chips={['Sponsor labels', 'Partner links', 'Editorial split']}
+              priority
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { src: getPolicyIllustrationPath('disclosure'), label: 'Sponsor markers' },
+                  { src: getPolicyIllustrationPath('terms'), label: 'Policy alignment' },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[20px] border border-white/10 bg-white/5 p-3">
+                    <div className="overflow-hidden rounded-[16px] border border-white/10 bg-[#0A1726]">
+                      <Image src={item.src} alt={item.label} width={1200} height={900} className="h-auto w-full object-cover" />
+                    </div>
+                    <p className="mt-2 text-xs text-text-secondary">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </IllustrationFrame>
+            <div className="mt-5 rounded-[24px] border border-white/10 bg-black/10 p-5">
+              <div className="flex items-center gap-2 text-sm text-text-secondary">
+                <Megaphone className="h-4 w-4 text-accent-cyan" />
+                Update policy
+              </div>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">
+                If the monetization system changes, this page gets updated first so disclosure rules stay aligned with the live product.
+              </p>
             </div>
-            <p className="mt-3 text-sm leading-7 text-text-secondary">
-              If the monetization system changes, this page gets updated first so disclosure rules stay aligned with the live product.
-            </p>
           </div>
         }
       />

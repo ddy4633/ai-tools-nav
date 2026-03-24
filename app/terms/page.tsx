@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { FileCheck2 } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
+import { getPolicyIllustrationPath } from '@/lib/illustrations';
 import { buildSiteUrl, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -60,14 +63,39 @@ export default function TermsPage() {
           },
         ]}
         aside={
-          <div className="rounded-[24px] border border-white/10 bg-black/10 p-5">
-            <div className="flex items-center gap-2 text-sm text-text-secondary">
-              <FileCheck2 className="h-4 w-4 text-accent-yellow" />
-              Questions about terms
+          <div>
+            <IllustrationFrame
+              src={getPolicyIllustrationPath('terms')}
+              alt="Abstract terms and agreement structure illustration"
+              eyebrow="Operating Rules"
+              title="Set the contract tone clearly"
+              description="A terms page should feel like an orderly operating system for cooperation, not a cluttered disclaimer dump."
+              chips={['Scope', 'Outbound links', 'Settlement rules']}
+              priority
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { src: getPolicyIllustrationPath('terms'), label: 'Agreement frame' },
+                  { src: getPolicyIllustrationPath('privacy'), label: 'Data constraints' },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-[20px] border border-white/10 bg-white/5 p-3">
+                    <div className="overflow-hidden rounded-[16px] border border-white/10 bg-[#0A1726]">
+                      <Image src={item.src} alt={item.label} width={1200} height={900} className="h-auto w-full object-cover" />
+                    </div>
+                    <p className="mt-2 text-xs text-text-secondary">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </IllustrationFrame>
+            <div className="mt-5 rounded-[24px] border border-white/10 bg-black/10 p-5">
+              <div className="flex items-center gap-2 text-sm text-text-secondary">
+                <FileCheck2 className="h-4 w-4 text-accent-yellow" />
+                Questions about terms
+              </div>
+              <p className="mt-3 text-sm leading-7 text-text-secondary">
+                For contractual clarification, email: {siteConfig.contactEmail}
+              </p>
             </div>
-            <p className="mt-3 text-sm leading-7 text-text-secondary">
-              For contractual clarification, email: {siteConfig.contactEmail}
-            </p>
           </div>
         }
       />

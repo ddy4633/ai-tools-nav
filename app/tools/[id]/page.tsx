@@ -7,11 +7,13 @@ import { getAllTools, getToolById } from '@/lib/supabase';
 import { RatingDisplay } from '@/components/ui/star-rating';
 import { RatingForm } from '@/components/rating-form';
 import Breadcrumb, { breadcrumbPresets } from '@/components/ui/Breadcrumb';
+import IllustrationFrame from '@/components/ui/IllustrationFrame';
 import LocalizedToolName from '@/components/ui/LocalizedToolName';
 import ToolLogo from '@/components/ui/ToolLogo';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Tool } from '@/types/tool';
 import { buildSiteUrl } from '@/lib/site';
+import { getToolIllustrationPath } from '@/lib/illustrations';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import TrackedExternalLink from '@/components/ui/TrackedExternalLink';
 import { resolveToolPrimaryUrl } from '@/lib/tracking';
@@ -107,6 +109,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const relatedTools = allTools
     .filter((item: Tool) => item.id !== tool.id && item.category === tool.category)
     .slice(0, 3);
+  const showcaseTools = [tool, ...relatedTools].slice(0, 4);
 
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -253,6 +256,44 @@ export default async function ToolPage({ params }: ToolPageProps) {
             </article>
 
             <aside className="space-y-4">
+              <IllustrationFrame
+                src={getToolIllustrationPath(tool.category, tool.categorySlug ?? tool.category_slug)}
+                alt={`${displayName} workflow illustration`}
+                eyebrow="Visual fit"
+                title={`How ${displayName} sits in the stack`}
+                description="This visual deck gives the page a stronger first impression while also surfacing the closest same-lane options before the user clicks away."
+                chips={[categoryLabel, pricing.text, hasPrimaryCta ? 'Live link ready' : 'Research first']}
+                priority
+              >
+                <div className="grid grid-cols-2 gap-3">
+                  {showcaseTools.map((item, index) => (
+                    <div
+                      key={`${item.id}-${index}`}
+                      className="rounded-[20px] border border-white/10 bg-white/5 p-3"
+                    >
+                      <div className="flex items-center gap-3">
+                        <ToolLogo
+                          name={getToolPrimaryName(item.name)}
+                          icon={item.icon}
+                          size={28}
+                          wrapperClassName="h-10 w-10 rounded-2xl border border-white/10 bg-black/15"
+                          imageClassName="h-7 w-7"
+                          textClassName="text-sm text-text-primary"
+                        />
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-text-primary">
+                            <LocalizedToolName name={item.name} mode="surface" />
+                          </p>
+                          <p className="text-[11px] text-text-muted">
+                            {item.id === tool.id ? 'Current pick' : 'Same-lane option'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </IllustrationFrame>
+
               <div className="rounded-[30px] border border-white/10 bg-white/5 p-5">
                 <div className="flex items-center gap-2 text-sm text-text-secondary">
                   <Sparkles className="h-4 w-4 text-accent-yellow" />
