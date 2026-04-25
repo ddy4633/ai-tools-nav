@@ -313,6 +313,37 @@ export function getToolCardSummary(tool: Tool) {
   return `${displayName} is best for ${category.bestFor}. Use this card to judge fit, maturity, and whether the product deserves a deeper look.`;
 }
 
+export function getToolFreshnessTimestamp(tool: Tool) {
+  const candidates = [tool.updatedAt, tool.createdAt];
+
+  for (const value of candidates) {
+    if (!value) {
+      continue;
+    }
+
+    const timestamp = Date.parse(value);
+    if (!Number.isNaN(timestamp)) {
+      return timestamp;
+    }
+  }
+
+  return 0;
+}
+
+export function compareToolsByFreshness(left: Tool, right: Tool) {
+  const freshnessDelta = getToolFreshnessTimestamp(right) - getToolFreshnessTimestamp(left);
+  if (freshnessDelta !== 0) {
+    return freshnessDelta;
+  }
+
+  const ratingDelta = (right.editorRating ?? 0) - (left.editorRating ?? 0);
+  if (ratingDelta !== 0) {
+    return ratingDelta;
+  }
+
+  return getToolPrimaryName(left.name).localeCompare(getToolPrimaryName(right.name));
+}
+
 export function getToolSourceNote(tool: Tool) {
   if (isCjkHeavy(tool.reason) || isCjkHeavy(tool.description)) {
     return 'Original editorial notes are currently stored in Simplified Chinese. English-first summaries are shown here for global browsing.';

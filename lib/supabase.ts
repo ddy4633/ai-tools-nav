@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { toolsData } from '@/lib/content/tools-data';
 import { toolIcons } from '@/lib/content/tool-icons';
 import type { Tool } from '@/types/tool';
+import { compareToolsByFreshness } from '@/lib/tool-display';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -121,20 +122,19 @@ export async function getTrendingTools(limit = 10) {
 export async function getFeaturedTools(limit = 8) {
   const supabase = getSupabase();
   if (!supabase) {
-    return getMockTools();
+    return getMockTools().filter((tool) => tool.is_featured ?? tool.isFeatured).slice(0, limit);
   }
   
   const { data, error } = await supabase
     .from('tools_view')
     .select('*')
-    .eq('is_featured', true)
-    .limit(limit);
+    .eq('is_featured', true);
   
   if (error || !data || data.length === 0) {
-    return getMockTools();
+    return getMockTools().filter((tool) => tool.is_featured ?? tool.isFeatured).slice(0, limit);
   }
   
-  return data.map((item) => enrichTool(item));
+  return mergeTools(data).filter((tool) => tool.is_featured ?? tool.isFeatured).slice(0, limit);
 }
 
 export async function getCategories() {
@@ -170,7 +170,7 @@ export async function getAllTools(): Promise<Tool[]> {
     return getMockTools();
   }
   
-  return data.map((item) => enrichTool(item));
+  return mergeTools(data);
 }
 
 // 根据 ID 获取工具
@@ -373,8 +373,28 @@ function getMockTrendingTools() {
   return tools.map(enrichTool);
 }
 
+function getLocalTools(): Tool[] {
+  return toolsData.map((tool) => enrichTool({ ...tool })).sort(compareToolsByFreshness);
+}
+
+function mergeTools(remoteTools: Tool[]): Tool[] {
+  const merged = new Map<string, Tool>();
+
+  for (const tool of remoteTools) {
+    merged.set(tool.id, enrichTool(tool));
+  }
+
+  for (const tool of getLocalTools()) {
+    if (!merged.has(tool.id)) {
+      merged.set(tool.id, tool);
+    }
+  }
+
+  return Array.from(merged.values()).sort(compareToolsByFreshness);
+}
+
 function getMockTools(): Tool[] {
-  return toolsData.map((tool) => enrichTool({ ...tool }));
+  return getLocalTools();
 }
 function getMockCategories() {
   const categoryMeta = [

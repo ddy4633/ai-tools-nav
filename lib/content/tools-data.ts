@@ -12,6 +12,7 @@ import sourcedBatchToolsRound7 from '@/content/batch-8-tools-sourced';
 import sourcedBatchToolsRound8 from '@/content/batch-9-tools-sourced';
 import sourcedBatchToolsRound9 from '@/content/batch-10-tools-sourced';
 import sourcedBatchToolsRound10 from '@/content/batch-11-tools-sourced';
+import sourcedBatchToolsRound11 from '@/content/batch-12-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -1318,7 +1319,7 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10]);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [

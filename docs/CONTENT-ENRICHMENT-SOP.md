@@ -197,6 +197,15 @@
 - `step-1o`
 - `flowise`
 
+### 已完成：第十一批 6 个工具
+
+- `fathom-ai`
+- `google-vids`
+- `softr`
+- `figma-for-agents`
+- `higgsfield`
+- `genspark`
+
 ### 下一批建议
 
 `rawTools` 中的条目已全部完成首轮增强。后续重点转为“高热度工具复查”和“链接/价格/版本状态维护”：
@@ -204,13 +213,13 @@
 - `ChatGPT`
 - `Claude`
 - `Gemini`
-- `Kimi K2.5`
-- `Runway`
+- `Genspark`
+- `Fathom`
+- `Google Vids`
+- `Higgsfield`
+- `Softr`
+- `Figma for Agents`
 - `Kling AI`
-- `Recraft`
-- `Flowise`
-- `Operator`
-- `Manus`
 
 ## 五、上线前检查
 

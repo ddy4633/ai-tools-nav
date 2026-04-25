@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useUiLanguage } from '@/components/providers/LanguageProvider';
 import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
-import { getCategoryLabel, getToolDisplayName, getToolNameForLanguage } from '@/lib/tool-display';
+import { compareToolsByFreshness, getCategoryLabel, getToolDisplayName, getToolNameForLanguage } from '@/lib/tool-display';
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,18 +17,20 @@ export function CommandPalette() {
   const router = useRouter();
   const { language, copy } = useUiLanguage();
 
+  const orderedTools = useMemo(() => [...toolsData].sort(compareToolsByFreshness), []);
+
   // 过滤工具
   const filteredTools = useMemo(() => {
-    if (!query.trim()) return toolsData.slice(0, 8);
+    if (!query.trim()) return orderedTools.slice(0, 8);
     const lowerQuery = query.toLowerCase();
-    return toolsData.filter(tool =>
+    return orderedTools.filter(tool =>
       getToolDisplayName(tool.name).toLowerCase().includes(lowerQuery) ||
       tool.name.toLowerCase().includes(lowerQuery) ||
       tool.description.toLowerCase().includes(lowerQuery) ||
       tool.category.toLowerCase().includes(lowerQuery) ||
       getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug).toLowerCase().includes(lowerQuery)
     ).slice(0, 8);
-  }, [query]);
+  }, [orderedTools, query]);
 
   const navigateToTool = useCallback((tool: Tool) => {
     router.push(`/tools/${tool.id}`);

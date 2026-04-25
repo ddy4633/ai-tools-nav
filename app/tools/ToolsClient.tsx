@@ -10,7 +10,7 @@ import ToolLogo from '@/components/ui/ToolLogo';
 import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Category, Tool } from '@/types/tool';
-import { getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName, getToolPricingNote, getToolPrimaryName } from '@/lib/tool-display';
+import { compareToolsByFreshness, getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName, getToolPricingNote, getToolPrimaryName } from '@/lib/tool-display';
 
 interface ToolsClientProps {
   tools: Tool[];
@@ -84,7 +84,7 @@ export default function ToolsClient({
   const featuredShortlist = useMemo(() => {
     return [...tools]
       .filter((tool) => tool.is_featured ?? tool.isFeatured)
-      .sort((left, right) => (right.editorRating ?? 0) - (left.editorRating ?? 0))
+      .sort(compareToolsByFreshness)
       .slice(0, 3);
   }, [tools]);
 
@@ -106,7 +106,7 @@ export default function ToolsClient({
       const matchesPricing = selectedPricing === 'all' || pricingType === selectedPricing;
 
       return matchesSearch && matchesCategory && matchesPricing;
-    });
+    }).sort(compareToolsByFreshness);
   }, [tools, deferredSearch, selectedCategory, selectedPricing]);
 
   const visibleTools = filteredTools.slice(0, visibleCount);
