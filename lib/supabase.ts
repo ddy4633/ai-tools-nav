@@ -12,7 +12,7 @@ let supabaseClient: ReturnType<typeof createClient> | null = null;
 const toolDetailIndex = new Map<string, Tool>(
   toolsData.map((tool) => [tool.id, tool])
 );
-const buildIcon = (id: string) => toolIcons[id] || `/tool-icons/${id}.svg`;
+const buildIcon = (id: string) => toolIcons[id];
 
 function enrichTool<T extends { id: string }>(tool: T): T & Tool {
   const detail = toolDetailIndex.get(tool.id);

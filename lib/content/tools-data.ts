@@ -58,7 +58,7 @@ const normalizeTool = (tool: Tool): Tool => ({
   sponsorEndAt: tool.sponsorEndAt ?? tool.sponsor_end_at ?? null,
   is_sponsored: tool.is_sponsored ?? tool.isSponsored ?? Boolean(tool.sponsor_type ?? tool.sponsorType),
   isSponsored: tool.isSponsored ?? tool.is_sponsored ?? Boolean(tool.sponsor_type ?? tool.sponsorType),
-  icon: tool.icon ?? toolIcons[tool.id] ?? `/tool-icons/${tool.id}.svg`,
+  icon: tool.icon ?? toolIcons[tool.id],
   is_featured: tool.is_featured ?? tool.isFeatured,
   isFeatured: tool.isFeatured ?? tool.is_featured,
   average_rating: tool.average_rating ?? tool.editorRating,

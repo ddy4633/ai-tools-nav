@@ -24,46 +24,44 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/8 glass">
-      <div className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(125,226,212,0.32),transparent)]" />
+    <header className="sticky top-0 z-40 px-3 py-3">
+      <div className="mx-auto max-w-7xl rounded-[28px] border border-white/10 bg-[#090c12]/76 px-4 shadow-[0_20px_70px_rgba(0,0,0,0.26)] backdrop-blur-2xl md:px-5">
+        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(125,226,212,0.42),rgba(240,154,121,0.28),transparent)]" />
 
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex h-18 items-center justify-between gap-4">
-          <Link href="/" className="flex min-w-0 items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/6 shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
-              <Compass className="h-5 w-5 text-accent-cyan" />
+        <div className="flex h-16 items-center justify-between gap-4">
+          <Link href="/" className="group flex min-w-0 items-center gap-3">
+            <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/12 bg-[linear-gradient(145deg,rgba(125,226,212,0.18),rgba(255,255,255,0.06))] shadow-[0_14px_34px_rgba(0,0,0,0.22)]">
+              <Compass className="h-5 w-5 text-accent-cyan transition group-hover:rotate-12" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="truncate text-base font-semibold text-text-primary md:text-lg">{brandConfig.siteName}</span>
-              </div>
+              <div className="truncate text-base font-semibold text-text-primary md:text-lg">{brandConfig.siteName}</div>
               <p className="hidden text-xs text-text-muted md:block">{copy.header.taglineSecondary}</p>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav className="hidden items-center rounded-full border border-white/8 bg-white/5 p-1 md:flex">
             {navItems.map((item) => (
               <TrackedLink
                 key={item.name}
                 href={item.href}
                 trackingPayload={{ placement: 'header_nav', source: 'header' }}
-                className="text-sm text-text-secondary transition hover:text-text-primary"
+                className="rounded-full px-3 py-2 text-sm text-text-secondary transition hover:bg-white/10 hover:text-text-primary"
               >
                 {item.name}
               </TrackedLink>
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <CommandPalette />
 
             <TrackedLink
               href="/advertise"
               trackingPayload={{ placement: 'header_top_cta', source: 'header' }}
-              className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-text-secondary transition hover:border-accent-cyan/28 hover:text-text-primary md:inline-flex"
+              className="hidden items-center gap-2 rounded-full border border-accent-yellow/24 bg-accent-yellow/10 px-4 py-2 text-sm text-[#f5ddb1] transition hover:bg-accent-yellow/15 md:inline-flex"
             >
-              <Sparkles className="h-4 w-4 text-accent-yellow" />
+              <Sparkles className="h-4 w-4" />
               {copy.header.promote}
             </TrackedLink>
 

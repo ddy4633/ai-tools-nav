@@ -10,23 +10,23 @@ module.exports = {
       colors: {
         // 背景色 - 编辑感深色主题
         bg: {
-          primary: '#090c12',
-          secondary: '#10151f',
-          card: '#171d28',
-          hover: '#212a39',
-          code: '#0e1219',
+          primary: '#070a10',
+          secondary: '#0d121c',
+          card: '#141b27',
+          hover: '#202a38',
+          code: '#0b1018',
         },
         // 文字色
         text: {
-          primary: '#f4efe6',
-          secondary: '#c6bfb2',
-          muted: '#867d71',
+          primary: '#fff5e8',
+          secondary: '#d4cab9',
+          muted: '#948879',
           accent: '#7de2d4',
         },
         // 表面色 - 用于卡片背景
         surface: {
           base: '#10151f',
-          card: '#171d28',
+          card: '#141b27',
         },
         // 强调色
         accent: {
@@ -73,9 +73,9 @@ module.exports = {
         },
       },
       backgroundImage: {
-        'gradient-cyber': 'linear-gradient(125deg, #f4efe6 5%, #7de2d4 48%, #f09a79 100%)',
+        'gradient-cyber': 'linear-gradient(120deg, #fff5e8 4%, #7de2d4 44%, #f0c979 70%, #f09a79 100%)',
         'gradient-heat': 'linear-gradient(135deg, #f09a79 0%, #f0c979 100%)',
-        'gradient-dark': 'linear-gradient(180deg, #090c12 0%, #10151f 100%)',
+        'gradient-dark': 'linear-gradient(180deg, #070a10 0%, #0d121c 100%)',
       },
     },
   },

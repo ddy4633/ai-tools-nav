@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #090c12;
-  --bg-secondary: #10151f;
-  --bg-card: #171d28;
-  --bg-hover: #212a39;
-  --bg-code: #0e1219;
+  --bg-primary: #070a10;
+  --bg-secondary: #0d121c;
+  --bg-card: #141b27;
+  --bg-hover: #202a38;
+  --bg-code: #0b1018;
 
-  --text-primary: #f4efe6;
-  --text-secondary: #c6bfb2;
-  --text-muted: #867d71;
+  --text-primary: #fff5e8;
+  --text-secondary: #d4cab9;
+  --text-muted: #948879;
   --text-accent: #7de2d4;
 
   --accent-cyan: #7de2d4;
@@ -35,9 +35,10 @@ body {
   min-height: 100vh;
   color: var(--text-primary);
   background:
-    radial-gradient(circle at top left, rgba(125, 226, 212, 0.12), transparent 32%),
-    radial-gradient(circle at 84% 0%, rgba(240, 154, 121, 0.13), transparent 28%),
-    linear-gradient(180deg, #090c12 0%, #0f141d 42%, #090c12 100%);
+    radial-gradient(circle at 12% -8%, rgba(125, 226, 212, 0.16), transparent 34%),
+    radial-gradient(circle at 88% 0%, rgba(240, 154, 121, 0.15), transparent 30%),
+    radial-gradient(circle at 50% 18%, rgba(142, 162, 255, 0.08), transparent 38%),
+    linear-gradient(180deg, #070a10 0%, #0e1420 44%, #070a10 100%);
   font-family: var(--font-sans), "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
   position: relative;
 }
@@ -48,11 +49,23 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent 84%);
-  opacity: 0.5;
+    linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(180deg, rgba(255, 255, 255, 0.38), transparent 86%);
+  opacity: 0.58;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.035) 48%, transparent 52%),
+    radial-gradient(circle at 50% 120%, rgba(240, 201, 121, 0.08), transparent 36%);
+  opacity: 0.36;
+  mix-blend-mode: screen;
 }
 
 .font-display {
@@ -94,7 +107,7 @@ body::before {
 }
 
 .text-gradient-cyber {
-  background: linear-gradient(125deg, #f4efe6 5%, #7de2d4 48%, #f09a79 100%);
+  background: linear-gradient(120deg, #fff5e8 4%, #7de2d4 44%, #f0c979 70%, #f09a79 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -221,4 +234,15 @@ body::before {
   .animate-scroll-right {
     animation: none;
   }
+}
+
+
+.surface-lift {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+}
+
+.text-balance {
+  text-wrap: balance;
 }
