@@ -6,6 +6,7 @@ import { getAllTools, getCategories, getTrendingTools } from '@/lib/supabase';
 import type { Category, Tool, TrendingTool } from '@/types/tool';
 import { buildSiteUrl, siteConfig } from '@/lib/site';
 import { brandConfig } from '@/lib/brand';
+import { sortToolsByFreshness } from '@/lib/content/tool-freshness';
 
 export const revalidate = 3600;
 
@@ -58,9 +59,9 @@ export default async function Home() {
 
   const displayCategories = categories.length > 0 ? categories : categoriesData;
   const displayAllTools = allTools.length > 0 ? allTools : toolsData;
-  const displayFeaturedTools = displayAllTools
-    .filter((tool) => tool.is_featured ?? tool.isFeatured)
-    .slice(0, 8);
+  const displayFeaturedTools = sortToolsByFreshness(
+    displayAllTools.filter((tool) => tool.is_featured ?? tool.isFeatured)
+  ).slice(0, 8);
   const featuredTools =
     displayFeaturedTools.length > 0 ? displayFeaturedTools : displayAllTools.slice(0, 8);
   const displaySponsoredTools = getSponsoredToolsFromList(displayAllTools, 3);

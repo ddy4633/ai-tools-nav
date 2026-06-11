@@ -112,6 +112,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog article pages
   const blogPages: MetadataRoute.Sitemap = [
     {
+      url: buildSiteUrl('/blog/june-2026-ai-tools'),
+      lastModified: new Date('2026-06-11'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: buildSiteUrl('/blog/deepseek-guide'),
       lastModified: new Date('2026-03-10'),
       changeFrequency: 'monthly',

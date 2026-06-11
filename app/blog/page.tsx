@@ -17,14 +17,14 @@ export const metadata: Metadata = {
 };
 
 const featuredPost = {
-  href: '/blog/top-ai-tools-2026',
-  title: '10 AI Tools Worth Watching in 2026',
-  excerpt: 'From frontier models and AI coding to video generation and agents, this is the clearest annual entry point for high-intent discovery.',
-  category: 'Annual ranking',
-  date: '2026-03-03',
-  readTime: '12 min read',
-  cover: '/tool-icons/windsurf.png',
-  logos: ['/tool-icons/windsurf.png', '/tool-icons/kling.png', '/tool-icons/deepseek.png'],
+  href: '/blog/june-2026-ai-tools',
+  title: '8 New AI Tools Worth Tracking in June 2026',
+  excerpt: 'A sharper June watchlist built around browser agents, voice software, AI video, UI generation, and commercial buyer intent.',
+  category: 'June roundup',
+  date: '2026-06-11',
+  readTime: '10 min read',
+  cover: '/tool-icons/claude-4.svg',
+  logos: ['/tool-icons/google-flow.svg', '/tool-icons/browser-use.svg', '/tool-icons/stitch.svg'],
 };
 
 const editorialClusters = [
@@ -43,6 +43,17 @@ const editorialClusters = [
 ];
 
 const blogPosts = [
+  {
+    href: '/blog/june-2026-ai-tools',
+    title: '8 New AI Tools Worth Tracking in June 2026',
+    excerpt: 'A fresh June shortlist covering Claude 4, Flow, Stitch, Wispr Flow, Granola, Vapi, Browser Use, and Browse.sh.',
+    category: 'Rankings',
+    date: '2026-06-11',
+    readTime: '10 min read',
+    tags: ['June 2026', 'AI tools', 'Commercial intent'],
+    cover: '/tool-icons/claude-4.svg',
+    logos: ['/tool-icons/google-flow.svg', '/tool-icons/browser-use.svg'],
+  },
   {
     href: '/blog/top-ai-tools-2026',
     title: '10 AI Tools Worth Watching in 2026',
@@ -101,18 +112,19 @@ const blogPosts = [
 ];
 
 const visualLogos = [
+  '/tool-icons/claude-4.svg',
+  '/tool-icons/google-flow.svg',
+  '/tool-icons/stitch.svg',
+  '/tool-icons/wispr-flow.svg',
+  '/tool-icons/granola.svg',
+  '/tool-icons/vapi.svg',
+  '/tool-icons/browser-use.svg',
+  '/tool-icons/browse-sh.svg',
   '/tool-icons/deepseek.png',
   '/tool-icons/chatgpt.svg',
   '/tool-icons/claude.svg',
   '/tool-icons/kimi.png',
   '/tool-icons/qwen.svg',
-  '/tool-icons/windsurf.png',
-  '/tool-icons/v0.png',
-  '/tool-icons/midjourney.png',
-  '/tool-icons/stable-diffusion.png',
-  '/tool-icons/ideogram.png',
-  '/tool-icons/kling.png',
-  '/tool-icons/udio.svg',
 ];
 
 export default function BlogPage() {

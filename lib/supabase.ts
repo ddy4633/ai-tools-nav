@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { toolsData } from '@/lib/content/tools-data';
 import { toolIcons } from '@/lib/content/tool-icons';
+import { sortToolsByFreshness } from '@/lib/content/tool-freshness';
 import type { Tool } from '@/types/tool';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -102,7 +103,7 @@ export const getSupabase = () => {
 export async function getTrendingTools(limit = 10) {
   const supabase = getSupabase();
   if (!supabase) {
-    return getMockTrendingTools();
+    return getMockTrendingTools(limit);
   }
   
   const { data, error } = await supabase
@@ -112,7 +113,7 @@ export async function getTrendingTools(limit = 10) {
     .limit(limit);
   
   if (error || !data || data.length === 0) {
-    return getMockTrendingTools();
+    return getMockTrendingTools(limit);
   }
   
   return data.map((item) => enrichTool(item));
@@ -121,7 +122,7 @@ export async function getTrendingTools(limit = 10) {
 export async function getFeaturedTools(limit = 8) {
   const supabase = getSupabase();
   if (!supabase) {
-    return getMockTools();
+    return getMockFeaturedTools(limit);
   }
   
   const { data, error } = await supabase
@@ -131,7 +132,7 @@ export async function getFeaturedTools(limit = 8) {
     .limit(limit);
   
   if (error || !data || data.length === 0) {
-    return getMockTools();
+    return getMockFeaturedTools(limit);
   }
   
   return data.map((item) => enrichTool(item));
@@ -196,21 +197,157 @@ export async function getToolById(id: string): Promise<Tool | null> {
 }
 
 // 模拟热度工具数据
-function getMockTrendingTools() {
+function getMockTrendingTools(limit = 10) {
   const tools = [
+    {
+      id: 'browser-use',
+      name: 'Browser Use',
+      description: '把浏览器真正交给 AI Agent，网页自动化、Skills 和隐身浏览器一体推进',
+      one_liner: '浏览器 Agent 基础设施，正在把“会操作网站”变成标准能力',
+      website: 'https://browser-use.com',
+      repo_url: 'https://github.com/browser-use/browser-use',
+      hype_score: 98,
+      viral_coefficient: 3.8,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 84853, stars_per_day: 980, forks: 7600 },
+        hackernews: { votes: 612, comments: 184 }
+      },
+      install_methods: ['📦 pip', '☁️ 云端'],
+      category: 'AI编程'
+    },
+    {
+      id: 'claude-4',
+      name: 'Claude 4',
+      description: 'Anthropic 新一代模型家族，代码、推理、Agent 和长任务能力明显前进',
+      one_liner: '不是简单聊天升级，而是更适合真实工作交付的模型层',
+      website: 'https://claude.ai',
+      repo_url: null,
+      hype_score: 96,
+      viral_coefficient: 3.4,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 740, comments: 205 }
+      },
+      install_methods: ['☁️ 云端', '📦 API', '💻 IDE'],
+      category: 'AI聊天'
+    },
+    {
+      id: 'google-flow',
+      name: 'Google Flow',
+      description: 'Google 的 AI 影视制作工具，镜头控制、场景扩展和素材管理更完整',
+      one_liner: '视频生成正从 demo 走向创作者工作台',
+      website: 'https://labs.google/fx/tools/flow',
+      repo_url: null,
+      hype_score: 94,
+      viral_coefficient: 3.1,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 430, comments: 120 }
+      },
+      install_methods: ['☁️ 云端'],
+      category: 'AI视频'
+    },
+    {
+      id: 'stitch',
+      name: 'Stitch',
+      description: 'Google Labs 的 AI UI 设计实验，把文本和图片更快变成界面稿与前端代码',
+      one_liner: 'idea-to-app 入口继续升温，产品、设计、开发都想点进来',
+      website: 'https://stitch.withgoogle.com/',
+      repo_url: null,
+      hype_score: 92,
+      viral_coefficient: 3.0,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 398, comments: 106 }
+      },
+      install_methods: ['☁️ 云端', '🎨 Figma'],
+      category: '设计助手'
+    },
+    {
+      id: 'vapi',
+      name: 'Vapi',
+      description: '语音 Agent 平台，直接承接客服、预约、销售等高价值通话流程',
+      one_liner: '语音 AI 离预算和 ROI 更近了',
+      website: 'https://vapi.ai',
+      repo_url: null,
+      hype_score: 90,
+      viral_coefficient: 2.9,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 265, comments: 74 }
+      },
+      install_methods: ['📦 API', '☁️ 云端'],
+      category: 'AI音频'
+    },
+    {
+      id: 'browse-sh',
+      name: 'Browse.sh',
+      description: '把常见网站操作流程沉淀成可安装技能的浏览器 CLI 和目录',
+      one_liner: '让 Agent 少重复摸索，多直接复用技能',
+      website: 'https://browse.sh',
+      repo_url: 'https://github.com/browserbase/skills',
+      hype_score: 89,
+      viral_coefficient: 2.8,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 244, comments: 61 }
+      },
+      install_methods: ['📦 npm', '☁️ 云端'],
+      category: 'AI编程'
+    },
+    {
+      id: 'wispr-flow',
+      name: 'Wispr Flow',
+      description: '跨桌面和移动端的 AI 语音输入工具，把说话变成更像成稿的文本',
+      one_liner: '高频办公效率产品，比很多生成器更容易形成复购',
+      website: 'https://wisprflow.ai',
+      repo_url: null,
+      hype_score: 87,
+      viral_coefficient: 2.5,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 186, comments: 52 }
+      },
+      install_methods: ['💻 客户端', '📱 移动端'],
+      category: '效率工具'
+    },
+    {
+      id: 'granola',
+      name: 'Granola',
+      description: 'botless 的 AI 会议笔记产品，把会议上下文变成动作和记忆',
+      one_liner: '会议记录从“会不会记”转向“会不会进工作流”',
+      website: 'https://www.granola.ai',
+      repo_url: null,
+      hype_score: 85,
+      viral_coefficient: 2.3,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 174, comments: 49 }
+      },
+      install_methods: ['💻 客户端', '📱 移动端'],
+      category: '效率工具'
+    },
     {
       id: 'lovable',
       name: 'Lovable',
       description: '用自然语言直接生成可部署的全栈应用',
-      one_liner: '用自然语言直接生成可部署的全栈应用',
+      one_liner: '浏览器内快速做 MVP，依然有很强传播力',
       website: 'https://lovable.dev',
       repo_url: 'https://github.com/lovable/lovable',
-      hype_score: 98,
-      viral_coefficient: 3.5,
-      tier: '🔥 BREAKING',
+      hype_score: 83,
+      viral_coefficient: 2.1,
+      tier: '🚀 NEW',
       metrics: {
-        github: { stars: 25000, stars_per_day: 800, forks: 1200 },
-        hackernews: { votes: 512, comments: 128 }
+        github: { stars: 25000, stars_per_day: 340, forks: 1200 },
+        hackernews: { votes: 168, comments: 44 }
       },
       install_methods: ['☁️ 云端', '🐳 Docker'],
       category: 'AI编程'
@@ -219,158 +356,31 @@ function getMockTrendingTools() {
       id: 'cursor',
       name: 'Cursor',
       description: 'AI原生代码编辑器，Composer多文件编辑革新编程体验',
-      one_liner: 'AI原生代码编辑器，Composer多文件编辑革新编程体验',
+      one_liner: '老热门仍强，但这轮更像成熟基线而不是最新惊喜',
       website: 'https://cursor.sh',
       repo_url: null,
-      hype_score: 96,
-      viral_coefficient: 3.2,
-      tier: '🔥 BREAKING',
+      hype_score: 84,
+      viral_coefficient: 1.9,
+      tier: '💡 WATCH',
       metrics: {
         github: { stars: 0, stars_per_day: 0, forks: 0 },
-        hackernews: { votes: 890, comments: 234 }
+        hackernews: { votes: 140, comments: 36 }
       },
       install_methods: ['💻 客户端'],
       category: 'AI编程'
     },
-    {
-      id: 'deepseek',
-      name: 'DeepSeek',
-      description: '国产AI黑马，推理能力顶尖，完全免费',
-      one_liner: '国产AI黑马，推理能力顶尖，完全免费',
-      website: 'https://chat.deepseek.com',
-      repo_url: 'https://github.com/deepseek-ai/DeepSeek-R1',
-      hype_score: 95,
-      viral_coefficient: 4.0,
-      tier: '🔥 BREAKING',
-      metrics: {
-        github: { stars: 65000, stars_per_day: 2500, forks: 8500 },
-        hackernews: { votes: 1200, comments: 456 }
-      },
-      install_methods: ['☁️ 云端', '📦 API'],
-      category: 'AI聊天'
-    },
-    {
-      id: 'sora',
-      name: 'Sora',
-      description: 'OpenAI视频生成模型，生成质量和一致性顶尖',
-      one_liner: 'OpenAI视频生成模型，生成质量和一致性顶尖',
-      website: 'https://openai.com/sora',
-      repo_url: null,
-      hype_score: 94,
-      viral_coefficient: 2.8,
-      tier: '🔥 BREAKING',
-      metrics: {
-        github: { stars: 0, stars_per_day: 0, forks: 0 },
-        hackernews: { votes: 678, comments: 189 }
-      },
-      install_methods: ['☁️ 云端'],
-      category: 'AI视频'
-    },
-    {
-      id: 'felvin',
-      name: 'Felvin',
-      description: '用文字编辑图片，像修图师一样对话',
-      one_liner: '用文字编辑图片，像修图师一样对话',
-      website: 'https://felvin.com',
-      repo_url: 'https://github.com/felvin/felvin',
-      hype_score: 88,
-      viral_coefficient: 2.4,
-      tier: '⚡ TRENDING',
-      metrics: {
-        github: { stars: 8900, stars_per_day: 420, forks: 680 },
-        hackernews: { votes: 289, comments: 67 }
-      },
-      install_methods: ['☁️ 云端', '🐳 Docker', '📦 pip'],
-      category: 'AI图像'
-    },
-    {
-      id: 'flux',
-      name: 'FLUX',
-      description: 'Black Forest Labs出品，开源图像生成新标杆',
-      one_liner: 'Black Forest Labs出品，开源图像生成新标杆',
-      website: 'https://flux-ai.io',
-      repo_url: null,
-      hype_score: 87,
-      viral_coefficient: 2.1,
-      tier: '⚡ TRENDING',
-      metrics: {
-        github: { stars: 12000, stars_per_day: 350, forks: 890 },
-        hackernews: { votes: 345, comments: 89 }
-      },
-      install_methods: ['☁️ 云端', '📦 pip'],
-      category: 'AI图像'
-    },
-    {
-      id: 'tldraw',
-      name: 'tldraw',
-      description: '画个草图，直接生成可用代码',
-      one_liner: '画个草图，直接生成可用代码',
-      website: 'https://tldraw.com',
-      repo_url: 'https://github.com/tldraw/tldraw',
-      hype_score: 86,
-      viral_coefficient: 2.2,
-      tier: '⚡ TRENDING',
-      metrics: {
-        github: { stars: 35000, stars_per_day: 580, forks: 2100 },
-        hackernews: { votes: 456, comments: 98 }
-      },
-      install_methods: ['☁️ 云端', '📦 npm', '🐳 Docker'],
-      category: 'AI编程'
-    },
-    {
-      id: 'kling-video',
-      name: '可灵AI视频',
-      description: '快手出品的AI视频生成工具，国产视频生成标杆',
-      one_liner: '快手出品的AI视频生成工具，国产视频生成标杆',
-      website: 'https://klingai.com',
-      repo_url: null,
-      hype_score: 85,
-      viral_coefficient: 2.5,
-      tier: '⚡ TRENDING',
-      metrics: {
-        github: { stars: 0, stars_per_day: 0, forks: 0 },
-        hackernews: { votes: 234, comments: 56 }
-      },
-      install_methods: ['☁️ 云端'],
-      category: 'AI视频'
-    },
-    {
-      id: 'synclabs',
-      name: 'Sync Labs',
-      description: '给任意视频换嘴型，让任何人说任何话',
-      one_liner: '给任意视频换嘴型，让任何人说任何话',
-      website: 'https://synclabs.so',
-      repo_url: 'https://github.com/synclabs/sync',
-      hype_score: 82,
-      viral_coefficient: 1.9,
-      tier: '🚀 NEW',
-      metrics: {
-        github: { stars: 5800, stars_per_day: 280, forks: 420 },
-        hackernews: { votes: 189, comments: 67 }
-      },
-      install_methods: ['☁️ API', '🐳 Docker'],
-      category: 'AI视频'
-    },
-    {
-      id: 'suno',
-      name: 'Suno',
-      description: '描述风格，AI给你生成完整歌曲',
-      one_liner: '描述风格，AI给你生成完整歌曲',
-      website: 'https://suno.com',
-      repo_url: 'https://github.com/suno/suno',
-      hype_score: 80,
-      viral_coefficient: 1.6,
-      tier: '🚀 NEW',
-      metrics: {
-        github: { stars: 3200, stars_per_day: 180, forks: 250 },
-        hackernews: { votes: 156, comments: 45 }
-      },
-      install_methods: ['☁️ 云端'],
-      category: 'AI音频'
-    }
   ];
 
-  return tools.map(enrichTool);
+  return tools
+    .sort((left, right) => right.hype_score - left.hype_score)
+    .slice(0, limit)
+    .map(enrichTool);
+}
+
+function getMockFeaturedTools(limit = 8): Tool[] {
+  return sortToolsByFreshness(
+    getMockTools().filter((tool) => tool.is_featured ?? tool.isFeatured)
+  ).slice(0, limit);
 }
 
 function getMockTools(): Tool[] {

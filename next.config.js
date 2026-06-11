@@ -5,6 +5,7 @@ const nextConfig = {
   output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
   distDir: '.next',
   outputFileTracingRoot: path.resolve(__dirname),
+  allowedDevOrigins: ['127.0.0.1'],
   images: {
     unoptimized: true,
   },
