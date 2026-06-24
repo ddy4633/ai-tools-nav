@@ -1,8 +1,13 @@
 // 使用 Supabase JS 客户端创建表结构
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://crmkyaoczrvnjsizlaas.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNybWt5YW9jenJ2bmpzaXpsYWFzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTE3NDE0OSwiZXhwIjoyMDg2NzUwMTQ5fQ.mHcUfPwebMa6QLYeErwey-dDhTvWjR3MUtmKIIarX2M';
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('错误: 请设置 SUPABASE_URL（或 NEXT_PUBLIC_SUPABASE_URL）和 SUPABASE_SERVICE_ROLE_KEY 环境变量');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 

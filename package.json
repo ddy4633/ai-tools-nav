@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "audit:site": "playwright test tests/browser/site-audit.spec.ts --browser=chromium --reporter=line",
     "db:types": "supabase gen types typescript --project-id $PROJECT_ID --schema public > types/supabase.ts"

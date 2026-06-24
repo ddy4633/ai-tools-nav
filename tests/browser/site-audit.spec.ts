@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page, type Request } from '@playwright/test';
 
 const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:3003';
 const outDir = path.resolve(process.cwd(), 'research', 'site-audit');
@@ -49,7 +49,7 @@ test('audit sitemap pages', async ({ page }) => {
 
   for (const url of urls) {
     const failedRequests: Array<{ url: string; method: string; failure: string }> = [];
-    const handler = (request: any) => {
+    const handler = (request: Request) => {
       const url = request.url();
       const failure = request.failure()?.errorText || 'unknown';
 

@@ -1,15 +1,32 @@
 const { Client } = require('pg');
 
-const client = new Client({
-  host: 'db.crmkyaoczrvnjsizlaas.supabase.co',
-  port: 6543,  // 使用连接池端口
-  database: 'postgres',
-  user: 'postgres.crmkyaoczrvnjsizlaas',
-  password: 'A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5',
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const connectionString = process.env.DATABASE_URL || process.env.SUPABASE_DB_URL;
+
+const client = connectionString
+  ? new Client({
+      connectionString,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    })
+  : new Client({
+      host: process.env.SUPABASE_DB_HOST,
+      port: Number(process.env.SUPABASE_DB_PORT || 6543), // 默认连接池端口
+      database: process.env.SUPABASE_DB_NAME || 'postgres',
+      user: process.env.SUPABASE_DB_USER,
+      password: process.env.SUPABASE_DB_PASSWORD,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
+
+if (
+  !connectionString &&
+  (!process.env.SUPABASE_DB_HOST || !process.env.SUPABASE_DB_USER || !process.env.SUPABASE_DB_PASSWORD)
+) {
+  console.error('错误: 请设置 DATABASE_URL（或 SUPABASE_DB_URL），或者提供 SUPABASE_DB_HOST / SUPABASE_DB_USER / SUPABASE_DB_PASSWORD。');
+  process.exit(1);
+}
 
 async function initDatabase() {
   try {

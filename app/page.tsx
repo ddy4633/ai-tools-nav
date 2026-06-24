@@ -58,8 +58,13 @@ export default async function Home() {
 
   const displayCategories = categories.length > 0 ? categories : categoriesData;
   const displayAllTools = allTools.length > 0 ? allTools : toolsData;
-  const displayFeaturedTools = displayAllTools
+  const displayFeaturedTools = [...displayAllTools]
     .filter((tool) => tool.is_featured ?? tool.isFeatured)
+    .sort((left, right) => {
+      const leftTime = Date.parse(left.updatedAt ?? left.createdAt ?? '1970-01-01');
+      const rightTime = Date.parse(right.updatedAt ?? right.createdAt ?? '1970-01-01');
+      return rightTime - leftTime;
+    })
     .slice(0, 8);
   const featuredTools =
     displayFeaturedTools.length > 0 ? displayFeaturedTools : displayAllTools.slice(0, 8);

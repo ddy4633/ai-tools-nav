@@ -2,7 +2,7 @@ import { brandConfig } from '@/lib/brand';
 
 const DEFAULT_SITE_URL = 'https://ai.poph163.com';
 const DEFAULT_GITHUB_URL = 'https://github.com/ddy4633/ai-tools-nav';
-const DEFAULT_CONTACT_EMAIL = 'hello@poph163.com';
+const DEFAULT_CONTACT_EMAIL = 'hello@ai.poph163.com';
 
 function normalizeUrl(url: string) {
   return url.trim().replace(/\/$/, '');

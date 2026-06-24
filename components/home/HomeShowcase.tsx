@@ -98,7 +98,7 @@ const pricingTone: Record<string, string> = {
   freemium: 'border-white/12 bg-white/6 text-text-secondary',
 };
 
-const heroQueries = ['DeepSeek', 'Cursor', 'Midjourney', 'ChatGPT', 'Sora', 'Perplexity'];
+const defaultHeroQueries = ['DeepSeek', 'Cursor', 'Midjourney', 'ChatGPT', 'Sora', 'Perplexity'];
 
 export default function HomeShowcase({
   allTools,
@@ -130,6 +130,17 @@ export default function HomeShowcase({
     .sort((left, right) => right.popularity - left.popularity)
     .slice(0, 6);
   const heroTools = featuredTools.slice(0, 6);
+  const freshLaunches = [...allTools]
+    .filter((tool) => Boolean(tool.updatedAt || tool.createdAt))
+    .sort((left, right) => {
+      const leftTime = Date.parse(left.updatedAt ?? left.createdAt ?? '1970-01-01');
+      const rightTime = Date.parse(right.updatedAt ?? right.createdAt ?? '1970-01-01');
+      return rightTime - leftTime;
+    })
+    .slice(0, 5);
+  const heroQueries = Array.from(
+    new Set(freshLaunches.map((tool) => getToolPrimaryName(tool.name)).filter(Boolean))
+  ).slice(0, 6);
   const iconWallTools = allTools.filter((tool) => Boolean(tool.icon)).slice(0, 30);
   const spotlightPick = editorPicks[0];
   const spotlightTool = spotlightPick?.tool ?? featuredTools[0];
@@ -208,7 +219,7 @@ export default function HomeShowcase({
 
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <span className="text-sm text-text-muted">Fast starts</span>
-                {heroQueries.map((query) => (
+                {(heroQueries.length > 0 ? heroQueries : defaultHeroQueries).map((query) => (
                   <button
                     key={query}
                     type="button"
@@ -291,6 +302,44 @@ export default function HomeShowcase({
                   <SignalPanel icon={<LineChart className="h-4 w-4" />} title="Momentum desk" value={`${trendingBoard.length || 0} live movers`} detail="Trending tools stay visible without taking over the page." />
                   <SignalPanel icon={<ShieldCheck className="h-4 w-4" />} title="Paid clarity" value={`${sponsoredTools.length} sponsor slots`} detail="Commercial placement is separated from editorial picks." />
                 </div>
+
+                {freshLaunches.length > 0 ? (
+                  <div className="rounded-[30px] border border-white/10 bg-white/5 p-5 backdrop-blur">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.22em] text-text-muted">Fresh launches</p>
+                        <h3 className="mt-2 text-xl font-semibold text-text-primary">Newest tools added to the atlas</h3>
+                      </div>
+                      <Link href="/tools" className="text-sm text-text-secondary transition hover:text-text-primary">Open directory</Link>
+                    </div>
+                    <div className="mt-5 space-y-3">
+                      {freshLaunches.map((tool) => (
+                        <Link key={tool.id} href={`/tools/${tool.id}`} className="group flex items-center gap-3 rounded-[22px] border border-white/8 bg-black/10 px-4 py-3 transition hover:border-accent-cyan/25 hover:bg-white/6">
+                          <ToolLogo
+                            name={getToolPrimaryName(tool.name)}
+                            icon={tool.icon}
+                            size={24}
+                            alt={`${getToolPrimaryName(tool.name)} logo`}
+                            wrapperClassName="h-10 w-10 rounded-[14px] border border-white/10 bg-white/5"
+                            imageClassName="h-6 w-6"
+                            textClassName="text-sm text-accent-cyan"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-text-primary">
+                              <LocalizedToolName name={tool.name} mode="surface" />
+                            </p>
+                            <p className="truncate text-xs text-text-muted">
+                              {getCategoryLabel(tool.category, tool.categorySlug ?? tool.category_slug)}
+                            </p>
+                          </div>
+                          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-text-secondary">
+                            {tool.updatedAt ?? tool.createdAt}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
 
                 {trendingBoard.length > 0 ? (
                   <div className="rounded-[30px] border border-white/10 bg-white/5 p-5 backdrop-blur">
