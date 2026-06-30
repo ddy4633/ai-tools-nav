@@ -1,8 +1,13 @@
 // 使用 Supabase JS 客户端创建表结构
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://crmkyaoczrvnjsizlaas.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNybWt5YW9jenJ2bmpzaXpsYWFzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTE3NDE0OSwiZXhwIjoyMDg2NzUwMTQ5fQ.mHcUfPwebMa6QLYeErwey-dDhTvWjR3MUtmKIIarX2M';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('错误: 请设置 SUPABASE_URL 和 SUPABASE_SERVICE_KEY 环境变量');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -22,7 +27,7 @@ async function initDatabase() {
         tool_count INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT NOW()
       );
-    `
+    `,
   });
 
   if (catError) {
@@ -80,16 +85,12 @@ async function initDatabase() {
     ON CONFLICT (slug) DO NOTHING;
   `;
 
-  // 执行 SQL
-  const { error: sqlError } = await supabase.rpc('exec_sql', { sql: initSql });
-  
-  if (sqlError) {
-    console.error('❌ SQL 执行失败:', sqlError.message);
-    console.log('\n请手动在 Supabase Dashboard 执行 SQL');
-    process.exit(1);
-  } else {
-    console.log('✅ 数据库初始化成功！');
-  }
+  console.log('准备执行初始化 SQL...');
+  console.log('SQL 长度:', initSql.length);
+  console.log('\n注意：如需实际执行，请在 Supabase SQL Editor 中运行上述 SQL，或实现可审计的服务端迁移流程。');
 }
 
-initDatabase();
+initDatabase().catch((error) => {
+  console.error('初始化数据库失败:', error);
+  process.exit(1);
+});

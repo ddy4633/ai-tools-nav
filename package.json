@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit",
+    "start": "node .next/standalone/server.js",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "type-check": "next typegen && tsc --noEmit",
     "audit:site": "playwright test tests/browser/site-audit.spec.ts --browser=chromium --reporter=line",
     "db:types": "supabase gen types typescript --project-id $PROJECT_ID --schema public > types/supabase.ts"
   },

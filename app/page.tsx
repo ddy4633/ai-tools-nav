@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import HomeShowcase from '@/components/home/HomeShowcase';
 import { editorPicks, toolsData, categoriesData } from '@/lib/content/tools-data';
 import { getSponsoredToolsFromList } from '@/lib/monetization/sponsored';
+import { rankFeaturedTools, rankToolsForDiscovery } from '@/lib/tool-ranking';
 import { getAllTools, getCategories, getTrendingTools } from '@/lib/supabase';
 import type { Category, Tool, TrendingTool } from '@/types/tool';
 import { buildSiteUrl, siteConfig } from '@/lib/site';
@@ -57,12 +58,8 @@ export default async function Home() {
   }
 
   const displayCategories = categories.length > 0 ? categories : categoriesData;
-  const displayAllTools = allTools.length > 0 ? allTools : toolsData;
-  const displayFeaturedTools = displayAllTools
-    .filter((tool) => tool.is_featured ?? tool.isFeatured)
-    .slice(0, 8);
-  const featuredTools =
-    displayFeaturedTools.length > 0 ? displayFeaturedTools : displayAllTools.slice(0, 8);
+  const displayAllTools = allTools.length > 0 ? allTools : rankToolsForDiscovery(toolsData);
+  const featuredTools = rankFeaturedTools(displayAllTools, 8);
   const displaySponsoredTools = getSponsoredToolsFromList(displayAllTools, 3);
 
   return (

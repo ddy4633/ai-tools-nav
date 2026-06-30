@@ -11,6 +11,7 @@ import ToolPrimaryCta from '@/components/ui/ToolPrimaryCta';
 import SponsorBadge from '@/components/ui/SponsorBadge';
 import type { Category, Tool } from '@/types/tool';
 import { getCategoryLabel, getPricingLabel, getToolCardSummary, getToolDisplayName, getToolPricingNote, getToolPrimaryName } from '@/lib/tool-display';
+import { rankFeaturedTools } from '@/lib/tool-ranking';
 
 interface ToolsClientProps {
   tools: Tool[];
@@ -81,12 +82,7 @@ export default function ToolsClient({
     setVisibleCount(24);
   }, [deferredSearch, selectedCategory, selectedPricing]);
 
-  const featuredShortlist = useMemo(() => {
-    return [...tools]
-      .filter((tool) => tool.is_featured ?? tool.isFeatured)
-      .sort((left, right) => (right.editorRating ?? 0) - (left.editorRating ?? 0))
-      .slice(0, 3);
-  }, [tools]);
+  const featuredShortlist = useMemo(() => rankFeaturedTools(tools, 3), [tools]);
 
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {

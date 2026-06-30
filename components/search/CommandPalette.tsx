@@ -9,6 +9,9 @@ import { useUiLanguage } from '@/components/providers/LanguageProvider';
 import type { Tool } from '@/types/tool';
 import ToolLogo from '@/components/ui/ToolLogo';
 import { getCategoryLabel, getToolDisplayName, getToolNameForLanguage } from '@/lib/tool-display';
+import { rankToolsForDiscovery } from '@/lib/tool-ranking';
+
+const discoveryTools = rankToolsForDiscovery(toolsData);
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,9 +22,9 @@ export function CommandPalette() {
 
   // 过滤工具
   const filteredTools = useMemo(() => {
-    if (!query.trim()) return toolsData.slice(0, 8);
+    if (!query.trim()) return discoveryTools.slice(0, 8);
     const lowerQuery = query.toLowerCase();
-    return toolsData.filter(tool =>
+    return discoveryTools.filter(tool =>
       getToolDisplayName(tool.name).toLowerCase().includes(lowerQuery) ||
       tool.name.toLowerCase().includes(lowerQuery) ||
       tool.description.toLowerCase().includes(lowerQuery) ||

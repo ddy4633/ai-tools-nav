@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { toolsData } from '@/lib/content/tools-data';
 import { toolIcons } from '@/lib/content/tool-icons';
 import type { Tool } from '@/types/tool';
+import { rankFeaturedTools, rankToolsForDiscovery } from '@/lib/tool-ranking';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -121,20 +122,19 @@ export async function getTrendingTools(limit = 10) {
 export async function getFeaturedTools(limit = 8) {
   const supabase = getSupabase();
   if (!supabase) {
-    return getMockTools();
+    return rankFeaturedTools(getMockTools(), limit);
   }
-  
+
   const { data, error } = await supabase
     .from('tools_view')
     .select('*')
-    .eq('is_featured', true)
-    .limit(limit);
-  
+    .eq('is_featured', true);
+
   if (error || !data || data.length === 0) {
-    return getMockTools();
+    return rankFeaturedTools(getMockTools(), limit);
   }
-  
-  return data.map((item) => enrichTool(item));
+
+  return rankFeaturedTools(data.map((item) => enrichTool(item)), limit);
 }
 
 export async function getCategories() {
@@ -160,17 +160,17 @@ export async function getAllTools(): Promise<Tool[]> {
   if (!supabase) {
     return getMockTools();
   }
-  
+
   const { data, error } = await supabase
     .from('tools_view')
     .select('*')
     .order('name', { ascending: true });
-  
+
   if (error || !data || data.length === 0) {
     return getMockTools();
   }
-  
-  return data.map((item) => enrichTool(item));
+
+  return rankToolsForDiscovery(data.map((item) => enrichTool(item)));
 }
 
 // 根据 ID 获取工具
@@ -198,6 +198,108 @@ export async function getToolById(id: string): Promise<Tool | null> {
 // 模拟热度工具数据
 function getMockTrendingTools() {
   const tools = [
+    {
+      id: 'codex',
+      name: 'Codex',
+      description: "OpenAI's cloud coding agent for delegated engineering work",
+      one_liner: 'Delegated coding work with repo context, commands, and reviewable output',
+      website: 'https://openai.com/codex/',
+      repo_url: null,
+      hype_score: 99,
+      viral_coefficient: 3.8,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 884, comments: 231 }
+      },
+      install_methods: ['☁️ Cloud'],
+      category: 'AI编程'
+    },
+    {
+      id: 'claude-code',
+      name: 'Claude Code',
+      description: "Anthropic's repo-aware coding agent for terminal and IDE workflows",
+      one_liner: 'Reads the repo, edits files, runs commands, and keeps coding tasks moving',
+      website: 'https://www.anthropic.com/claude-code',
+      repo_url: null,
+      hype_score: 97,
+      viral_coefficient: 3.4,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 742, comments: 198 }
+      },
+      install_methods: ['💻 Desktop app', '☁️ API'],
+      category: 'AI编程'
+    },
+    {
+      id: 'notebooklm',
+      name: 'NotebookLM',
+      description: "Google's source-grounded research notebook and thinking partner",
+      one_liner: 'Turns dense sources into briefs, study guides, citations, and audio explainers',
+      website: 'https://notebooklm.google/',
+      repo_url: null,
+      hype_score: 95,
+      viral_coefficient: 2.9,
+      tier: '🔥 BREAKING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 536, comments: 142 }
+      },
+      install_methods: ['☁️ Cloud'],
+      category: '知识管理'
+    },
+    {
+      id: 'granola',
+      name: 'Granola',
+      description: 'AI meeting notepad for searchable notes and cleaner follow-up',
+      one_liner: 'Stay present in the meeting and let the notes become structured memory',
+      website: 'https://www.granola.ai/',
+      repo_url: null,
+      hype_score: 93,
+      viral_coefficient: 2.7,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 388, comments: 96 }
+      },
+      install_methods: ['💻 Desktop app'],
+      category: '效率工具'
+    },
+    {
+      id: 'vapi',
+      name: 'Vapi',
+      description: 'Voice AI developer platform for telephony, orchestration, and deployment',
+      one_liner: 'Build production voice agents instead of stopping at demos',
+      website: 'https://vapi.ai/',
+      repo_url: null,
+      hype_score: 92,
+      viral_coefficient: 2.8,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 312, comments: 84 }
+      },
+      install_methods: ['☁️ API'],
+      category: 'AI编程'
+    },
+    {
+      id: 'wispr-flow',
+      name: 'Wispr Flow',
+      description: 'Voice dictation layer for faster writing across everyday apps',
+      one_liner: 'Reduce typing friction and turn spoken drafts into polished text',
+      website: 'https://wisprflow.ai/',
+      repo_url: null,
+      hype_score: 90,
+      viral_coefficient: 2.5,
+      tier: '⚡ TRENDING',
+      metrics: {
+        github: { stars: 0, stars_per_day: 0, forks: 0 },
+        hackernews: { votes: 274, comments: 73 }
+      },
+      install_methods: ['💻 Desktop app'],
+      category: 'AI音频'
+    },
     {
       id: 'lovable',
       name: 'Lovable',
@@ -374,7 +476,7 @@ function getMockTrendingTools() {
 }
 
 function getMockTools(): Tool[] {
-  return toolsData.map((tool) => enrichTool({ ...tool }));
+  return rankToolsForDiscovery(toolsData.map((tool) => enrichTool({ ...tool })));
 }
 function getMockCategories() {
   const categoryMeta = [

@@ -90,12 +90,13 @@ export function EnhancedSearch({ tools, onSearch, currentQuery }: EnhancedSearch
         type: 'history',
       }));
       
-      const trendingSuggestions: SearchSuggestion[] = [
-        { id: 'trend-1', name: 'ChatGPT', category: 'AI Chat', type: 'trending' },
-        { id: 'trend-2', name: 'Cursor', category: 'AI Coding', type: 'trending' },
-        { id: 'trend-3', name: 'Midjourney', category: 'Image & Art', type: 'trending' },
-      ];
-      
+      const trendingSuggestions: SearchSuggestion[] = tools.slice(0, 3).map((tool) => ({
+        id: `trend-${tool.id}`,
+        name: getToolNameForLanguage(tool.name, language, 'surface'),
+        category: getCategoryLabel(tool.category),
+        type: 'trending' as const,
+      }));
+
       setSuggestions([...historySuggestions, ...trendingSuggestions]);
       return;
     }

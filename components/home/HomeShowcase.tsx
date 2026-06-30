@@ -98,8 +98,6 @@ const pricingTone: Record<string, string> = {
   freemium: 'border-white/12 bg-white/6 text-text-secondary',
 };
 
-const heroQueries = ['DeepSeek', 'Cursor', 'Midjourney', 'ChatGPT', 'Sora', 'Perplexity'];
-
 export default function HomeShowcase({
   allTools,
   featuredTools,
@@ -130,9 +128,10 @@ export default function HomeShowcase({
     .sort((left, right) => right.popularity - left.popularity)
     .slice(0, 6);
   const heroTools = featuredTools.slice(0, 6);
+  const heroQueries = heroTools.map((tool) => getToolPrimaryName(tool.name));
   const iconWallTools = allTools.filter((tool) => Boolean(tool.icon)).slice(0, 30);
-  const spotlightPick = editorPicks[0];
-  const spotlightTool = spotlightPick?.tool ?? featuredTools[0];
+  const spotlightTool = featuredTools[0] ?? editorPicks[0]?.tool;
+  const spotlightPick = editorPicks.find((pick) => pick.tool.id === spotlightTool?.id) ?? editorPicks[0];
   const editorCards = editorPicks.slice(1, 4);
   const trendingBoard = trendingTools.slice(0, 5);
   const toolCount = allTools.length;
