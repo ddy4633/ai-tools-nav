@@ -2,12 +2,12 @@ import { test, expect } from '@playwright/test';
 
 const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:3003';
 const freshLaunches = [
-  { id: 'codex', name: 'Codex' },
-  { id: 'claude-code', name: 'Claude Code' },
-  { id: 'granola', name: 'Granola' },
-  { id: 'vapi', name: 'Vapi' },
-  { id: 'wispr-flow', name: 'Wispr Flow' },
-  { id: 'notebooklm', name: 'NotebookLM' },
+  { id: 'modelence', name: 'Modelence App Builder' },
+  { id: 'tabstack', name: 'Tabstack' },
+  { id: 'acti', name: 'Acti' },
+  { id: 'adam-cad-copilot', name: 'Adam CAD Copilot' },
+  { id: 'mailadept', name: 'MailAdept' },
+  { id: 'humalike', name: 'Humalike' },
 ];
 
 test('homepage and featured api surface the fresh launches', async ({ page, request }) => {
@@ -24,7 +24,7 @@ test('homepage and featured api surface the fresh launches', async ({ page, requ
   const featuredPayload = await featuredResponse.json();
   const featuredIds = new Set((featuredPayload.data ?? []).map((tool: { id: string }) => tool.id));
 
-  for (const tool of ['codex', 'claude-code', 'granola']) {
+  for (const tool of ['modelence', 'tabstack', 'acti']) {
     expect(featuredIds.has(tool)).toBeTruthy();
   }
 });

@@ -2,14 +2,21 @@ import requests
 import json
 import os
 
+def require_api_key(env_name):
+    api_key = os.getenv(env_name)
+    if not api_key:
+        raise RuntimeError(f"Missing required environment variable: {env_name}")
+    return api_key
+
 # 测试 MiniMax
 def test_minimax():
     print("=== 测试 MiniMax ===")
     try:
+        api_key = require_api_key('MINIMAX_API_KEY')
         response = requests.post(
             "https://api.minimax.chat/v1/text/chatcompletion_v2",
             headers={
-                "Authorization": f"Bearer {os.getenv('MINIMAX_API_KEY', 'sk-cp-3j1CJqg4FcIftDXhHKkSP5AU8flu5PG92bg66_cR0mi1G1P8PGoMPK5OErj5QyQqHxvD5RL5pwB6B7pIINvilc0dS68Iiu1_NW1W8htzClsdkw4w0fjeCCg')}",
+                "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             },
             json={
@@ -35,10 +42,11 @@ def test_minimax():
 def test_nvidia_glm():
     print("\n=== 测试 NVIDIA GLM 5.0 ===")
     try:
+        api_key = require_api_key('NVIDIA_API_KEY')
         response = requests.post(
             "https://integrate.api.nvidia.com/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {os.getenv('NVIDIA_API_KEY', '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')}",
+                "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             },
             json={
@@ -64,10 +72,11 @@ def test_nvidia_glm():
 def test_kimi():
     print("\n=== 测试 Kimi K2.5 ===")
     try:
+        api_key = require_api_key('MOONSHOT_API_KEY')
         response = requests.post(
             "https://api.moonshot.cn/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {os.getenv('MOONSHOT_API_KEY', '19c33701-5cc2-883b-8000-00002f2fc8d8')}",
+                "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             },
             json={

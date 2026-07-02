@@ -13,6 +13,7 @@ import sourcedBatchToolsRound8 from '@/content/batch-9-tools-sourced';
 import sourcedBatchToolsRound9 from '@/content/batch-10-tools-sourced';
 import sourcedBatchToolsRound10 from '@/content/batch-11-tools-sourced';
 import sourcedBatchToolsRound11 from '@/content/batch-12-tools-sourced';
+import sourcedBatchToolsRound12 from '@/content/batch-13-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -1319,10 +1320,17 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11]);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [
+  {
+    id: 'pick-modelence',
+    tool: toolsData.find(t => t.id === 'modelence')!,
+    editor: editors[0],
+    comment: 'Modelence is one of the clearest signs that app builders are moving from flashy prototypes toward tools teams might actually ship from.',
+    pickedAt: '2026-07-03'
+  },
   {
     id: 'pick-codex',
     tool: toolsData.find(t => t.id === 'codex')!,
