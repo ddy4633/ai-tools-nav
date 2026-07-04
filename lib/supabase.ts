@@ -207,71 +207,71 @@ const fallbackTrendingOrder = [
 ] as const;
 
 const fallbackTrendingMeta: Record<string, Pick<TrendingTool, 'one_liner' | 'hype_score' | 'viral_coefficient' | 'tier' | 'metrics' | 'install_methods'>> = {
-  modelence: {
-    one_liner: 'Ship a production-ready full-stack app from a prompt',
+  glaze: {
+    one_liner: 'Build local-first desktop apps by chatting with AI',
     hype_score: 99,
-    viral_coefficient: 3.7,
+    viral_coefficient: 3.8,
     tier: '🔥 BREAKING',
     metrics: {
-      github: { stars: 414, stars_per_day: 31, forks: 41 },
-      hackernews: { votes: 402, comments: 118 },
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 573, comments: 96 },
     },
-    install_methods: ['☁️ Cloud', '📦 GitHub export'],
+    install_methods: ['💻 Desktop app', '🧩 Local-first', '👥 Team store'],
   },
-  tabstack: {
-    one_liner: 'Extract, research, and automate the web in one API call',
+  vida: {
+    one_liner: 'Let a proactive agent learn your context and finish routine work early',
     hype_score: 97,
-    viral_coefficient: 3.4,
+    viral_coefficient: 3.5,
     tier: '🔥 BREAKING',
     metrics: {
       github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 362, comments: 114 },
+      hackernews: { votes: 320, comments: 53 },
     },
-    install_methods: ['☁️ API', '🧩 MCP', '💻 CLI'],
+    install_methods: ['💻 Desktop app', '☁️ Agent'],
   },
-  acti: {
-    one_liner: 'Turn the mobile keyboard into an agent that can act, not just type',
-    hype_score: 96,
-    viral_coefficient: 3.6,
+  'termi-protocol': {
+    one_liner: 'Watch coding agents work live, pause them, and rewind when needed',
+    hype_score: 95,
+    viral_coefficient: 3.2,
     tier: '🔥 BREAKING',
     metrics: {
       github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 418, comments: 121 },
+      hackernews: { votes: 162, comments: 30 },
     },
-    install_methods: ['📱 iOS', '🤖 Android'],
+    install_methods: ['💻 Desktop app', '📦 Local-first'],
   },
-  'adam-cad-copilot': {
-    one_liner: 'AI CAD help inside Onshape and Fusion for real hardware workflows',
-    hype_score: 93,
-    viral_coefficient: 2.8,
-    tier: '⚡ TRENDING',
-    metrics: {
-      github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 276, comments: 74 },
-    },
-    install_methods: ['🧩 Onshape', '🛠️ Fusion'],
-  },
-  mailadept: {
-    one_liner: 'Fix inbox placement with AI agents plus deliverability experts',
-    hype_score: 91,
-    viral_coefficient: 2.5,
-    tier: '⚡ TRENDING',
-    metrics: {
-      github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 224, comments: 61 },
-    },
-    install_methods: ['☁️ Subscription service'],
-  },
-  humalike: {
-    one_liner: 'Give agents turn-taking, norms, memory, and social signals',
-    hype_score: 89,
+  archify: {
+    one_liner: 'Reveal components, APIs, and runtime behavior directly in the browser',
+    hype_score: 92,
     viral_coefficient: 2.9,
+    tier: '⚡ TRENDING',
+    metrics: {
+      github: { stars: 20, stars_per_day: 10, forks: 1 },
+      hackernews: { votes: 205, comments: 48 },
+    },
+    install_methods: ['🧩 Chrome extension', '📦 Open source'],
+  },
+  checklistfox: {
+    one_liner: 'Turn planning prompts into printable checklists and PDF planners',
+    hype_score: 91,
+    viral_coefficient: 2.6,
+    tier: '⚡ TRENDING',
+    metrics: {
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 211, comments: 19 },
+    },
+    install_methods: ['☁️ Web app', '📄 PDF'],
+  },
+  vox: {
+    one_liner: 'Speak to Copilot CLI and hear the agent answer back',
+    hype_score: 89,
+    viral_coefficient: 2.3,
     tier: '🚀 NEW',
     metrics: {
-      github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 432, comments: 155 },
+      github: { stars: 1, stars_per_day: 1, forks: 0 },
+      hackernews: { votes: 154, comments: 25 },
     },
-    install_methods: ['☁️ API', '🤝 Design partners'],
+    install_methods: ['💻 CLI extension', '🎙️ Voice'],
   },
   codex: {
     one_liner: 'Delegated coding work with repo context, commands, and reviewable output',

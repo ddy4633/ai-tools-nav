@@ -14,6 +14,7 @@ import sourcedBatchToolsRound9 from '@/content/batch-10-tools-sourced';
 import sourcedBatchToolsRound10 from '@/content/batch-11-tools-sourced';
 import sourcedBatchToolsRound11 from '@/content/batch-12-tools-sourced';
 import sourcedBatchToolsRound12 from '@/content/batch-13-tools-sourced';
+import sourcedBatchToolsRound13 from '@/content/batch-14-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -1320,10 +1321,17 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12]);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [
+  {
+    id: 'pick-glaze',
+    tool: toolsData.find(t => t.id === 'glaze')!,
+    editor: editors[0],
+    comment: 'Glaze feels like one of the first fresh launches this month that makes AI-built software feel personal, local, and actually usable beyond a landing-page demo.',
+    pickedAt: '2026-07-05'
+  },
   {
     id: 'pick-modelence',
     tool: toolsData.find(t => t.id === 'modelence')!,

@@ -131,8 +131,8 @@ export default function HomeShowcase({
   const heroQueries = heroTools.map((tool) => getToolPrimaryName(tool.name));
   const iconWallTools = allTools.filter((tool) => Boolean(tool.icon)).slice(0, 30);
   const spotlightTool = featuredTools[0] ?? editorPicks[0]?.tool;
-  const spotlightPick = editorPicks.find((pick) => pick.tool.id === spotlightTool?.id) ?? editorPicks[0];
-  const editorCards = editorPicks.slice(1, 4);
+  const spotlightPick = editorPicks.find((pick) => pick.tool.id === spotlightTool?.id);
+  const editorCards = editorPicks.filter((pick) => pick.tool.id !== spotlightTool?.id).slice(0, 3);
   const trendingBoard = trendingTools.slice(0, 5);
   const toolCount = allTools.length;
   const categoryCount = categories.length;
