@@ -93,6 +93,65 @@ function enrichTool<T extends { id: string }>(tool: T): T & Tool {
   return merged;
 }
 
+function mergeCuratedTools(tools: Array<{ id: string }>): Tool[] {
+  const merged = new Map<string, Tool>();
+
+  for (const tool of tools) {
+    merged.set(tool.id, enrichTool(tool));
+  }
+
+  for (const tool of toolsData) {
+    if (!merged.has(tool.id)) {
+      merged.set(tool.id, enrichTool({ ...tool }));
+    }
+  }
+
+  return Array.from(merged.values());
+}
+
+function mergeTrendingTools(tools: Array<{ id: string } & Partial<TrendingTool> & Partial<Tool>>, limit: number): TrendingTool[] {
+  const merged = new Map<string, TrendingTool>(
+    getMockTrendingTools().map((tool) => [tool.id, tool])
+  );
+
+  for (const tool of tools) {
+    const existing = merged.get(tool.id);
+    const enriched = enrichTool(tool) as Partial<TrendingTool> & Tool;
+
+    merged.set(
+      enriched.id,
+      {
+        ...(existing ?? {}),
+        ...enriched,
+        one_liner: enriched.one_liner ?? existing?.one_liner ?? enriched.description,
+        hype_score: enriched.hype_score ?? existing?.hype_score ?? 0,
+        viral_coefficient: enriched.viral_coefficient ?? existing?.viral_coefficient ?? 0,
+        tier: enriched.tier ?? existing?.tier ?? '💡 WATCH',
+        metrics: enriched.metrics ?? existing?.metrics ?? {
+          github: { stars: 0, stars_per_day: 0, forks: 0 },
+        },
+        install_methods: enriched.install_methods ?? existing?.install_methods ?? [],
+      } as TrendingTool
+    );
+  }
+
+  return Array.from(merged.values())
+    .sort((left, right) => {
+      const hypeDelta = (right.hype_score ?? 0) - (left.hype_score ?? 0);
+      if (hypeDelta !== 0) {
+        return hypeDelta;
+      }
+
+      const viralDelta = (right.viral_coefficient ?? 0) - (left.viral_coefficient ?? 0);
+      if (viralDelta !== 0) {
+        return viralDelta;
+      }
+
+      return rankToolsForDiscovery([left, right])[0]?.id === right.id ? 1 : -1;
+    })
+    .slice(0, limit);
+}
+
 export const getSupabase = () => {
   if (!supabaseClient && supabaseUrl && supabaseKey) {
     supabaseClient = createClient(supabaseUrl, supabaseKey);
@@ -103,7 +162,7 @@ export const getSupabase = () => {
 export async function getTrendingTools(limit = 10) {
   const supabase = getSupabase();
   if (!supabase) {
-    return getMockTrendingTools();
+    return getMockTrendingTools().slice(0, limit);
   }
   
   const { data, error } = await supabase
@@ -113,10 +172,10 @@ export async function getTrendingTools(limit = 10) {
     .limit(limit);
   
   if (error || !data || data.length === 0) {
-    return getMockTrendingTools();
+    return getMockTrendingTools().slice(0, limit);
   }
-  
-  return data.map((item) => enrichTool(item));
+
+  return mergeTrendingTools(data, limit);
 }
 
 export async function getFeaturedTools(limit = 8) {
@@ -134,7 +193,7 @@ export async function getFeaturedTools(limit = 8) {
     return rankFeaturedTools(getMockTools(), limit);
   }
 
-  return rankFeaturedTools(data.map((item) => enrichTool(item)), limit);
+  return rankFeaturedTools(mergeCuratedTools(data), limit);
 }
 
 export async function getCategories() {
@@ -150,8 +209,26 @@ export async function getCategories() {
   if (error || !data) {
     return getMockCategories();
   }
-  
-  return data;
+
+  const remoteCategories = data as Array<{ id: string; name: string; slug: string; count: number; popularity: number }>;
+  const localCategories = getMockCategories();
+  const localCategoryBySlug = new Map(localCategories.map((category) => [category.slug, category]));
+
+  const mergedCategories = remoteCategories.map((category) => {
+    const local = localCategoryBySlug.get(category.slug);
+    if (!local) {
+      return category;
+    }
+
+    localCategoryBySlug.delete(category.slug);
+    return {
+      ...category,
+      count: Math.max(category.count ?? 0, local.count),
+      popularity: Math.max(category.popularity ?? 0, local.popularity),
+    };
+  });
+
+  return [...mergedCategories, ...localCategoryBySlug.values()];
 }
 
 // 获取所有工具
@@ -170,7 +247,7 @@ export async function getAllTools(): Promise<Tool[]> {
     return getMockTools();
   }
 
-  return rankToolsForDiscovery(data.map((item) => enrichTool(item)));
+  return rankToolsForDiscovery(mergeCuratedTools(data));
 }
 
 // 根据 ID 获取工具
@@ -207,71 +284,60 @@ const fallbackTrendingOrder = [
 ] as const;
 
 const fallbackTrendingMeta: Record<string, Pick<TrendingTool, 'one_liner' | 'hype_score' | 'viral_coefficient' | 'tier' | 'metrics' | 'install_methods'>> = {
-  glaze: {
-    one_liner: 'Build local-first desktop apps by chatting with AI',
+  workbuddy: {
+    one_liner: 'Turn one office prompt into parallel agent execution and deliverables',
     hype_score: 99,
-    viral_coefficient: 3.8,
+    viral_coefficient: 3.9,
     tier: '🔥 BREAKING',
     metrics: {
       github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 573, comments: 96 },
+      hackernews: { votes: 295, comments: 64 },
     },
-    install_methods: ['💻 Desktop app', '🧩 Local-first', '👥 Team store'],
+    install_methods: ['☁️ Workspace', '🧠 Multi-agent', '💬 Messaging control'],
   },
-  vida: {
-    one_liner: 'Let a proactive agent learn your context and finish routine work early',
+  docsalot: {
+    one_liner: 'Publish docs that humans and AI agents can both onboard from',
     hype_score: 97,
     viral_coefficient: 3.5,
     tier: '🔥 BREAKING',
     metrics: {
       github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 320, comments: 53 },
+      hackernews: { votes: 257, comments: 37 },
     },
-    install_methods: ['💻 Desktop app', '☁️ Agent'],
+    install_methods: ['☁️ Hosted docs', '🧩 MCP', '📄 llms.txt'],
   },
-  'termi-protocol': {
-    one_liner: 'Watch coding agents work live, pause them, and rewind when needed',
+  trycase: {
+    one_liner: 'Give coding agents disposable Linux desktops and proof bundles',
     hype_score: 95,
     viral_coefficient: 3.2,
     tier: '🔥 BREAKING',
     metrics: {
       github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 162, comments: 30 },
+      hackernews: { votes: 164, comments: 24 },
     },
-    install_methods: ['💻 Desktop app', '📦 Local-first'],
+    install_methods: ['💻 Disposable desktop', '🧪 Browser testing', '🎥 Proof artifacts'],
   },
-  archify: {
-    one_liner: 'Reveal components, APIs, and runtime behavior directly in the browser',
-    hype_score: 92,
+  'mentiondrop-mcp': {
+    one_liner: 'Feed live market mentions and demand signals into your agent',
+    hype_score: 93,
     viral_coefficient: 2.9,
     tier: '⚡ TRENDING',
     metrics: {
-      github: { stars: 20, stars_per_day: 10, forks: 1 },
-      hackernews: { votes: 205, comments: 48 },
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 160, comments: 17 },
     },
-    install_methods: ['🧩 Chrome extension', '📦 Open source'],
+    install_methods: ['🧩 MCP server', '📈 Market signals', '✍️ Reply drafts'],
   },
-  checklistfox: {
-    one_liner: 'Turn planning prompts into printable checklists and PDF planners',
+  circlechat: {
+    one_liner: 'Run a visible agent team with channels, kanban, and an LLM judge',
     hype_score: 91,
     viral_coefficient: 2.6,
     tier: '⚡ TRENDING',
     metrics: {
-      github: { stars: 0, stars_per_day: 0, forks: 0 },
-      hackernews: { votes: 211, comments: 19 },
+      github: { stars: 29, stars_per_day: 29, forks: 9 },
+      hackernews: { votes: 124, comments: 10 },
     },
-    install_methods: ['☁️ Web app', '📄 PDF'],
-  },
-  vox: {
-    one_liner: 'Speak to Copilot CLI and hear the agent answer back',
-    hype_score: 89,
-    viral_coefficient: 2.3,
-    tier: '🚀 NEW',
-    metrics: {
-      github: { stars: 1, stars_per_day: 1, forks: 0 },
-      hackernews: { votes: 154, comments: 25 },
-    },
-    install_methods: ['💻 CLI extension', '🎙️ Voice'],
+    install_methods: ['📦 Self-hosted', '☁️ Managed workspace', '🤖 Bring your own model'],
   },
   codex: {
     one_liner: 'Delegated coding work with repo context, commands, and reviewable output',

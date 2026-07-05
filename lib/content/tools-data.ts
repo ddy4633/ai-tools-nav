@@ -2,6 +2,7 @@
 
 import { Tool, EditorPick, Editor, Category } from '@/types/tool';
 import { toolIcons } from '@/lib/content/tool-icons';
+import { rankFeaturedTools, rankToolsForDiscovery } from '@/lib/tool-ranking';
 import sourcedBatchTools from '@/content/batch-2-tools-sourced';
 import sourcedBatchToolsRound2 from '@/content/batch-3-tools-sourced';
 import sourcedBatchToolsRound3 from '@/content/batch-4-tools-sourced';
@@ -15,6 +16,7 @@ import sourcedBatchToolsRound10 from '@/content/batch-11-tools-sourced';
 import sourcedBatchToolsRound11 from '@/content/batch-12-tools-sourced';
 import sourcedBatchToolsRound12 from '@/content/batch-13-tools-sourced';
 import sourcedBatchToolsRound13 from '@/content/batch-14-tools-sourced';
+import sourcedBatchToolsRound14 from '@/content/batch-15-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -1321,7 +1323,7 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13]);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13, ...sourcedBatchToolsRound14]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [
@@ -1405,7 +1407,7 @@ export function getToolsByCategory(categorySlug: string): Tool[] {
 }
 
 export function getFeaturedTools(): Tool[] {
-  return toolsData.filter(t => t.isFeatured);
+  return rankFeaturedTools(toolsData);
 }
 
 export function getEditorsPickTools(): Tool[] {
@@ -1413,5 +1415,5 @@ export function getEditorsPickTools(): Tool[] {
 }
 
 export function getTrendingTools(limit: number = 10): Tool[] {
-  return toolsData.slice(0, limit);
+  return rankToolsForDiscovery(toolsData).slice(0, limit);
 }
