@@ -17,6 +17,7 @@ import sourcedBatchToolsRound11 from '@/content/batch-12-tools-sourced';
 import sourcedBatchToolsRound12 from '@/content/batch-13-tools-sourced';
 import sourcedBatchToolsRound13 from '@/content/batch-14-tools-sourced';
 import sourcedBatchToolsRound14 from '@/content/batch-15-tools-sourced';
+import sourcedBatchToolsRound15 from '@/content/batch-16-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -1323,10 +1324,38 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13, ...sourcedBatchToolsRound14]);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13, ...sourcedBatchToolsRound14, ...sourcedBatchToolsRound15]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [
+  {
+    id: 'pick-anysearch',
+    tool: toolsData.find(t => t.id === 'anysearch')!,
+    editor: editors[0],
+    comment: 'AnySearch feels like one of the clearest launch-ready answers to a real agent bottleneck: better search in, better outputs out.',
+    pickedAt: '2026-07-06'
+  },
+  {
+    id: 'pick-octolens',
+    tool: toolsData.find(t => t.id === 'octolens')!,
+    editor: editors[0],
+    comment: 'Octolens turns social listening into something operators and agents can actually use, which makes it unusually easy to justify commercially.',
+    pickedAt: '2026-07-06'
+  },
+  {
+    id: 'pick-edgee',
+    tool: toolsData.find(t => t.id === 'edgee')!,
+    editor: editors[1],
+    comment: 'Edgee is one of the more practical launches for teams already spending real money on coding agents and feeling the token bill.',
+    pickedAt: '2026-07-06'
+  },
+  {
+    id: 'pick-typeahead',
+    tool: toolsData.find(t => t.id === 'typeahead')!,
+    editor: editors[2],
+    comment: 'Typeahead has the kind of simple consumer promise that still cuts through quickly: every Mac app, local by default, one-time purchase.',
+    pickedAt: '2026-07-06'
+  },
   {
     id: 'pick-glaze',
     tool: toolsData.find(t => t.id === 'glaze')!,
@@ -1337,7 +1366,7 @@ export const editorPicks: EditorPick[] = [
   {
     id: 'pick-modelence',
     tool: toolsData.find(t => t.id === 'modelence')!,
-    editor: editors[0],
+    editor: editors[1],
     comment: 'Modelence is one of the clearest signs that app builders are moving from flashy prototypes toward tools teams might actually ship from.',
     pickedAt: '2026-07-03'
   },
@@ -1354,27 +1383,6 @@ export const editorPicks: EditorPick[] = [
     editor: editors[1],
     comment: '国产AI黑马，推理能力让我惊讶。完全免费+国内直达，这是我今年最推荐的AI工具。',
     pickedAt: '2026-02-28'
-  },
-  {
-    id: 'pick1',
-    tool: toolsData.find(t => t.id === 'claude')!,
-    editor: editors[0],
-    comment: '处理论文和报告时，Claude的长上下文能力让我惊艳。200K的窗口意味着我可以扔给它整本书然后提问。',
-    pickedAt: '2026-02-27'
-  },
-  {
-    id: 'pick2',
-    tool: toolsData.find(t => t.id === 'cursor')!,
-    editor: editors[1],
-    comment: 'Composer功能彻底改变了我的编程方式。描述需求，它自动生成多文件代码，而且都能运行。',
-    pickedAt: '2026-02-27'
-  },
-  {
-    id: 'pick3',
-    tool: toolsData.find(t => t.id === 'midjourney')!,
-    editor: editors[2],
-    comment: 'V6的质量让我再次确认它在AI图像领域的统治地位。那种独特的美感是其他工具模仿不了的。',
-    pickedAt: '2026-02-27'
   }
 ];
 
