@@ -284,6 +284,61 @@ const fallbackTrendingOrder = [
 ] as const;
 
 const fallbackTrendingMeta: Record<string, Pick<TrendingTool, 'one_liner' | 'hype_score' | 'viral_coefficient' | 'tier' | 'metrics' | 'install_methods'>> = {
+  'scribble-network': {
+    one_liner: 'Track whether AI answer engines cite your brand, then close the gap',
+    hype_score: 99,
+    viral_coefficient: 3.8,
+    tier: '🔥 BREAKING',
+    metrics: {
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 335, comments: 44 },
+    },
+    install_methods: ['☁️ SaaS', '📈 GEO analytics', '✍️ Creator distribution'],
+  },
+  katalyst: {
+    one_liner: 'Turn Salesforce pipeline admin into guided next-step execution',
+    hype_score: 97,
+    viral_coefficient: 3.4,
+    tier: '🔥 BREAKING',
+    metrics: {
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 295, comments: 56 },
+    },
+    install_methods: ['☁️ SaaS', '🧾 CRM automation', '📞 Revenue workflows'],
+  },
+  mira: {
+    one_liner: 'Run AI-moderated interviews that adapt in real time and read emotion',
+    hype_score: 95,
+    viral_coefficient: 3.1,
+    tier: '🔥 BREAKING',
+    metrics: {
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 198, comments: 31 },
+    },
+    install_methods: ['☁️ SaaS', '🧪 User research', '🌍 Multilingual interviews'],
+  },
+  'ai-emaily': {
+    one_liner: 'Let an inbox-native agent triage, draft, schedule, and follow up',
+    hype_score: 93,
+    viral_coefficient: 2.8,
+    tier: '⚡ TRENDING',
+    metrics: {
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 170, comments: 27 },
+    },
+    install_methods: ['💻 Web app', '📬 Multi-provider email', '🤖 Copilot + autopilot'],
+  },
+  'ogment-ai': {
+    one_liner: 'Give every Slack user an AI coworker with connectors and shared memory',
+    hype_score: 91,
+    viral_coefficient: 2.6,
+    tier: '⚡ TRENDING',
+    metrics: {
+      github: { stars: 0, stars_per_day: 0, forks: 0 },
+      hackernews: { votes: 159, comments: 25 },
+    },
+    install_methods: ['💬 Slack-native', '🔌 1,000+ integrations', '🧠 Shared skills'],
+  },
   workbuddy: {
     one_liner: 'Turn one office prompt into parallel agent execution and deliverables',
     hype_score: 99,

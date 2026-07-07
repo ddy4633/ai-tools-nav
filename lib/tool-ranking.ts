@@ -1,6 +1,6 @@
 import type { Tool } from '@/types/tool';
 
-export const freshLaunchToolIds = ['anysearch', 'octolens', 'typeahead', 'edgee', 'needle'] as const;
+export const freshLaunchToolIds = ['scribble-network', 'katalyst', 'mira', 'ai-emaily', 'ogment-ai'] as const;
 
 const freshLaunchPriority = new Map<string, number>(
   freshLaunchToolIds.map((id, index) => [id, freshLaunchToolIds.length - index])

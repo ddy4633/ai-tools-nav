@@ -18,6 +18,7 @@ import sourcedBatchToolsRound12 from '@/content/batch-13-tools-sourced';
 import sourcedBatchToolsRound13 from '@/content/batch-14-tools-sourced';
 import sourcedBatchToolsRound14 from '@/content/batch-15-tools-sourced';
 import sourcedBatchToolsRound15 from '@/content/batch-16-tools-sourced';
+import sourcedBatchToolsRound16 from '@/content/batch-17-tools-sourced';
 
 export const editors: Editor[] = [
   {
@@ -1324,10 +1325,38 @@ const rawTools: Tool[] = [
   }
 ];
 
-export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13, ...sourcedBatchToolsRound14, ...sourcedBatchToolsRound15]);
+export const toolsData: Tool[] = dedupeTools([...rawTools, ...sourcedBatchTools, ...sourcedBatchToolsRound2, ...sourcedBatchToolsRound3, ...sourcedBatchToolsRound4, ...sourcedBatchToolsRound5, ...sourcedBatchToolsRound6, ...sourcedBatchToolsRound7, ...sourcedBatchToolsRound8, ...sourcedBatchToolsRound9, ...sourcedBatchToolsRound10, ...sourcedBatchToolsRound11, ...sourcedBatchToolsRound12, ...sourcedBatchToolsRound13, ...sourcedBatchToolsRound14, ...sourcedBatchToolsRound15, ...sourcedBatchToolsRound16]);
 
 // 编辑精选数据
 export const editorPicks: EditorPick[] = [
+  {
+    id: 'pick-scribble-network',
+    tool: toolsData.find(t => t.id === 'scribble-network')!,
+    editor: editors[0],
+    comment: 'Scribble is unusually well timed: AI discoverability is turning into a real growth budget, and this launch sells the outcome in plain English.',
+    pickedAt: '2026-07-07'
+  },
+  {
+    id: 'pick-katalyst',
+    tool: toolsData.find(t => t.id === 'katalyst')!,
+    editor: editors[1],
+    comment: 'Katalyst feels commercially sharp because it ties agent value directly to Salesforce hygiene, pipeline movement, and rep time saved.',
+    pickedAt: '2026-07-07'
+  },
+  {
+    id: 'pick-ai-emaily',
+    tool: toolsData.find(t => t.id === 'ai-emaily')!,
+    editor: editors[2],
+    comment: 'AI Emaily has the kind of broad, legible pain point that still converts well: email overload, but with a more believable automation layer than most rivals.',
+    pickedAt: '2026-07-07'
+  },
+  {
+    id: 'pick-ogment-ai',
+    tool: toolsData.find(t => t.id === 'ogment-ai')!,
+    editor: editors[0],
+    comment: 'Ogment AI gets the distribution logic right by living in Slack, where team AI adoption is much easier to trigger than in another separate app.',
+    pickedAt: '2026-07-07'
+  },
   {
     id: 'pick-anysearch',
     tool: toolsData.find(t => t.id === 'anysearch')!,

@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 
 const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:3003';
 const freshLaunches = [
-  { id: 'anysearch', name: 'AnySearch' },
-  { id: 'octolens', name: 'Octolens' },
-  { id: 'typeahead', name: 'Typeahead' },
-  { id: 'edgee', name: 'Edgee' },
-  { id: 'needle', name: 'Needle' },
+  { id: 'scribble-network', name: 'Scribble Network' },
+  { id: 'katalyst', name: 'Katalyst' },
+  { id: 'mira', name: 'Mira' },
+  { id: 'ai-emaily', name: 'AI Emaily' },
+  { id: 'ogment-ai', name: 'Ogment AI' },
 ];
 
 test('homepage and featured api surface the fresh launches', async ({ page, request }) => {
@@ -23,7 +23,7 @@ test('homepage and featured api surface the fresh launches', async ({ page, requ
   const featuredPayload = await featuredResponse.json();
   const featuredIds = new Set((featuredPayload.data ?? []).map((tool: { id: string }) => tool.id));
 
-  for (const tool of ['anysearch', 'octolens', 'typeahead']) {
+  for (const tool of ['scribble-network', 'katalyst', 'mira']) {
     expect(featuredIds.has(tool)).toBeTruthy();
   }
 });
